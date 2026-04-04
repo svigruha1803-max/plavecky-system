@@ -1,0 +1,1532 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#18181b">
+    <title>Plavecký tréninkový systém</title>
+    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiUGxhdmVja8O9IHRyw6luaW5rb3bDvSBzeXN0w6ltIiwic2hvcnRfbmFtZSI6IlBsYXbDoW7DrSIsInN0YXJ0X3VybCI6Ii4iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjMTgxODFiIiwidGhlbWVfY29sb3IiOiIjMTgxODFiIn0=">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #18181b;
+            color: #e4e4e7;
+            min-height: 100vh;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: #27272a;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: #3f3f46;
+            padding: 12px 16px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        .header h1 {
+            font-size: clamp(1em, 3.5vw, 1.4em);
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #fafafa;
+        }
+
+        .header p {
+            color: #a1a1aa;
+            font-size: clamp(0.7em, 2vw, 0.8em);
+            font-weight: 400;
+        }
+
+        .api-key-setup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .api-key-modal {
+            background: #27272a;
+            border-radius: 16px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+
+        .api-key-modal h2 {
+            color: #fafafa;
+            margin-bottom: 10px;
+            font-size: 1.8em;
+        }
+
+        .api-key-modal p {
+            color: #a1a1aa;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .api-key-modal input {
+            width: 100%;
+            padding: 14px;
+            background: #3f3f46;
+            border: 1px solid #52525b;
+            border-radius: 8px;
+            color: #e4e4e7;
+            font-size: 0.95em;
+            margin-bottom: 20px;
+            font-family: monospace;
+        }
+
+        .api-key-modal input:focus {
+            outline: none;
+            border-color: #60a5fa;
+        }
+
+        .api-key-modal .btn {
+            width: 100%;
+        }
+
+        .api-key-modal .help-link {
+            color: #60a5fa;
+            text-decoration: none;
+            font-size: 0.9em;
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .tabs-nav {
+            display: flex;
+            background: #3f3f46;
+            border-bottom: 1px solid #52525b;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .tab-btn {
+            flex: 1;
+            min-width: 120px;
+            padding: 18px 12px;
+            background: transparent;
+            border: none;
+            font-size: 0.95em;
+            font-weight: 500;
+            color: #a1a1aa;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
+            white-space: nowrap;
+        }
+
+        .tab-btn:active {
+            background: rgba(255,255,255,0.05);
+        }
+
+        .tab-btn.active {
+            color: #60a5fa;
+            background: #27272a;
+        }
+
+        .main-tab-content {
+            display: none;
+            padding: 20px;
+        }
+
+        .main-tab-content.active {
+            display: block;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0;
+            background: #3f3f46;
+            margin: -20px -20px 30px -20px;
+            border-bottom: 1px solid #52525b;
+        }
+
+        .step {
+            padding: 16px 8px;
+            text-align: center;
+            border-right: 1px solid #52525b;
+        }
+
+        .step:last-child {
+            border-right: none;
+        }
+
+        .step-number {
+            width: 36px;
+            height: 36px;
+            background: #52525b;
+            color: #a1a1aa;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1em;
+            margin-bottom: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .step.active .step-number {
+            background: #60a5fa;
+            color: #18181b;
+        }
+
+        .step.completed .step-number {
+            background: #4ade80;
+            color: #18181b;
+        }
+
+        .step-title {
+            font-weight: 500;
+            color: #a1a1aa;
+            font-size: 0.75em;
+        }
+
+        .step.active .step-title {
+            color: #e4e4e7;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        h2 {
+            color: #fafafa;
+            font-weight: 600;
+            font-size: clamp(1.2em, 4vw, 1.5em);
+            margin-bottom: 20px;
+        }
+
+        .upload-area {
+            border: 2px dashed #52525b;
+            border-radius: 12px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #3f3f46;
+            margin-bottom: 20px;
+        }
+
+        .upload-area:active {
+            background: #52525b;
+        }
+
+        .upload-icon {
+            font-size: 3em;
+            margin-bottom: 12px;
+        }
+
+        .upload-text {
+            font-size: 1em;
+            color: #e4e4e7;
+            margin-bottom: 6px;
+        }
+
+        .upload-subtext {
+            color: #a1a1aa;
+            font-size: 0.85em;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            border-radius: 12px;
+            margin: 15px 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        .swimmers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .swimmer-card {
+            background: #3f3f46;
+            border: 1px solid #52525b;
+            border-radius: 12px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .swimmer-card:active {
+            transform: scale(0.98);
+        }
+
+        .swimmer-card.selected {
+            border-color: #60a5fa;
+            background: #1e40af;
+        }
+
+        .swimmer-avatar {
+            width: 56px;
+            height: 56px;
+            background: #52525b;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3em;
+            color: #fafafa;
+            margin: 0 auto 12px;
+            font-weight: 600;
+        }
+
+        .swimmer-card.selected .swimmer-avatar {
+            background: #60a5fa;
+            color: #18181b;
+        }
+
+        .swimmer-name {
+            font-weight: 500;
+            color: #fafafa;
+            margin-bottom: 6px;
+            font-size: 0.9em;
+        }
+
+        .swimmer-times {
+            font-size: 0.75em;
+            color: #a1a1aa;
+            line-height: 1.4;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #e4e4e7;
+            font-weight: 500;
+            font-size: 0.9em;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #52525b;
+            border-radius: 8px;
+            font-size: 0.95em;
+            transition: all 0.2s ease;
+            background: #3f3f46;
+            color: #e4e4e7;
+            font-family: 'Inter', sans-serif;
+        }
+
+        input::placeholder, textarea::placeholder {
+            color: #71717a;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #60a5fa;
+            background: #52525b;
+        }
+
+        .btn {
+            background: #60a5fa;
+            color: #18181b;
+            padding: 14px 28px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
+            width: 100%;
+            touch-action: manipulation;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-secondary {
+            background: #52525b;
+            color: #e4e4e7;
+        }
+
+        .btn-success {
+            font-size: 1.1em;
+            padding: 16px 32px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-group .btn {
+            flex: 1;
+        }
+
+        .selected-count {
+            background: #3f3f46;
+            color: #60a5fa;
+            padding: 14px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 15px 0;
+            font-weight: 600;
+            border: 1px solid #52525b;
+        }
+
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: #3f3f46;
+            border: 1px solid #52525b;
+            border-radius: 12px;
+            padding: 20px 12px;
+            text-align: center;
+        }
+
+        .stat-icon {
+            font-size: 2em;
+            margin-bottom: 8px;
+        }
+
+        .stat-number {
+            font-size: 1.8em;
+            font-weight: 700;
+            margin: 8px 0;
+            color: #fafafa;
+        }
+
+        .stat-label {
+            font-size: 0.8em;
+            color: #a1a1aa;
+        }
+
+        .chart-section {
+            background: #3f3f46;
+            border: 1px solid #52525b;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .chart-section h3 {
+            color: #fafafa;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 250px;
+        }
+
+        .swimmer-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+        }
+
+        .swimmer-stat-card {
+            background: #3f3f46;
+            border: 1px solid #52525b;
+            border-radius: 12px;
+            padding: 18px;
+        }
+
+        .swimmer-stat-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #52525b;
+        }
+
+        .mini-avatar {
+            width: 44px;
+            height: 44px;
+            background: #52525b;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fafafa;
+            font-weight: 600;
+            font-size: 1em;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(82,82,91,0.5);
+            color: #a1a1aa;
+            font-size: 0.9em;
+        }
+
+        .stat-row strong {
+            color: #60a5fa;
+            font-weight: 600;
+        }
+
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .history-item {
+            background: #3f3f46;
+            border: 1px solid #52525b;
+            border-radius: 12px;
+            padding: 18px;
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .history-date {
+            font-weight: 600;
+            color: #fafafa;
+            font-size: 1em;
+        }
+
+        .history-badge {
+            background: #60a5fa;
+            color: #18181b;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+
+        .export-btn {
+            background: #4ade80;
+            color: #18181b;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .spinner {
+            border: 3px solid #52525b;
+            border-top: 3px solid #60a5fa;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .alert {
+            padding: 14px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 3px solid;
+            font-size: 0.9em;
+        }
+
+        .alert-info {
+            background: rgba(96,165,250,0.1);
+            border-color: #60a5fa;
+            color: #e4e4e7;
+        }
+
+        .training-output {
+            background: #3f3f46;
+            border: 1px solid #52525b;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .training-section {
+            margin-bottom: 20px;
+        }
+
+        .training-section h3 {
+            color: #60a5fa;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #52525b;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        .training-section p {
+            color: #d4d4d8;
+            line-height: 1.6;
+            font-size: 0.9em;
+        }
+
+        .filter-section {
+            background: #3f3f46;
+            padding: 18px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #52525b;
+        }
+
+        .filter-section h4 {
+            color: #e4e4e7;
+            margin-bottom: 12px;
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+
+        .filter-group {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        @media (min-width: 640px) {
+            .swimmers-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+
+            .filter-group {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .steps {
+                margin: -20px -40px 30px -40px;
+            }
+
+            .main-tab-content {
+                padding: 40px;
+            }
+
+            .header {
+                padding: 50px 40px;
+            }
+        }
+
+        .settings-icon {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            background: #60a5fa;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            z-index: 50;
+        }
+
+        .settings-icon:active {
+            transform: scale(0.95);
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #27272a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #52525b;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <!-- API Key Setup Modal -->
+    <div class="api-key-setup" id="apiKeySetup" style="display: none;">
+        <div class="api-key-modal">
+            <h2>🔑 API klíč</h2>
+            <p>Pro generování tréninků potřebuješ API klíč od Anthropic. Zadej ho níže - uloží se pouze v tomto zařízení.</p>
+            <input type="password" id="apiKeyInput" placeholder="sk-ant-api03-...">
+            <button class="btn" onclick="saveApiKey()">💾 Uložit klíč</button>
+            <a href="https://console.anthropic.com/" target="_blank" class="help-link">
+                Jak získat API klíč?
+            </a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>🏊 Plavecký tréninkový systém</h1>
+            <p>Generování • Statistiky • Export</p>
+        </div>
+
+        <div class="tabs-nav">
+            <button class="tab-btn active" onclick="switchMainTab('training')">🏊 Trénink</button>
+            <button class="tab-btn" onclick="switchMainTab('stats')">📊 Statistiky</button>
+            <button class="tab-btn" onclick="switchMainTab('history')">📜 Historie</button>
+        </div>
+
+        <!-- TRAINING TAB -->
+        <div id="training-tab-main" class="main-tab-content active">
+            <div class="steps">
+                <div class="step active" id="step1">
+                    <div class="step-number">1</div>
+                    <div class="step-title">Screenshot</div>
+                </div>
+                <div class="step" id="step2">
+                    <div class="step-number">2</div>
+                    <div class="step-title">Účast</div>
+                </div>
+                <div class="step" id="step3">
+                    <div class="step-number">3</div>
+                    <div class="step-title">Detaily</div>
+                </div>
+                <div class="step" id="step4">
+                    <div class="step-number">4</div>
+                    <div class="step-title">Generovat</div>
+                </div>
+            </div>
+
+            <!-- Step 1 -->
+            <div class="section active" id="section1">
+                <h2>📸 Screenshot z databáze svazu</h2>
+                
+                <div id="existingSwimmersNotice" style="display: none; background: #3f3f46; border: 1px solid #60a5fa; border-radius: 8px; padding: 16px; margin-bottom: 20px; text-align: center;">
+                    <div style="color: #e4e4e7; margin-bottom: 12px;">
+                        <strong>✅ Máš už <span id="swimmerCount">0</span> plavců v databázi</strong>
+                    </div>
+                    <button class="btn" onclick="goToStep(2)" style="display: inline-block; width: auto;">
+                        🏊 Přeskočit na výběr plavců →
+                    </button>
+                </div>
+                
+                <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
+                    <div class="upload-icon">📤</div>
+                    <div class="upload-text">Nahrát screenshot</div>
+                    <div class="upload-subtext">JPG, PNG, WebP</div>
+                </div>
+                <input type="file" id="fileInput" style="display: none;" accept="image/*">
+                
+                <div style="text-align: center; margin: 15px 0;">
+                    <div style="color: #a1a1aa; margin-bottom: 10px; font-size: 0.9em;">nebo</div>
+                    <button class="btn btn-secondary" onclick="pasteFromClipboard()">
+                        📋 Vložit ze schránky (Ctrl+V)
+                    </button>
+                </div>
+                
+                <div id="imagePreview"></div>
+                <div class="btn-group">
+                    <button class="btn" id="analyzeBtn" style="display: none;" onclick="analyzeScreenshot()">🔍 Analyzovat</button>
+                </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="section" id="section2">
+                <h2>👥 Kdo přišel?</h2>
+                <div class="alert alert-info">
+                    <strong>💡 Tip:</strong> Klikni na plavce, kteří dneska přišli
+                </div>
+                <input type="text" id="searchSwimmers" placeholder="🔍 Hledat..." style="margin-bottom: 15px;">
+                <div class="selected-count" id="selectedCount">Vybráno: 0</div>
+                <div class="swimmers-grid" id="swimmersGrid"></div>
+                <div class="btn-group">
+                    <button class="btn btn-secondary" onclick="goToStep(1)">← Zpět</button>
+                    <button class="btn" onclick="goToStep(3)">Pokračovat →</button>
+                </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="section" id="section3">
+                <h2>⚙️ Detaily tréninku</h2>
+                <div class="form-group">
+                    <label>⏱️ Délka (minuty):</label>
+                    <select id="trainingDuration">
+                        <option value="60">60 minut</option>
+                        <option value="90" selected>90 minut</option>
+                        <option value="120">120 minut</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>🏊 Bazén:</label>
+                    <select id="poolSize">
+                        <option value="25m" selected>25 metrů</option>
+                        <option value="50m">50 metrů</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>📏 Cílové metry (celkem):</label>
+                    <input type="number" id="targetMeters" placeholder="např. 3500" value="3000" min="1000" max="10000" step="100">
+                    <div style="color: #a1a1aa; font-size: 0.85em; margin-top: 4px;">Kolik metrů chceš aby dneska celkem naplavali</div>
+                </div>
+                <div class="form-group">
+                    <label>🏆 Závod:</label>
+                    <input type="text" id="targetRace" placeholder="např. Krajský přebor">
+                </div>
+                <div class="form-group">
+                    <label>📝 Poznámky:</label>
+                    <textarea id="trainingNotes" rows="3" placeholder="Volitelné..."></textarea>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-secondary" onclick="goToStep(2)">← Zpět</button>
+                    <button class="btn" onclick="goToStep(4)">Pokračovat →</button>
+                </div>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="section" id="section4">
+                <h2>🎯 Generovat</h2>
+                <div style="text-align: center; margin: 30px 0;">
+                    <button class="btn btn-success" onclick="generateTraining()">
+                        🤖 Vygenerovat trénink
+                    </button>
+                </div>
+                <div id="trainingOutput"></div>
+                <div class="btn-group">
+                    <button class="btn btn-secondary" onclick="goToStep(3)">← Zpět</button>
+                    <button class="btn" id="saveTrainingBtn" style="display: none;" onclick="saveTraining()">
+                        💾 Uložit
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- STATISTICS TAB -->
+        <div id="stats-tab-main" class="main-tab-content">
+            <h2>📊 Statistiky</h2>
+            <div class="stats-cards" id="statsCards"></div>
+            <div class="chart-section">
+                <h3>📈 Naplavané metry</h3>
+                <div class="chart-container"><canvas id="metersChart"></canvas></div>
+            </div>
+            <div class="chart-section">
+                <h3>👥 Docházka</h3>
+                <div class="chart-container"><canvas id="attendanceChart"></canvas></div>
+            </div>
+            <div class="chart-section">
+                <h3>🎯 Disciplíny</h3>
+                <div class="chart-container"><canvas id="disciplinesChart"></canvas></div>
+            </div>
+            <h2 style="margin-top: 30px;">👤 Plavci</h2>
+            <div class="swimmer-stats-grid" id="swimmerStatsGrid"></div>
+            <div style="text-align: center; margin: 30px 0;">
+                <button class="btn export-btn" onclick="exportToExcel()">📊 Export Excel</button>
+            </div>
+        </div>
+
+        <!-- HISTORY TAB -->
+        <div id="history-tab-main" class="main-tab-content">
+            <h2>📜 Historie</h2>
+            <div class="filter-section">
+                <h4>🔍 Filtrovat:</h4>
+                <div class="filter-group">
+                    <div><label>Od:</label><input type="date" id="filterDateFrom"></div>
+                    <div><label>Do:</label><input type="date" id="filterDateTo"></div>
+                    <div><label>Plavec:</label><select id="filterSwimmer"><option value="">Všichni</option></select></div>
+                </div>
+                <button class="btn" onclick="applyFilters()" style="margin-top: 12px;">Použít</button>
+            </div>
+            <div class="history-list" id="historyList"></div>
+        </div>
+    </div>
+
+    <!-- Settings Icon -->
+    <div class="settings-icon" onclick="showApiKeySetup()">⚙️</div>
+
+    <script>
+        let appData = {
+            uploadedImage: null,
+            swimmers: [],
+            selectedSwimmers: [],
+            trainingHistory: [],
+            currentTraining: null,
+            apiKey: null
+        };
+
+        let metersChart, attendanceChart, disciplinesChart;
+
+        function loadData() {
+            const saved = localStorage.getItem('swimTrainingData');
+            if (saved) {
+                const data = JSON.parse(saved);
+                appData.swimmers = data.swimmers || [];
+                appData.trainingHistory = data.trainingHistory || [];
+            }
+            appData.apiKey = localStorage.getItem('anthropicApiKey');
+            if (!appData.apiKey) {
+                showApiKeySetup();
+            }
+        }
+
+        function saveData() {
+            localStorage.setItem('swimTrainingData', JSON.stringify({
+                swimmers: appData.swimmers,
+                trainingHistory: appData.trainingHistory
+            }));
+        }
+
+        function showApiKeySetup() {
+            document.getElementById('apiKeySetup').style.display = 'flex';
+            const input = document.getElementById('apiKeyInput');
+            if (appData.apiKey) input.value = appData.apiKey;
+        }
+
+        function saveApiKey() {
+            const key = document.getElementById('apiKeyInput').value.trim();
+            if (!key) {
+                alert('⚠️ Zadej API klíč!');
+                return;
+            }
+            if (!key.startsWith('sk-ant-')) {
+                alert('⚠️ API klíč musí začínat "sk-ant-"');
+                return;
+            }
+            appData.apiKey = key;
+            localStorage.setItem('anthropicApiKey', key);
+            document.getElementById('apiKeySetup').style.display = 'none';
+            alert('✅ API klíč uložen!');
+        }
+
+        function switchMainTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.main-tab-content').forEach(c => c.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById(tab + '-tab-main').classList.add('active');
+            if (tab === 'stats') updateStatistics();
+            if (tab === 'history') displayHistory();
+        }
+
+        function goToStep(stepNum) {
+            if (stepNum === 2 && appData.swimmers.length === 0) {
+                alert('⚠️ Nejprve nahraj screenshot!');
+                return;
+            }
+            if (stepNum === 3 && appData.selectedSwimmers.length === 0) {
+                alert('⚠️ Vyber alespoň jednoho plavce!');
+                return;
+            }
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.step').forEach(s => {
+                s.classList.remove('active');
+                s.classList.remove('completed');
+            });
+            document.getElementById(`section${stepNum}`).classList.add('active');
+            document.getElementById(`step${stepNum}`).classList.add('active');
+            for (let i = 1; i < stepNum; i++) {
+                document.getElementById(`step${i}`).classList.add('completed');
+            }
+            
+            // Reset upload area when going back to step 1
+            if (stepNum === 1) {
+                document.getElementById('imagePreview').innerHTML = '';
+                document.getElementById('analyzeBtn').style.display = 'none';
+                appData.uploadedImage = null;
+                updateExistingSwimmersNotice();
+            }
+            
+            if (stepNum === 2) displaySwimmers();
+        }
+
+        function updateExistingSwimmersNotice() {
+            const notice = document.getElementById('existingSwimmersNotice');
+            const count = document.getElementById('swimmerCount');
+            
+            if (appData.swimmers.length > 0) {
+                count.textContent = appData.swimmers.length;
+                notice.style.display = 'block';
+            } else {
+                notice.style.display = 'none';
+            }
+        }
+
+        const fileInput = document.getElementById('fileInput');
+        const uploadArea = document.getElementById('uploadArea');
+
+        uploadArea.addEventListener('dragover', (e) => e.preventDefault());
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith('image/')) handleImageUpload(file);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) handleImageUpload(file);
+        });
+
+        function handleImageUpload(file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                appData.uploadedImage = e.target.result;
+                // Detect actual image type from data URL
+                const imageType = e.target.result.split(';')[0].split(':')[1];
+                appData.imageType = imageType || 'image/jpeg';
+                document.getElementById('imagePreview').innerHTML = `<img src="${e.target.result}" class="preview-image">`;
+                document.getElementById('analyzeBtn').style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Paste from clipboard
+        async function pasteFromClipboard() {
+            try {
+                const clipboardItems = await navigator.clipboard.read();
+                
+                for (const clipboardItem of clipboardItems) {
+                    for (const type of clipboardItem.types) {
+                        if (type.startsWith('image/')) {
+                            const blob = await clipboardItem.getType(type);
+                            handleImageUpload(blob);
+                            return;
+                        }
+                    }
+                }
+                
+                alert('⚠️ Ve schránce není žádný obrázek.\n\nTip: Udělej screenshot (Win + Shift + S) a pak klikni "Vložit ze schránky".');
+            } catch (err) {
+                console.error('Clipboard error:', err);
+                if (err.name === 'NotAllowedError') {
+                    alert('⚠️ Aplikace nemá oprávnění ke schránce.\n\nPoužij místo toho:\n1. Udělej screenshot\n2. Ulož jako soubor\n3. Přetáhni sem\n\n(Ctrl+V funguje jen když je aplikace na webu, ne z lokálního souboru)');
+                } else {
+                    alert('❌ Nepodařilo se přečíst schránku. Zkus přetáhnout soubor.');
+                }
+            }
+        }
+
+        // Listen for Ctrl+V keyboard shortcut
+        document.addEventListener('paste', async (e) => {
+            const step1Active = document.getElementById('section1').classList.contains('active');
+            if (!step1Active) return;
+
+            const items = e.clipboardData?.items;
+            if (!items) return;
+
+            for (let i = 0; i < items.length; i++) {
+                if (items[i].type.indexOf('image') !== -1) {
+                    const blob = items[i].getAsFile();
+                    handleImageUpload(blob);
+                    e.preventDefault();
+                    break;
+                }
+            }
+        });
+
+        async function analyzeScreenshot() {
+            if (!appData.apiKey) {
+                showApiKeySetup();
+                return;
+            }
+
+            const btn = document.getElementById('analyzeBtn');
+            btn.innerHTML = '<div class="spinner" style="width: 16px; height: 16px; border-width: 2px; display: inline-block; margin-right: 8px; vertical-align: middle;"></div> Analyzuji...';
+            btn.disabled = true;
+
+            try {
+                const base64Image = appData.uploadedImage.split(',')[1];
+                const imageType = appData.imageType || 'image/jpeg';
+                
+                // Set timeout for 45 seconds
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 45000);
+                
+                const response = await fetch("https://shy-cloud-5a4aanthropic-proxy.svigruha1803.workers.dev/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "x-api-key": appData.apiKey,
+                        "anthropic-version": "2023-06-01"
+                    },
+                    body: JSON.stringify({
+                        model: "claude-sonnet-4-20250514",
+                        max_tokens: 2000,
+                        messages: [{
+                            role: "user",
+                            content: [
+                                { type: "image", source: { type: "base64", media_type: imageType, data: base64Image } },
+                                { type: "text", text: `Extrahuj plavce z tohoto screenshotu a urči jejich PRIMÁRNÍ STYLY.
+
+Vrať POUZE JSON v tomto formátu:
+[{
+  "jmeno": "Celé jméno",
+  "vek": null,
+  "discipliny": {"50m volný způsob": "00:26.50", "100m znak": "01:15.20"},
+  "primarni_styly": ["Volný způsob", "Znak"]
+}]
+
+DŮLEŽITÉ pro určení primárních stylů:
+- Podívej se na všechny časy plavce
+- Vyber 2 styly kde má nejlepší výkony (nejlepší časy/body)
+- Možné styly: "Volný způsob", "Znak", "Prsa", "Motýl"
+- Pokud má jen jeden styl nebo nejsou jasné primární styly, dej jen ten jeden nebo ["Volný způsob"]` }
+                            ]
+                        }]
+                    }),
+                    signal: controller.signal
+                });
+                
+                clearTimeout(timeoutId);
+
+                const data = await response.json();
+                
+                if (data.error) {
+                    throw new Error(data.error.message || 'API error');
+                }
+
+                let text = data.content.filter(i => i.type === "text").map(i => i.text).join('\n');
+                const cleanText = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+                
+                let swimmers;
+                try {
+                    swimmers = JSON.parse(cleanText);
+                } catch (parseError) {
+                    console.error('JSON parse error:', parseError);
+                    console.log('Received text:', cleanText);
+                    throw new Error('AI nevrátilo platný JSON. Zkus to znovu nebo použij jiný screenshot.');
+                }
+
+                if (!Array.isArray(swimmers) || swimmers.length === 0) {
+                    alert('⚠️ Žádná data nenalezena!');
+                    btn.innerHTML = '🔍 Analyzovat';
+                    btn.disabled = false;
+                    return;
+                }
+
+                // Update existing swimmers or add new ones
+                let updated = 0;
+                let added = 0;
+                
+                swimmers.forEach(newSwimmer => {
+                    const existingIndex = appData.swimmers.findIndex(s => s.jmeno === newSwimmer.jmeno);
+                    if (existingIndex >= 0) {
+                        // Update existing swimmer's data (merge disciplines)
+                        if (newSwimmer.discipliny) {
+                            appData.swimmers[existingIndex].discipliny = {
+                                ...appData.swimmers[existingIndex].discipliny,
+                                ...newSwimmer.discipliny
+                            };
+                        }
+                        if (newSwimmer.vek) {
+                            appData.swimmers[existingIndex].vek = newSwimmer.vek;
+                        }
+                        updated++;
+                    } else {
+                        // Add new swimmer
+                        appData.swimmers.push(newSwimmer);
+                        added++;
+                    }
+                });
+                
+                saveData();
+                let message = '✅ ';
+                if (added > 0) message += `Přidáno ${added} plavců. `;
+                if (updated > 0) message += `Aktualizováno ${updated} plavců. `;
+                message += `Celkem: ${appData.swimmers.length}`;
+                alert(message);
+                
+                btn.innerHTML = '🔍 Analyzovat';
+                btn.disabled = false;
+                
+                goToStep(2);
+            } catch (error) {
+                console.error('Analysis error:', error);
+                
+                let errorMsg = '❌ Chyba při analýze: ';
+                if (error.name === 'AbortError') {
+                    errorMsg += 'Analýza trvala příliš dlouho (timeout 45s). Zkus menší screenshot nebo to zkus znovu.';
+                } else {
+                    errorMsg += error.message;
+                }
+                
+                alert(errorMsg);
+                btn.innerHTML = '🔍 Analyzovat';
+                btn.disabled = false;
+            }
+        }
+
+        function displaySwimmers() {
+            const grid = document.getElementById('swimmersGrid');
+            const search = document.getElementById('searchSwimmers').value.toLowerCase();
+            const filtered = appData.swimmers.filter(s => s.jmeno.toLowerCase().includes(search));
+
+            grid.innerHTML = filtered.map((s, idx) => {
+                const originalIdx = appData.swimmers.indexOf(s);
+                const selected = appData.selectedSwimmers.includes(originalIdx);
+                const initials = s.jmeno.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase();
+                const times = s.discipliny ? Object.entries(s.discipliny).slice(0,2).map(([d,t]) => `${d}: ${t}`).join('<br>') : 'Bez časů';
+                const primary = s.primarni_styly ? `<div style="color: #60a5fa; font-weight: 500; margin-top: 4px; font-size: 0.8em;">🎯 ${s.primarni_styly.join(', ')}</div>` : '';
+
+                return `
+                    <div class="swimmer-card ${selected ? 'selected' : ''}" onclick="toggleSwimmer(${originalIdx})">
+                        <div class="swimmer-avatar">${initials}</div>
+                        <div class="swimmer-name">${s.jmeno}</div>
+                        <div class="swimmer-times">${s.vek ? `${s.vek} let<br>` : ''}${times}${primary}</div>
+                    </div>
+                `;
+            }).join('');
+
+            updateSelectedCount();
+        }
+
+        document.getElementById('searchSwimmers').addEventListener('input', displaySwimmers);
+
+        function toggleSwimmer(idx) {
+            const pos = appData.selectedSwimmers.indexOf(idx);
+            if (pos > -1) appData.selectedSwimmers.splice(pos, 1);
+            else appData.selectedSwimmers.push(idx);
+            displaySwimmers();
+        }
+
+        function updateSelectedCount() {
+            document.getElementById('selectedCount').textContent = `Vybráno: ${appData.selectedSwimmers.length}`;
+        }
+
+        async function generateTraining() {
+            if (!appData.apiKey) {
+                showApiKeySetup();
+                return;
+            }
+
+            const output = document.getElementById('trainingOutput');
+            output.innerHTML = '<div class="loading"><div class="spinner"></div><div class="loading-text">Generuji...</div></div>';
+
+            const selected = appData.selectedSwimmers.map(i => appData.swimmers[i]);
+            const duration = document.getElementById('trainingDuration').value;
+            const pool = document.getElementById('poolSize').value;
+            const targetMeters = document.getElementById('targetMeters').value || '3000';
+            const race = document.getElementById('targetRace').value;
+            const notes = document.getElementById('trainingNotes').value;
+
+            const prompt = `Vytvoř JEDEN SPOLEČNÝ plavecký trénink pro ZÁVODNÍ SKUPINU.
+
+DŮLEŽITÉ: 
+- Trénink je pro VŠECHNY plavce STEJNĚ (všichni jsou závodníci)
+- ŽÁDNÉ skupiny A/B/C - jeden společný plán
+- ZAMĚŘ HLAVNÍ ČÁST na primární styly plavců
+- Ostatní styly jen okrajově (rozcvička, technika)
+- Uveď konkrétní intervaly a časy odpočinku
+- Celkem naplavat cca ${targetMeters}m
+
+PLAVCI A JEJICH PRIMÁRNÍ STYLY (${selected.length} celkem):
+${selected.map(s => {
+    const times = s.discipliny ? Object.entries(s.discipliny).slice(0, 2).map(([d,t]) => `${d}: ${t}`).join(', ') : 'Bez časů';
+    const primary = s.primarni_styly ? s.primarni_styly.join(', ') : 'Volný způsob';
+    return `- ${s.jmeno}${s.vek ? ` (${s.vek} let)` : ''}\n  Primární: ${primary}\n  Časy: ${times}`;
+}).join('\n')}
+
+PARAMETRY:
+- Délka: ${duration} min
+- Bazén: ${pool}
+- Cílové metry: ${targetMeters}m
+${race ? `- Cíl: ${race}` : ''}
+${notes ? `- Poznámky: ${notes}` : ''}
+
+Formát:
+1. ROZCVIČKA (mix stylů, klidně)
+2. HLAVNÍ ČÁST - ZAMĚŘ na primární styly plavců! (série s intervaly - např. "8x100m volný @1:25")
+3. TECHNIKA/DOPLŇKOVÉ (ostatní styly, kratší série)
+4. ZÁVĚR (vyklidnění)
+
+Uveď konkrétní vzdálenosti, počty opakování a intervaly/odpočinek.`;
+
+            try {
+                const response = await fetch("https://shy-cloud-5a4aanthropic-proxy.svigruha1803.workers.dev/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "x-api-key": appData.apiKey,
+                        "anthropic-version": "2023-06-01"
+                    },
+                    body: JSON.stringify({
+                        model: "claude-sonnet-4-20250514",
+                        max_tokens: 3000,
+                        messages: [{ role: "user", content: prompt }]
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.error) {
+                    throw new Error(data.error.message || 'API error');
+                }
+
+                const trainingText = data.content.filter(i => i.type === "text").map(i => i.text).join('\n');
+
+                appData.currentTraining = {
+                    date: new Date().toISOString(),
+                    duration: parseInt(duration),
+                    pool: pool,
+                    targetMeters: parseInt(targetMeters),
+                    race: race || 'Běžný trénink',
+                    notes: notes,
+                    swimmers: selected.map(s => s.jmeno),
+                    content: trainingText
+                };
+
+                displayTrainingOutput(trainingText, selected, duration, pool, targetMeters, race);
+                document.getElementById('saveTrainingBtn').style.display = 'block';
+            } catch (error) {
+                output.innerHTML = `<div class="alert" style="background: rgba(239,68,68,0.1); border-color: #ef4444;">❌ Chyba: ${error.message}</div>`;
+            }
+        }
+
+        function displayTrainingOutput(text, swimmers, duration, pool, targetMeters, race) {
+            const output = document.getElementById('trainingOutput');
+            output.innerHTML = `
+                <div class="training-output">
+                    <div style="text-align: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #52525b;">
+                        <h2 style="color: #fafafa; font-size: 1.4em; margin-bottom: 8px;">🏊 ${new Date().toLocaleDateString('cs-CZ')}</h2>
+                        <div style="color: #a1a1aa; font-size: 0.9em;">${pool} • ${duration} min • ${targetMeters}m • ${swimmers.length} plavců</div>
+                        ${race ? `<div style="color: #60a5fa; margin-top: 6px; font-size: 0.9em;">🏆 ${race}</div>` : ''}
+                    </div>
+                    <div style="margin-bottom: 15px; color: #e4e4e7; font-size: 0.9em;"><strong>Přítomní:</strong> ${swimmers.map(s => s.jmeno).join(', ')}</div>
+                    <div style="white-space: pre-line; line-height: 1.6; color: #d4d4d8; font-size: 0.9em;">${text}</div>
+                </div>
+            `;
+        }
+
+        function saveTraining() {
+            if (!appData.currentTraining) return;
+            appData.trainingHistory.push(appData.currentTraining);
+            saveData();
+            alert('✅ Uloženo!');
+            document.getElementById('saveTrainingBtn').style.display = 'none';
+        }
+
+        function updateStatistics() {
+            const history = appData.trainingHistory;
+            const totalTrainings = history.length;
+            const totalMeters = history.reduce((sum, t) => {
+                const matches = t.content.match(/(\d+)\s*m(?!\w)/g);
+                return sum + (matches ? matches.reduce((s, m) => s + parseInt(m), 0) : 0);
+            }, 0);
+            const allSwimmers = [...new Set(history.flatMap(t => t.swimmers))];
+            const avgAttendance = history.length > 0 ? (history.reduce((sum, t) => sum + t.swimmers.length, 0) / history.length).toFixed(1) : 0;
+
+            document.getElementById('statsCards').innerHTML = `
+                <div class="stat-card"><div class="stat-icon">🏊</div><div class="stat-number">${totalTrainings}</div><div class="stat-label">Tréninky</div></div>
+                <div class="stat-card"><div class="stat-icon">📏</div><div class="stat-number">${(totalMeters/1000).toFixed(1)}k</div><div class="stat-label">Metry</div></div>
+                <div class="stat-card"><div class="stat-icon">👥</div><div class="stat-number">${allSwimmers.length}</div><div class="stat-label">Plavci</div></div>
+                <div class="stat-card"><div class="stat-icon">📊</div><div class="stat-number">${avgAttendance}</div><div class="stat-label">Účast</div></div>
+            `;
+
+            updateCharts(history, allSwimmers);
+            updateSwimmerStats(history, allSwimmers);
+        }
+
+        function updateCharts(history, allSwimmers) {
+            if (metersChart) metersChart.destroy();
+            if (attendanceChart) attendanceChart.destroy();
+            if (disciplinesChart) disciplinesChart.destroy();
+
+            Chart.defaults.color = '#a1a1aa';
+            Chart.defaults.borderColor = '#52525b';
+
+            const metersCtx = document.getElementById('metersChart');
+            if (metersCtx && history.length > 0) {
+                const last30 = history.slice(-30);
+                metersChart = new Chart(metersCtx, {
+                    type: 'line',
+                    data: {
+                        labels: last30.map(t => new Date(t.date).toLocaleDateString('cs', {month: 'short', day: 'numeric'})),
+                        datasets: [{
+                            label: 'Metry',
+                            data: last30.map(t => {
+                                const m = t.content.match(/(\d+)\s*m(?!\w)/g);
+                                return m ? m.reduce((s, x) => s + parseInt(x), 0) : 0;
+                            }),
+                            borderColor: '#60a5fa',
+                            backgroundColor: 'rgba(96,165,250,0.1)',
+                            tension: 0.3
+                        }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+                });
+            }
+
+            const attendanceCtx = document.getElementById('attendanceChart');
+            if (attendanceCtx && allSwimmers.length > 0) {
+                const data = {};
+                allSwimmers.forEach(s => {
+                    data[s] = history.filter(t => t.swimmers.includes(s)).length;
+                });
+                attendanceChart = new Chart(attendanceCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: Object.keys(data),
+                        datasets: [{ label: 'Tréninky', data: Object.values(data), backgroundColor: '#60a5fa' }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+                });
+            }
+
+            const disciplinesCtx = document.getElementById('disciplinesChart');
+            if (disciplinesCtx && history.length > 0) {
+                const disc = {};
+                history.forEach(t => {
+                    const c = t.content.toLowerCase();
+                    if (c.includes('volný') || c.includes('volny')) disc['Volný'] = (disc['Volný'] || 0) + 1;
+                    if (c.includes('prsa')) disc['Prsa'] = (disc['Prsa'] || 0) + 1;
+                    if (c.includes('znak')) disc['Znak'] = (disc['Znak'] || 0) + 1;
+                    if (c.includes('motýl') || c.includes('motyl')) disc['Motýl'] = (disc['Motýl'] || 0) + 1;
+                });
+                disciplinesChart = new Chart(disciplinesCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: Object.keys(disc),
+                        datasets: [{ data: Object.values(disc), backgroundColor: ['#60a5fa', '#4ade80', '#f59e0b', '#ef4444'] }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false }
+                });
+            }
+        }
+
+        function updateSwimmerStats(history, allSwimmers) {
+            const grid = document.getElementById('swimmerStatsGrid');
+            grid.innerHTML = allSwimmers.map(swimmer => {
+                const tr = history.filter(t => t.swimmers.includes(swimmer));
+                const att = history.length > 0 ? ((tr.length / history.length) * 100).toFixed(0) : 0;
+                const m = tr.reduce((sum, t) => {
+                    const x = t.content.match(/(\d+)\s*m(?!\w)/g);
+                    return sum + (x ? x.reduce((s, n) => s + parseInt(n), 0) : 0);
+                }, 0);
+                const init = swimmer.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase();
+
+                return `
+                    <div class="swimmer-stat-card">
+                        <div class="swimmer-stat-header">
+                            <div class="mini-avatar">${init}</div>
+                            <div><div style="font-weight: 600; color: #fafafa; font-size: 0.95em;">${swimmer}</div><div style="font-size: 0.8em; color: #a1a1aa;">${tr.length} tréninků</div></div>
+                        </div>
+                        <div class="stat-row"><span>Docházka:</span><strong>${att}%</strong></div>
+                        <div class="stat-row"><span>Metry:</span><strong>${(m/1000).toFixed(1)}k</strong></div>
+                        <div class="stat-row"><span>Průměr:</span><strong>${tr.length > 0 ? (m / tr.length).toFixed(0) : 0}m</strong></div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function exportToExcel() {
+            const history = appData.trainingHistory;
+            if (history.length === 0) { alert('⚠️ Zatím nejsou žádné tréninky!'); return; }
+
+            const tData = history.map(t => ({
+                'Datum': new Date(t.date).toLocaleDateString('cs'),
+                'Délka': t.duration,
+                'Bazén': t.pool,
+                'Závod': t.race,
+                'Plavci': t.swimmers.join(', ')
+            }));
+
+            const allSwimmers = [...new Set(history.flatMap(t => t.swimmers))];
+            const sData = allSwimmers.map(s => {
+                const tr = history.filter(t => t.swimmers.includes(s));
+                const m = tr.reduce((sum, t) => {
+                    const x = t.content.match(/(\d+)\s*m(?!\w)/g);
+                    return sum + (x ? x.reduce((a, n) => a + parseInt(n), 0) : 0);
+                }, 0);
+                return {
+                    'Jméno': s,
+                    'Tréninky': tr.length,
+                    'Metry': m,
+                    'Průměr': tr.length > 0 ? Math.round(m / tr.length) : 0,
+                    'Docházka %': history.length > 0 ? ((tr.length / history.length) * 100).toFixed(1) : 0
+                };
+            });
+
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(tData), "Tréninky");
+            XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(sData), "Plavci");
+            XLSX.writeFile(wb, `statistiky-${new Date().toISOString().split('T')[0]}.xlsx`);
+            alert('✅ Excel vygenerován!');
+        }
+
+        function displayHistory() {
+            const list = document.getElementById('historyList');
+            const history = [...appData.trainingHistory].reverse();
+
+            if (history.length === 0) {
+                list.innerHTML = '<div class="alert alert-info">Zatím žádné tréninky</div>';
+                return;
+            }
+
+            list.innerHTML = history.map(t => `
+                <div class="history-item">
+                    <div class="history-header">
+                        <div class="history-date">${new Date(t.date).toLocaleDateString('cs')}</div>
+                        <div class="history-badge">${t.duration} min</div>
+                    </div>
+                    <div style="color: #a1a1aa; line-height: 1.5; font-size: 0.85em;">
+                        <div><strong style="color: #e4e4e7;">Bazén:</strong> ${t.pool}</div>
+                        <div><strong style="color: #e4e4e7;">Cíl:</strong> ${t.race}</div>
+                        <div><strong style="color: #e4e4e7;">Plavci:</strong> ${t.swimmers.join(', ')}</div>
+                    </div>
+                </div>
+            `).join('');
+
+            const filterSelect = document.getElementById('filterSwimmer');
+            const allSwimmers = [...new Set(history.flatMap(t => t.swimmers))];
+            filterSelect.innerHTML = '<option value="">Všichni</option>' + allSwimmers.map(s => `<option value="${s}">${s}</option>`).join('');
+        }
+
+        function applyFilters() { displayHistory(); }
+
+        loadData();
+        if (appData.trainingHistory.length > 0) updateStatistics();
+        updateExistingSwimmersNotice();
+    </script>
+</body>
+</html>
