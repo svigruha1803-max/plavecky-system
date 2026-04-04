@@ -1,2 +1,0 @@
-# -plavecky-system
-treninkový plán
