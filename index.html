@@ -939,7 +939,7 @@
                         </div>
                     </div>
                     <!-- Počasí -->
-                    <div id="weatherWidget" onclick="loadWeather()" title="Klikni pro načtení počasí" style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:12px 16px;text-align:center;cursor:pointer;min-width:90px;flex-shrink:0;transition:all 0.2s;" onmouseover="this.style.borderColor='var(--blue)'" onmouseout="this.style.borderColor=''">
+                    <div id="weatherWidget" onclick="(document.getElementById('weatherCity')?.textContent==='zadat město')?setWeatherCity():loadWeather()" oncontextmenu="event.preventDefault();setWeatherCity()" title="Klik = načíst počasí, pravý klik = změnit město" style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:12px 16px;text-align:center;cursor:pointer;min-width:90px;flex-shrink:0;transition:all 0.2s;" onmouseover="this.style.borderColor='var(--blue)'" onmouseout="this.style.borderColor=''">
                         <div id="weatherIcon" style="font-size:2em;line-height:1;margin-bottom:6px;">🌤️</div>
                         <div id="weatherTemp" style="font-size:1em;font-weight:700;color:var(--text);line-height:1;">—°C</div>
                         <div id="weatherCity" style="font-size:0.7em;color:var(--blue);margin-top:4px;font-weight:600;">načíst</div>
@@ -3908,7 +3908,7 @@ Verify: total meters = ${targetMeters}m ± 5%. If not, adjust before responding.
             // Stáhni časy z ČSPS
             try {
                 const controller = new AbortController();
-            const timeout = setTimeout(() => controller.abort(), 12000); // 12s timeout
+            const timeout = setTimeout(() => controller.abort(), 30000); // 30s — ČSPS login 5-8s
             let r;
             try {
                 r = await fetch(`${WORKER_URL}/swimmer/${cspsId}`, { signal: controller.signal });
@@ -3985,22 +3985,35 @@ Verify: total meters = ${targetMeters}m ± 5%. If not, adjust before responding.
             const msgTimer = setInterval(() => {
                 msgIdx = Math.min(msgIdx + 1, msgs.length - 1);
                 const el = document.getElementById('step1Results');
-                if (el && el.innerHTML.includes('⏳') || el.innerHTML.includes('🔑') || el.innerHTML.includes('🔍') || el.innerHTML.includes('⌛')) {
+                if (el && ['⏳','🔑','🔍','⌛'].some(x => el.innerHTML.includes(x))) {
                     el.innerHTML = `<div style="color:var(--text3);text-align:center;padding:20px;font-size:0.88em;">${msgs[msgIdx]}</div>`;
                 }
             }, 2000);
 
             try {
-                const controller = new AbortController();
-                const fetchTimeout = setTimeout(() => controller.abort(), 15000);
-                let r;
-                try {
-                    r = await fetch(`${WORKER_URL}/search?q=${encodeURIComponent(query)}`, { signal: controller.signal });
-                } finally {
-                    clearTimeout(fetchTimeout);
+                // Až 2 pokusy — ČSPS login trvá 5-8s, timeout 30s
+                let r, lastErr;
+                for (let attempt = 0; attempt < 2; attempt++) {
+                    const controller = new AbortController();
+                    const fetchTimeout = setTimeout(() => controller.abort(), 30000);
+                    try {
+                        r = await fetch(`${WORKER_URL}/search?q=${encodeURIComponent(query)}`, { signal: controller.signal });
+                        lastErr = null;
+                        break;
+                    } catch (e) {
+                        lastErr = e;
+                        console.warn(`[search] pokus ${attempt + 1} selhal:`, e.message);
+                    } finally {
+                        clearTimeout(fetchTimeout);
+                    }
                 }
                 clearInterval(msgTimer);
-                if (!r.ok) throw new Error(`ČSPS server vrátil chybu (${r.status})`);
+                if (lastErr) throw lastErr;
+                if (!r.ok) {
+                    let body = '';
+                    try { body = (await r.text()).slice(0, 200); } catch (e) {}
+                    throw new Error(`Worker vrátil chybu ${r.status}${body ? ': ' + body : ''}`);
+                }
                 const swimmers = await r.json();
 
                 if (!swimmers.length) {
@@ -4066,7 +4079,7 @@ Verify: total meters = ${targetMeters}m ± 5%. If not, adjust before responding.
 
             try {
                 const controller = new AbortController();
-                const timeout = setTimeout(() => controller.abort(), 15000);
+                const timeout = setTimeout(() => controller.abort(), 30000);
                 let r;
                 try {
                     r = await fetch(`${WORKER_URL}/swimmer/${cspsId}`, { signal: controller.signal });
@@ -4894,17 +4907,20 @@ Použij české názvy disciplín. Každá série: X× Ym styl @interval`;
             renderFunWidget();
         }
 
+        let funRetries = 0;
         function renderFunWidget() {
             const item = FUN_CONTENT[funIndex];
             if (!item) return;
             const label = document.getElementById('funWidgetLabel');
             const contentEl = document.getElementById('funWidgetContent');
             const meta = document.getElementById('funWidgetMeta');
-            // Retry pokud DOM element ještě neexistuje
+            // Retry pokud DOM element ještě neexistuje (max 25× = 5s)
             if (!label || !contentEl) {
-                setTimeout(renderFunWidget, 200);
+                if (funRetries++ < 25) setTimeout(renderFunWidget, 200);
+                else console.error('[funWidget] elementy nenalezeny po 5s');
                 return;
             }
+            funRetries = 0;
             const typeLabels = { vtip: '😄 Vtip dne', zajímavost: '🧠 Věděl jsi že...', motivace: '💪 Motivace' };
             label.textContent = typeLabels[item.type] || '✨ Zajímavost';
             contentEl.textContent = item.text;
@@ -4912,95 +4928,107 @@ Použij české názvy disciplín. Každá série: X× Ym styl @interval`;
         }
 
 
-        // ── POČASÍ ───────────────────────────────────────────────────────────
-        async function loadWeather() {
-            const widget = document.getElementById('weatherWidget');
+        // ── POČASÍ — řetěz fallbacků: GPS → ipapi.co → ipwho.is → uložené město → cache
+        const WEATHER_ICON = c => c <= 1 ? '☀️' : c <= 3 ? '⛅' : c <= 49 ? '🌫️' : c <= 67 ? '🌧️' : c <= 77 ? '❄️' : c <= 82 ? '🌦️' : '⛈️';
+
+        async function fetchWeatherFor(lat, lon, cityLabel) {
+            const r = await fetch(
+                `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code,wind_speed_10m&wind_speed_unit=kmh`
+            );
+            if (!r.ok) throw new Error(`Open-Meteo ${r.status}`);
+            const data = await r.json();
+            const temp = Math.round(data.current.temperature_2m);
+            const code = data.current.weather_code;
+            const wind = Math.round(data.current.wind_speed_10m);
+            return { temp, code, wind, weatherIcon: WEATHER_ICON(code), city: cityLabel || `${wind} km/h`, time: Date.now() };
+        }
+
+        function renderWeather(w) {
             const iconEl = document.getElementById('weatherIcon');
             const tempEl = document.getElementById('weatherTemp');
             const cityEl = document.getElementById('weatherCity');
-            if (!iconEl) return;
+            if (iconEl) iconEl.textContent = w.weatherIcon;
+            if (tempEl) tempEl.textContent = `${w.temp}°C`;
+            if (cityEl) cityEl.textContent = w.city;
+        }
 
-            iconEl.textContent = '⏳';
-
+        async function getCoords() {
+            // 1) GPS (5s timeout)
             try {
-                // Získej polohu
                 const pos = await new Promise((res, rej) =>
-                    navigator.geolocation.getCurrentPosition(res, rej, { timeout: 5000 })
+                    navigator.geolocation.getCurrentPosition(res, rej, { timeout: 5000, maximumAge: 600000 })
                 );
-                const { latitude: lat, longitude: lon } = pos.coords;
+                return { lat: pos.coords.latitude, lon: pos.coords.longitude, city: null };
+            } catch (e) { console.warn('[weather] GPS fail:', e.message || e.code); }
+            // 2) ipapi.co
+            try {
+                const r = await fetch('https://ipapi.co/json/', { signal: AbortSignal.timeout(6000) });
+                const g = await r.json();
+                if (g.latitude) return { lat: g.latitude, lon: g.longitude, city: g.city };
+                console.warn('[weather] ipapi.co bez souřadnic:', g.reason || g.error);
+            } catch (e) { console.warn('[weather] ipapi.co fail:', e.message); }
+            // 3) ipwho.is
+            try {
+                const r = await fetch('https://ipwho.is/', { signal: AbortSignal.timeout(6000) });
+                const g = await r.json();
+                if (g.success && g.latitude) return { lat: g.latitude, lon: g.longitude, city: g.city };
+            } catch (e) { console.warn('[weather] ipwho.is fail:', e.message); }
+            // 4) uložené město
+            const saved = localStorage.getItem('weatherCityCoords');
+            if (saved) { try { return JSON.parse(saved); } catch (e) {} }
+            return null;
+        }
 
-                // Open-Meteo API — zdarma, bez klíče
-                const r = await fetch(
-                    `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code,wind_speed_10m&wind_speed_unit=kmh`
-                );
-                const data = await r.json();
-                const temp = Math.round(data.current.temperature_2m);
-                const code = data.current.weather_code;
-                const wind = Math.round(data.current.wind_speed_10m);
-
-                // Počasí ikona podle kódu
-                const weatherIcon = code <= 1 ? '☀️' : code <= 3 ? '⛅' : code <= 49 ? '🌫️' : code <= 67 ? '🌧️' : code <= 77 ? '❄️' : code <= 82 ? '🌦️' : '⛈️';
-
-                iconEl.textContent = weatherIcon;
-                tempEl.textContent = `${temp}°C`;
-                cityEl.textContent = `${wind} km/h`;
-
-                // Ulož do localStorage na 30 min
-                localStorage.setItem('weatherCache', JSON.stringify({ temp, code, wind, weatherIcon, time: Date.now() }));
-
+        async function loadWeather() {
+            const iconEl = document.getElementById('weatherIcon');
+            if (!iconEl) return;
+            iconEl.textContent = '⏳';
+            try {
+                const c = await getCoords();
+                if (!c) throw new Error('žádná poloha');
+                const w = await fetchWeatherFor(c.lat, c.lon, c.city);
+                renderWeather(w);
+                localStorage.setItem('weatherCache', JSON.stringify(w));
             } catch (e) {
-                // Fallback: IP-based geolokace (bez povolení)
-                try {
-                    const geoR = await fetch('https://ipapi.co/json/');
-                    const geo = await geoR.json();
-                    if (geo.latitude) {
-                        const r2 = await fetch(
-                            `https://api.open-meteo.com/v1/forecast?latitude=${geo.latitude}&longitude=${geo.longitude}&current=temperature_2m,weather_code,wind_speed_10m&wind_speed_unit=kmh`
-                        );
-                        const data2 = await r2.json();
-                        const temp = Math.round(data2.current.temperature_2m);
-                        const code = data2.current.weather_code;
-                        const wind = Math.round(data2.current.wind_speed_10m);
-                        const weatherIcon = code <= 1 ? '☀️' : code <= 3 ? '⛅' : code <= 49 ? '🌫️' : code <= 67 ? '🌧️' : code <= 77 ? '❄️' : code <= 82 ? '🌦️' : '⛈️';
-                        iconEl.textContent = weatherIcon;
-                        tempEl.textContent = `${temp}°C`;
-                        cityEl.textContent = geo.city || `${wind} km/h`;
-                        localStorage.setItem('weatherCache', JSON.stringify({ temp, code, wind, weatherIcon, city: geo.city, time: Date.now() }));
-                        return;
-                    }
-                } catch(e2) {}
-                // Zkus cache
+                console.warn('[weather] loadWeather fail:', e.message);
                 const cached = localStorage.getItem('weatherCache');
                 if (cached) {
-                    const w = JSON.parse(cached);
-                    iconEl.textContent = w.weatherIcon;
-                    tempEl.textContent = `${w.temp}°C`;
-                    cityEl.textContent = w.city || `${w.wind} km/h`;
-                } else {
-                    iconEl.textContent = '🌤️';
-                    tempEl.textContent = '—°C';
-                    cityEl.textContent = 'načíst';
+                    try { renderWeather(JSON.parse(cached)); return; } catch (e2) {}
                 }
+                // Poslední záchrana: zeptej se na město
+                iconEl.textContent = '📍';
+                const tempEl = document.getElementById('weatherTemp');
+                const cityEl = document.getElementById('weatherCity');
+                if (tempEl) tempEl.textContent = '—°C';
+                if (cityEl) cityEl.textContent = 'zadat město';
             }
         }
 
+        async function setWeatherCity() {
+            const name = prompt('Město pro počasí (např. Ostrava):');
+            if (!name) return;
+            try {
+                const r = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(name)}&count=1&language=cs`);
+                const d = await r.json();
+                if (!d.results || !d.results.length) { alert('Město nenalezeno'); return; }
+                const g = d.results[0];
+                const coords = { lat: g.latitude, lon: g.longitude, city: g.name };
+                localStorage.setItem('weatherCityCoords', JSON.stringify(coords));
+                const w = await fetchWeatherFor(coords.lat, coords.lon, coords.city);
+                renderWeather(w);
+                localStorage.setItem('weatherCache', JSON.stringify(w));
+            } catch (e) { alert('Počasí se nepodařilo načíst: ' + e.message); }
+        }
+
         function initWeather() {
-            // Zkus cache první
-            const cached = localStorage.getItem('weatherCache');
-            if (cached) {
-                const w = JSON.parse(cached);
-                const age = (Date.now() - w.time) / 60000; // minuty
-                if (age < 30) {
-                    const iconEl = document.getElementById('weatherIcon');
-                    const tempEl = document.getElementById('weatherTemp');
-                    const cityEl = document.getElementById('weatherCity');
-                    if (iconEl) iconEl.textContent = w.weatherIcon;
-                    if (tempEl) tempEl.textContent = `${w.temp}°C`;
-                    if (cityEl) cityEl.textContent = `${w.wind} km/h`;
-                    return;
+            // Zkus cache první (max 30 min)
+            try {
+                const cached = localStorage.getItem('weatherCache');
+                if (cached) {
+                    const w = JSON.parse(cached);
+                    if ((Date.now() - w.time) / 60000 < 30) { renderWeather(w); return; }
                 }
-            }
-            // Načti nové
+            } catch (e) { localStorage.removeItem('weatherCache'); }
             loadWeather();
         }
 
@@ -6262,18 +6290,23 @@ Použij české názvy disciplín. Každá série: X× Ym styl @interval`;
             if (el) el.classList.add('active');
         }
 
-        loadData();
-        initTheme();
-        initWeather();
-        if (appData.trainingHistory.length > 0) updateStatistics();
-        updateExistingSwimmersNotice();
-        // initFunWidget - element je staticky v HTML, spusť hned
-        initFunWidget();
-        const todayEl = document.getElementById('todayDate');
-        if (todayEl) todayEl.textContent = new Date().toLocaleDateString('cs-CZ', {day:'numeric',month:'short'});
-        if (document.getElementById('csps-tab-main')?.classList.contains('active')) {
-            renderCSPSTab();
+        // Init — každý krok izolovaný, jedna chyba nezabije zbytek
+        function safeInit(name, fn) {
+            try { fn(); } catch (e) { console.error(`[init] ${name} selhal:`, e); }
         }
+        safeInit('loadData', loadData);
+        safeInit('funWidget', initFunWidget);
+        safeInit('todayDate', () => {
+            const todayEl = document.getElementById('todayDate');
+            if (todayEl) todayEl.textContent = new Date().toLocaleDateString('cs-CZ', {day:'numeric',month:'short'});
+        });
+        safeInit('theme', initTheme);
+        safeInit('weather', initWeather);
+        safeInit('statistics', () => { if (appData.trainingHistory.length > 0) updateStatistics(); });
+        safeInit('existingSwimmers', updateExistingSwimmersNotice);
+        safeInit('cspsTab', () => {
+            if (document.getElementById('csps-tab-main')?.classList.contains('active')) renderCSPSTab();
+        });
     </script>
 </body>
 </html>
