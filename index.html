@@ -2451,7 +2451,7 @@ COACH TIP: [One practical coaching cue for today's session]
                 const yarmillBtn = document.getElementById('yarmillBtn');
                 if (yarmillBtn) yarmillBtn.style.display = '';
                 resetTrainingChat();
-                initStopwatches(selected, trainingText);
+                if (!window.rbFreeMode) initStopwatches(selected, trainingText);
                 // Add video links to training text
                 setTimeout(() => {
                     const el = document.getElementById('trainingTextContent');
@@ -2519,11 +2519,10 @@ COACH TIP: [One practical coaching cue for today's session]
                 <div class="training-output">
                     <div style="text-align:center;margin-bottom:20px;padding-bottom:15px;border-bottom:1px solid var(--border);">
                         <h2 style="color:var(--text);font-size:1.4em;margin-bottom:8px;">${isSuchy ? '🏋️' : '🏊'} ${new Date().toLocaleDateString('cs-CZ')}</h2>
-                        <div style="color:var(--text2);font-size:0.9em;">${isSuchy ? '🏋️ Suchá příprava • ' + duration + ' min • ' + swimmers.length + ' plavců' : pool + ' • ' + duration + ' min • ' + targetMeters + 'm • ' + swimmers.length + ' plavců'}</div>
-                        ${race && race !== 'Suchá příprava' ? `<div style="color:var(--blue);margin-top:6px;font-size:0.9em;">🏆 ${race}</div>` : ''}
+                        ${rbHeaderChips(isSuchy, swimmers, duration, pool, targetMeters, race)}
                     </div>
                     ${methodologyBadge}
-                    <div style="margin-bottom:15px;color:var(--text);font-size:0.9em;"><strong>Přítomní:</strong> ${swimmers.map(s => s.jmeno).join(', ')}</div>
+                    ${window.rbFreeMode ? '' : `<div style="margin-bottom:15px;color:var(--text);font-size:0.9em;"><strong>Přítomní:</strong> ${swimmers.map(s => s.jmeno).join(', ')}</div>`}
                     <div style="line-height:1.7;color:var(--text2);font-size:0.88em;" id="trainingTextContent"></div>
                 </div>
                 <div id="stopwatchPanel"></div>
@@ -5298,7 +5297,7 @@ Použij české názvy disciplín. Každá série: X× Ym styl @interval`;
             const autoMeters = { '60': '2500m', '90': '3800m', '120': '5000m' };
 
             const previewItems = [
-                { icon: '👥', label: 'Plavci', value: selected.length > 0 ? selected.length + '× (' + selected.map(s => s.jmeno.split(' ')[0]).join(', ') + ')' : '—' },
+                window.rbFreeMode ? { icon: '🎯', label: 'Režim', value: 'Na míru · ' + rbFreeLabel() } : { icon: '👥', label: 'Plavci', value: selected.length > 0 ? selected.length + '× (' + selected.map(s => s.jmeno.split(' ')[0]).join(', ') + ')' : '—' },
                 { icon: '⏱️', label: 'Délka', value: duration + ' min' },
             ];
             if (type === 'suchy') {
@@ -7558,6 +7557,27 @@ Na konci jeden řádek: CELKEM: ${duration} min, a pak jedna věta COACH TIP.`;
                 '</div></div>';
             m.addEventListener('click', e => { if (e.target === m) m.remove(); });
             document.body.appendChild(m);
+        }
+
+        function rbPlural(n) { return n + ' ' + (n === 1 ? 'plavec' : (n >= 2 && n <= 4 ? 'plavci' : 'plavců')); }
+        function rbFreeLabel() { const el = document.getElementById('freeAge'); return el ? el.options[el.selectedIndex].text.replace(/\s*\(.*\)/, '') : 'Skupina'; }
+        function rbHeaderChips(isSuchy, swimmers, duration, pool, targetMeters, race) {
+            const chip = (txt, accent) => '<span style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;font-size:0.82em;font-weight:600;' +
+                (accent ? 'background:rgba(236,72,153,0.10);border:1px solid rgba(236,72,153,0.35);color:#db2777;' : 'background:var(--surface2);border:1px solid var(--border);color:var(--text2);') + '">' + txt + '</span>';
+            const c = [];
+            if (isSuchy) c.push(chip('🏋️ Suchá příprava'));
+            else c.push(chip('📏 ' + String(pool).replace('m', ' m')), chip('🏊 ' + Number(targetMeters).toLocaleString('cs-CZ') + ' m'));
+            c.push(chip('⏱️ ' + duration + ' min'));
+            if (window.rbFreeMode) {
+                const f = rbGetFocus();
+                const tl = { auto: 'Auto podle fáze', vytrvalost: 'Vytrvalost', intervaly: 'Intervaly', kratke: 'Krátké časy', technika: 'Technika' }[f.typ];
+                c.push(chip('🎯 ' + tl + (f.styles.length ? ' · ' + f.styles.map(x => RB_STY[x]).join(' + ') : ''), true));
+                c.push(chip('👥 ' + rbFreeLabel()));
+            } else {
+                c.push(chip('👥 ' + rbPlural(swimmers.length)));
+                if (race && race !== 'Běžný trénink' && race !== 'Suchá příprava') c.push(chip('🏆 ' + race, true));
+            }
+            return '<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:4px;">' + c.join('') + '</div>';
         }
     </script>
 </body>
