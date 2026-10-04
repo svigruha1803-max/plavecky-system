@@ -797,7 +797,7 @@
             <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
                 <div>
                     <h1 style="font-size:clamp(0.95em,3vw,1.3em);font-weight:700;">🤖 Mattyho tréninkový robůtek</h1>
-                    <p style="font-size:0.75em;color:var(--text3);">šup do vody • žádné výmluvy • makáme 🏊 <span style="opacity:0.6;font-size:0.9em;color:var(--green);cursor:help;" title="v3.9 — zaměření tréninku (typ + 2 styly), záložka Yarmill: rozvrh, generátor období (auto/na míru, 25/50 m), zápis plánu i skutečnosti přes záložku, plán → skutečnost">v3.9 📒</span></p>
+                    <p style="font-size:0.75em;color:var(--text3);">šup do vody • žádné výmluvy • makáme 🏊 <span style="opacity:0.6;font-size:0.9em;color:var(--green);cursor:help;" title="v3.10 — režim Na míru (podle cíle, bez ohledu na účast); v3.9 — zaměření tréninku (typ + 2 styly), záložka Yarmill: rozvrh, generátor období (auto/na míru, 25/50 m), zápis plánu i skutečnosti přes záložku, plán → skutečnost">v3.10 🎯</span></p>
                 </div>
                 <div style="display:flex;align-items:center;gap:8px;">
                     <select id="clubSelector" onchange="switchClub(this.value)"
@@ -857,6 +857,20 @@
 
             <!-- Step 1 -->
             <div class="section active" id="section1">
+
+                <!-- Volba režimu (v3.10) -->
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-bottom:20px;">
+                    <div onclick="rbExitFree();document.getElementById('step1SearchInput')?.focus()" style="padding:16px;background:var(--surface2);border:2px solid var(--border2);border-radius:14px;cursor:pointer;">
+                        <div style="font-size:1.4em;">👥</div>
+                        <div style="font-weight:700;color:var(--text);margin-top:4px;">Podle účasti</div>
+                        <div style="color:var(--text3);font-size:0.78em;">vyber, kdo dorazil — trénink na míru plavcům (časy z ČSPS)</div>
+                    </div>
+                    <div onclick="rbStartFree()" style="padding:16px;background:linear-gradient(135deg,rgba(236,72,153,0.12),rgba(124,58,237,0.12));border:2px solid #ec4899;border-radius:14px;cursor:pointer;">
+                        <div style="font-size:1.4em;">🎯</div>
+                        <div style="font-weight:700;color:var(--text);margin-top:4px;">Na míru — podle cíle</div>
+                        <div style="color:var(--text3);font-size:0.78em;">zvolíš styly, typ (vytrvalost / intervaly / krátké časy), bazén 25/50 — bez ohledu na to, kdo dorazí</div>
+                    </div>
+                </div>
 
                 <!-- HERO — vždy plná výška -->
                 <div style="margin:-24px -20px 24px;padding:44px 28px 40px;position:relative;overflow:hidden;background:linear-gradient(135deg,rgba(79,142,247,0.13) 0%,rgba(124,58,237,0.1) 50%,rgba(61,214,140,0.06) 100%);border-bottom:1px solid var(--border);">
@@ -1018,6 +1032,23 @@
             <div class="section" id="section3">
                 <h2>⚙️ Detaily tréninku</h2>
 
+
+                <!-- Režim na míru (v3.10) -->
+                <div id="freeModeWrap" style="display:none;margin-bottom:20px;background:linear-gradient(135deg,rgba(236,72,153,0.1),rgba(124,58,237,0.1));border:1px solid #ec4899;border-radius:14px;padding:14px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+                        <div style="font-weight:700;color:var(--text);">🎯 Režim na míru — bez ohledu na účast</div>
+                        <button type="button" onclick="rbExitFree();goToStep(1)" style="padding:6px 12px;background:var(--surface3);border:1px solid var(--border2);border-radius:8px;color:var(--text2);cursor:pointer;font-size:0.78em;">↩ Podle účasti</button>
+                    </div>
+                    <label>👥 Kategorie skupiny</label>
+                    <select id="freeAge" style="margin-top:8px;">
+                        <option value="9">Mladší žáci (8–10 let)</option>
+                        <option value="11">Starší žáci (11–12 let)</option>
+                        <option value="13" selected>Žáci / mladší dorost (13–14 let)</option>
+                        <option value="16">Dorost (15–17 let)</option>
+                        <option value="19">Dospělí (18+)</option>
+                    </select>
+                    <div style="color:var(--text3);font-size:0.75em;margin-top:6px;">Bez osobních časů — intervaly AI odvodí z kategorie. Nastav níže zaměření a styly.</div>
+                </div>
                 <!-- Typ + Délka + Bazén v jedné řadě -->
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;">
                     <!-- Typ tréninku -->
@@ -1902,7 +1933,10 @@ Všichni plavci a tréninky tohoto klubu budou NENÁVRATNĚ smazány!`)) return;
         // switchMainTab - definováno v ČSPS sekci
 
         function goToStep(stepNum) {
-            if (stepNum === 3 && appData.selectedSwimmers.length === 0) {
+            if (window.rbFreeMode && stepNum === 2) { rbExitFree(); stepNum = 1; }
+            if (stepNum === 1) rbExitFree();
+            const fw = document.getElementById('freeModeWrap'); if (fw) fw.style.display = window.rbFreeMode ? '' : 'none';
+            if (stepNum === 3 && !window.rbFreeMode && appData.selectedSwimmers.length === 0) {
                 alert('⚠️ Vyber alespoň jednoho plavce na kroku 2!');
                 return;
             }
@@ -2140,7 +2174,7 @@ Všichni plavci a tréninky tohoto klubu budou NENÁVRATNĚ smazány!`)) return;
             renderGenMsg();
             const genTimer = setInterval(() => { genMsgIdx++; renderGenMsg(); }, 2500);
 
-            const selected = appData.selectedSwimmers.map(i => appData.swimmers[i]);
+            const selected = window.rbFreeMode ? [rbFreeSwimmer()] : appData.selectedSwimmers.map(i => appData.swimmers[i]);
             const duration = document.getElementById('trainingDuration').value;
             const pool = document.getElementById('poolSize').value;
             const notes = document.getElementById('trainingNotes').value;
@@ -5267,7 +5301,7 @@ Použij české názvy disciplín. Každá série: X× Ym styl @interval`;
             const methodSub = document.getElementById('methodologyPreviewSub');
             if (!grid) return;
 
-            const selected = appData.selectedSwimmers.map(i => appData.swimmers[i]).filter(Boolean);
+            const selected = window.rbFreeMode ? [rbFreeSwimmer()] : appData.selectedSwimmers.map(i => appData.swimmers[i]).filter(Boolean);
             const duration = document.getElementById('trainingDuration')?.value || '90';
             const pool = document.getElementById('poolSize')?.value || '25m';
             const type = document.querySelector('input[name="trainingType"]:checked')?.value || 'pool';
@@ -7503,6 +7537,20 @@ Na konci jeden řádek: CELKEM: ${duration} min, a pak jedna věta COACH TIP.`;
             })();
         }
 
+
+        // ── v3.10 Režim na míru (bez ohledu na účast) ──
+        window.rbFreeMode = false;
+        function rbStartFree() {
+            window.rbFreeMode = true;
+            goToStep(3);
+            setTimeout(() => { const f = document.getElementById('focusWrap'); if (f) f.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 120);
+        }
+        function rbExitFree() { window.rbFreeMode = false; const fw = document.getElementById('freeModeWrap'); if (fw) fw.style.display = 'none'; }
+        function rbFreeSwimmer() {
+            const names = { VZ: 'Volný způsob', Z: 'Znak', P: 'Prsa', M: 'Motýl', PZ: 'Polohový závod' };
+            const st = rbFocusStyles.map(x => names[x]);
+            return { jmeno: 'Skupina (na míru)', vek: parseInt(document.getElementById('freeAge')?.value) || 13, primarni_styly: st.length ? st : ['Volný způsob'], bestTimes: [], discipliny: {} };
+        }
     </script>
 </body>
 </html>
