@@ -787,6 +787,15 @@
         .rb-card{background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:16px;}
         .rb-card h3{color:var(--text);font-size:1em;font-weight:700;margin:0 0 12px;}
         .ym-row input,.ym-row select{padding:7px 8px;font-size:0.8em;}
+        @media (max-width: 640px) {
+            .ym-row { grid-template-columns: 1fr 1fr 1fr 1fr !important; }
+            .ym-row [data-f="k"], .ym-row [data-f="misto"] { grid-column: span 2; }
+            #weekGrid { grid-template-columns: repeat(7, minmax(84px, 1fr)) !important; overflow-x: auto; padding-bottom: 6px; }
+            .tab-btn { flex: 0 0 auto; min-width: 0; padding: 13px 12px; font-size: 0.78em; }
+        }
+        .btn.gen-again { background: var(--surface2) !important; color: var(--text) !important; border: 1px solid var(--border2) !important; box-shadow: none !important; padding: 12px !important; font-size: 0.9em !important; }
+        .btn:focus { outline: none; }
+        .btn:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
     </style>
 </head>
 <body>
@@ -797,7 +806,7 @@
             <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
                 <div>
                     <h1 style="font-size:clamp(0.95em,3vw,1.3em);font-weight:700;">🤖 Mattyho tréninkový robůtek</h1>
-                    <p style="font-size:0.75em;color:var(--text3);">šup do vody • žádné výmluvy • makáme 🏊 <span style="opacity:0.6;font-size:0.9em;color:var(--green);cursor:help;" title="v3.11 — volba režimu po Trénovat (Podle účasti / Na míru), hlavička výstupu se štítky; v3.10 — režim Na míru (podle cíle, bez ohledu na účast); v3.9 — zaměření tréninku (typ + 2 styly), záložka Yarmill: rozvrh, generátor období (auto/na míru, 25/50 m), zápis plánu i skutečnosti přes záložku, plán → skutečnost">v3.11 🎯</span></p>
+                    <p style="font-size:0.75em;color:var(--text3);">šup do vody • žádné výmluvy • makáme 🏊 <span style="opacity:0.6;font-size:0.9em;color:var(--green);cursor:help;" title="v3.13 — HZ VODA v minutách, jemnější „Generovat znovu“; v3.12 — vtip celý, světlý režim sjednocen (ČSPS, Sezóna…), mobil: záložky, týden, rozvrh; v3.11 — volba režimu po Trénovat (Podle účasti / Na míru), hlavička výstupu se štítky; v3.10 — režim Na míru (podle cíle, bez ohledu na účast); v3.9 — zaměření tréninku (typ + 2 styly), záložka Yarmill: rozvrh, generátor období (auto/na míru, 25/50 m), zápis plánu i skutečnosti přes záložku, plán → skutečnost">v3.13 ✨</span></p>
                 </div>
                 <div style="display:flex;align-items:center;gap:8px;">
                     <select id="clubSelector" onchange="switchClub(this.value)"
@@ -903,13 +912,13 @@
                                 </div>
                             </div>
                             <!-- Vtip -->
-                            <div style="background:rgba(255,255,255,0.04);border:1px solid var(--border2);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:8px;flex:1;min-width:160px;max-width:240px;">
+                            <div style="background:rgba(255,255,255,0.04);border:1px solid var(--border2);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:8px;flex:1 1 280px;min-width:220px;">
                                 <div style="flex:1;overflow:hidden;">
                                     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;">
                                         <div id="funWidgetLabel" style="color:var(--text3);font-size:0.65em;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">😄 Vtip</div>
                                         <button onclick="nextFunContent()" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:0.8em;padding:0;font-family:Inter,sans-serif;">↻</button>
                                     </div>
-                                    <div id="funWidgetContent" style="color:var(--text2);font-size:0.72em;line-height:1.4;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;"></div>
+                                    <div id="funWidgetContent" style="color:var(--text2);font-size:0.78em;line-height:1.45;"></div>
                                     <div id="funWidgetMeta" style="display:none;"></div>
                                 </div>
                             </div>
@@ -1336,9 +1345,9 @@
             <h2>🔗 ČSPS Integrace</h2>
             
             <!-- Sekce: Plavci a jejich ČSPS ID -->
-            <div style="background: #3f3f46; border: 1px solid #52525b; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
+            <div style="background: var(--surface2); border: 1px solid var(--border2); border-radius: 12px; padding: 20px; margin-bottom: 20px;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                    <h3 style="color: #fafafa; font-size: 1.1em; font-weight: 600; margin: 0;">👥 Plavci a ČSPS ID</h3>
+                    <h3 style="color: var(--text); font-size: 1.1em; font-weight: 600; margin: 0;">👥 Plavci a ČSPS ID</h3>
                     <button onclick="syncAllTimes()" id="syncAllBtn" style="padding: 8px 16px; background: #60a5fa; border: none; border-radius: 8px; color: #18181b; font-weight: 600; cursor: pointer; font-size: 0.85em; font-family: Inter, sans-serif;">
                         🔄 Sync všichni
                     </button>
@@ -1347,14 +1356,14 @@
             </div>
 
             <!-- Sekce: Doporučené závody -->
-            <div style="background: #3f3f46; border: 1px solid #52525b; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
+            <div style="background: var(--surface2); border: 1px solid var(--border2); border-radius: 12px; padding: 20px; margin-bottom: 20px;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                    <h3 style="color: #fafafa; font-size: 1.1em; font-weight: 600; margin: 0;">🏆 Doporučené závody</h3>
+                    <h3 style="color: var(--text); font-size: 1.1em; font-weight: 600; margin: 0;">🏆 Doporučené závody</h3>
                     <button onclick="loadRecommendedRaces()" id="recommendBtn" style="padding: 8px 16px; background: #4ade80; border: none; border-radius: 8px; color: #18181b; font-weight: 600; cursor: pointer; font-size: 0.85em; font-family: Inter, sans-serif;">
                         🔍 Načíst doporučení
                     </button>
                 </div>
-                <div id="recommendedRacesList"><div style="color: #a1a1aa; font-size: 0.9em; text-align: center; padding: 20px;">Klikni "Načíst doporučení" pro zobrazení vhodných závodů pro tvůj tým</div></div>
+                <div id="recommendedRacesList"><div style="color: var(--text2); font-size: 0.9em; text-align: center; padding: 20px;">Klikni "Načíst doporučení" pro zobrazení vhodných závodů pro tvůj tým</div></div>
             </div>
         </div>
 
@@ -1364,23 +1373,23 @@
             <h2>📈 Výkonnost plavců</h2>
 
             <!-- Výběr plavce -->
-            <div style="background:#3f3f46;border:1px solid #52525b;border-radius:12px;padding:20px;margin-bottom:20px;">
+            <div style="background:var(--surface2);border:1px solid var(--border2);border-radius:12px;padding:20px;margin-bottom:20px;">
                 <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
                     <div style="flex:1;min-width:200px;">
-                        <label style="color:#a1a1aa;font-size:0.85em;display:block;margin-bottom:6px;">Plavec</label>
-                        <select id="perfSwimmerSelect" onchange="loadPerformanceData()" style="width:100%;padding:10px;background:#27272a;border:1px solid #52525b;border-radius:8px;color:#e4e4e7;font-family:Inter,sans-serif;">
+                        <label style="color:var(--text2);font-size:0.85em;display:block;margin-bottom:6px;">Plavec</label>
+                        <select id="perfSwimmerSelect" onchange="loadPerformanceData()" style="width:100%;padding:10px;background:var(--surface3);border:1px solid var(--border2);border-radius:8px;color:var(--text);font-family:Inter,sans-serif;">
                             <option value="">-- Vyber plavce --</option>
                         </select>
                     </div>
                     <div style="flex:1;min-width:160px;">
-                        <label style="color:#a1a1aa;font-size:0.85em;display:block;margin-bottom:6px;">Disciplína</label>
-                        <select id="perfDisciplineSelect" onchange="updatePerformanceChart()" style="width:100%;padding:10px;background:#27272a;border:1px solid #52525b;border-radius:8px;color:#e4e4e7;font-family:Inter,sans-serif;">
+                        <label style="color:var(--text2);font-size:0.85em;display:block;margin-bottom:6px;">Disciplína</label>
+                        <select id="perfDisciplineSelect" onchange="updatePerformanceChart()" style="width:100%;padding:10px;background:var(--surface3);border:1px solid var(--border2);border-radius:8px;color:var(--text);font-family:Inter,sans-serif;">
                             <option value="">-- Vyber disciplínu --</option>
                         </select>
                     </div>
                     <div style="flex:1;min-width:120px;">
-                        <label style="color:#a1a1aa;font-size:0.85em;display:block;margin-bottom:6px;">Bazén</label>
-                        <select id="perfPoolSelect" onchange="updatePerformanceChart()" style="width:100%;padding:10px;background:#27272a;border:1px solid #52525b;border-radius:8px;color:#e4e4e7;font-family:Inter,sans-serif;">
+                        <label style="color:var(--text2);font-size:0.85em;display:block;margin-bottom:6px;">Bazén</label>
+                        <select id="perfPoolSelect" onchange="updatePerformanceChart()" style="width:100%;padding:10px;background:var(--surface3);border:1px solid var(--border2);border-radius:8px;color:var(--text);font-family:Inter,sans-serif;">
                             <option value="25">25m</option>
                             <option value="50">50m</option>
                             <option value="">Oba</option>
@@ -1390,16 +1399,16 @@
             </div>
 
             <!-- Loading state -->
-            <div id="perfLoading" style="display:none;text-align:center;padding:40px;color:#a1a1aa;">
+            <div id="perfLoading" style="display:none;text-align:center;padding:40px;color:var(--text2);">
                 ⏳ Načítám historické časy z ČSPS...
             </div>
 
             <!-- Graf -->
-            <div id="perfChartContainer" style="display:none;background:#3f3f46;border:1px solid #52525b;border-radius:12px;padding:20px;margin-bottom:20px;">
+            <div id="perfChartContainer" style="display:none;background:var(--surface2);border:1px solid var(--border2);border-radius:12px;padding:20px;margin-bottom:20px;">
                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
                     <div>
-                        <h3 id="perfChartTitle" style="color:#fafafa;font-size:1em;font-weight:600;"></h3>
-                        <div id="perfChartSubtitle" style="color:#a1a1aa;font-size:0.82em;margin-top:2px;"></div>
+                        <h3 id="perfChartTitle" style="color:var(--text);font-size:1em;font-weight:600;"></h3>
+                        <div id="perfChartSubtitle" style="color:var(--text2);font-size:0.82em;margin-top:2px;"></div>
                     </div>
                     <div id="perfBadges" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
                 </div>
@@ -1409,14 +1418,14 @@
             </div>
 
             <!-- Statistiky plavce -->
-            <div id="perfStatsContainer" style="display:none;background:#3f3f46;border:1px solid #52525b;border-radius:12px;padding:20px;margin-bottom:20px;">
-                <h3 style="color:#fafafa;font-size:1em;font-weight:600;margin-bottom:16px;">📊 Přehled výkonnosti</h3>
+            <div id="perfStatsContainer" style="display:none;background:var(--surface2);border:1px solid var(--border2);border-radius:12px;padding:20px;margin-bottom:20px;">
+                <h3 style="color:var(--text);font-size:1em;font-weight:600;margin-bottom:16px;">📊 Přehled výkonnosti</h3>
                 <div id="perfStatsGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;"></div>
             </div>
 
             <!-- Všechny disciplíny -->
-            <div id="perfAllTimes" style="display:none;background:#3f3f46;border:1px solid #52525b;border-radius:12px;padding:20px;">
-                <h3 style="color:#fafafa;font-size:1em;font-weight:600;margin-bottom:16px;">🏆 Nejlepší časy</h3>
+            <div id="perfAllTimes" style="display:none;background:var(--surface2);border:1px solid var(--border2);border-radius:12px;padding:20px;">
+                <h3 style="color:var(--text);font-size:1em;font-weight:600;margin-bottom:16px;">🏆 Nejlepší časy</h3>
                 <div id="perfAllTimesGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;"></div>
             </div>
         </div>
@@ -1429,15 +1438,15 @@
             <div id="currentPhaseCard" style="border-radius:12px;padding:20px;margin-bottom:20px;"></div>
 
             <!-- Timeline sezóny -->
-            <div style="background:#3f3f46;border:1px solid #52525b;border-radius:12px;padding:20px;margin-bottom:20px;">
-                <h3 style="color:#fafafa;font-size:1em;font-weight:600;margin-bottom:16px;">📆 Průběh sezóny</h3>
+            <div style="background:var(--surface2);border:1px solid var(--border2);border-radius:12px;padding:20px;margin-bottom:20px;">
+                <h3 style="color:var(--text);font-size:1em;font-weight:600;margin-bottom:16px;">📆 Průběh sezóny</h3>
                 <div id="seasonTimeline"></div>
             </div>
 
             <!-- Generovat trénink pro fázi -->
-            <div style="background:#3f3f46;border:1px solid #52525b;border-radius:12px;padding:20px;margin-bottom:20px;">
-                <h3 style="color:#fafafa;font-size:1em;font-weight:600;margin-bottom:12px;">🤖 Generovat trénink pro aktuální fázi</h3>
-                <p id="seasonTrainingHint" style="color:#a1a1aa;font-size:0.85em;margin-bottom:12px;"></p>
+            <div style="background:var(--surface2);border:1px solid var(--border2);border-radius:12px;padding:20px;margin-bottom:20px;">
+                <h3 style="color:var(--text);font-size:1em;font-weight:600;margin-bottom:12px;">🤖 Generovat trénink pro aktuální fázi</h3>
+                <p id="seasonTrainingHint" style="color:var(--text2);font-size:0.85em;margin-bottom:12px;"></p>
                 <div style="margin-bottom:14px;">
                     <label style="color:var(--text3);font-size:0.75em;display:block;margin-bottom:6px;">⚙️ Přepsat automatickou fázi:</label>
                     <select id="manualPhaseSelect" onchange="setManualSeasonPhase(this.value)"
@@ -1452,7 +1461,7 @@
                     </select>
                 </div>
                 <div style="display:flex;gap:10px;flex-wrap:wrap;">
-                    <select id="seasonSwimmerSelect" style="flex:1;min-width:200px;padding:10px;background:#27272a;border:1px solid #52525b;border-radius:8px;color:#e4e4e7;font-family:Inter,sans-serif;">
+                    <select id="seasonSwimmerSelect" style="flex:1;min-width:200px;padding:10px;background:var(--surface3);border:1px solid var(--border2);border-radius:8px;color:var(--text);font-family:Inter,sans-serif;">
                         <option value="all">Celý tým</option>
                     </select>
                     <button onclick="generateSeasonTraining()" style="padding:10px 24px;background:#60a5fa;border:none;border-radius:8px;color:#18181b;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;">
@@ -1463,8 +1472,8 @@
             </div>
 
             <!-- Přehled fází -->
-            <div style="background:#3f3f46;border:1px solid #52525b;border-radius:12px;padding:20px;">
-                <h3 style="color:#fafafa;font-size:1em;font-weight:600;margin-bottom:16px;">📋 Fáze sezóny</h3>
+            <div style="background:var(--surface2);border:1px solid var(--border2);border-radius:12px;padding:20px;">
+                <h3 style="color:var(--text);font-size:1em;font-weight:600;margin-bottom:16px;">📋 Fáze sezóny</h3>
                 <div id="seasonPhasesList"></div>
             </div>
         </div>
@@ -1667,15 +1676,15 @@
     <!-- Settings Icon -->
     <div class="settings-icon" onclick="showSettingsMenu()">⚙️</div>
     
-    <div id="settingsMenu" style="display: none; position: fixed; bottom: 85px; right: 20px; background: #27272a; border: 1px solid #52525b; border-radius: 12px; padding: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.4); z-index: 100;">
+    <div id="settingsMenu" style="display: none; position: fixed; bottom: 85px; right: 20px; background: var(--surface3); border: 1px solid var(--border2); border-radius: 12px; padding: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.4); z-index: 100;">
 
-        <button onclick="exportSwimmersData(); closeSettingsMenu();" style="display: block; width: 100%; padding: 12px 16px; background: #3f3f46; border: 1px solid #52525b; border-radius: 8px; color: #e4e4e7; font-family: 'Inter', sans-serif; font-size: 0.9em; margin-bottom: 8px; cursor: pointer; text-align: left; transition: all 0.2s;">
+        <button onclick="exportSwimmersData(); closeSettingsMenu();" style="display: block; width: 100%; padding: 12px 16px; background: var(--surface2); border: 1px solid var(--border2); border-radius: 8px; color: var(--text); font-family: 'Inter', sans-serif; font-size: 0.9em; margin-bottom: 8px; cursor: pointer; text-align: left; transition: all 0.2s;">
             📤 Exportovat plavce
         </button>
-        <button onclick="document.getElementById('importFileInput').click(); closeSettingsMenu();" style="display: block; width: 100%; padding: 12px 16px; background: #3f3f46; border: 1px solid #52525b; border-radius: 8px; color: #e4e4e7; font-family: 'Inter', sans-serif; font-size: 0.9em; margin-bottom: 8px; cursor: pointer; text-align: left; transition: all 0.2s;">
+        <button onclick="document.getElementById('importFileInput').click(); closeSettingsMenu();" style="display: block; width: 100%; padding: 12px 16px; background: var(--surface2); border: 1px solid var(--border2); border-radius: 8px; color: var(--text); font-family: 'Inter', sans-serif; font-size: 0.9em; margin-bottom: 8px; cursor: pointer; text-align: left; transition: all 0.2s;">
             📥 Importovat plavce
         </button>
-        <button onclick="deleteAllSwimmers(); closeSettingsMenu();" style="display: block; width: 100%; padding: 12px 16px; background: #dc2626; border: 1px solid #991b1b; border-radius: 8px; color: #fafafa; font-family: 'Inter', sans-serif; font-size: 0.9em; cursor: pointer; text-align: left; transition: all 0.2s;">
+        <button onclick="deleteAllSwimmers(); closeSettingsMenu();" style="display: block; width: 100%; padding: 12px 16px; background: #dc2626; border: 1px solid #991b1b; border-radius: 8px; color: var(--text); font-family: 'Inter', sans-serif; font-size: 0.9em; cursor: pointer; text-align: left; transition: all 0.2s;">
             🗑️ Smazat všechny plavce
         </button>
     </div>
@@ -1801,14 +1810,14 @@
                 '<button onclick="selectClubColor(\'' + c + '\')" data-color="' + c + '" class="color-pick-btn" style="width:32px;height:32px;background:' + c + ';border:3px solid transparent;border-radius:8px;cursor:pointer;"></button>'
             ).join('');
             const html = '<div style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.9);z-index:2000;display:flex;align-items:center;justify-content:center;padding:20px;" id="addClubDialog">'
-                + '<div style="background:#27272a;border-radius:12px;padding:28px;max-width:400px;width:100%;">'
-                + '<h2 style="color:#fafafa;margin-bottom:20px;font-size:1.2em;">🏊 Přidat nový klub</h2>'
-                + '<label style="color:#a1a1aa;font-size:0.85em;display:block;margin-bottom:6px;">Název klubu</label>'
-                + '<input type="text" id="newClubName" placeholder="např. SK Plavání Brno" style="width:100%;padding:12px;background:#3f3f46;border:1px solid #52525b;border-radius:8px;color:#e4e4e7;font-family:Inter,sans-serif;margin-bottom:16px;">'
-                + '<label style="color:#a1a1aa;font-size:0.85em;display:block;margin-bottom:8px;">Barva</label>'
+                + '<div style="background:var(--surface3);border-radius:12px;padding:28px;max-width:400px;width:100%;">'
+                + '<h2 style="color:var(--text);margin-bottom:20px;font-size:1.2em;">🏊 Přidat nový klub</h2>'
+                + '<label style="color:var(--text2);font-size:0.85em;display:block;margin-bottom:6px;">Název klubu</label>'
+                + '<input type="text" id="newClubName" placeholder="např. SK Plavání Brno" style="width:100%;padding:12px;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;color:var(--text);font-family:Inter,sans-serif;margin-bottom:16px;">'
+                + '<label style="color:var(--text2);font-size:0.85em;display:block;margin-bottom:8px;">Barva</label>'
                 + '<div style="display:flex;gap:8px;margin-bottom:20px;">' + colorBtns + '</div>'
                 + '<div style="display:flex;gap:10px;">'
-                + '<button onclick="document.getElementById(\'addClubDialog\').remove()" style="flex:1;padding:12px;background:#3f3f46;border:none;border-radius:8px;color:#e4e4e7;cursor:pointer;font-family:Inter,sans-serif;">Zrušit</button>'
+                + '<button onclick="document.getElementById(\'addClubDialog\').remove()" style="flex:1;padding:12px;background:var(--surface2);border:none;border-radius:8px;color:var(--text);cursor:pointer;font-family:Inter,sans-serif;">Zrušit</button>'
                 + '<button onclick="createClub()" style="flex:1;padding:12px;background:#60a5fa;border:none;border-radius:8px;color:#18181b;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;">✅ Vytvořit</button>'
                 + '</div></div></div>';
             document.body.insertAdjacentHTML('beforeend', html);
@@ -1946,11 +1955,11 @@ Všichni plavci a tréninky tohoto klubu budou NENÁVRATNĚ smazány!`)) return;
             if (stepNum === 1) {
                 updateExistingSwimmersNotice();
                 const resultsEl = document.getElementById('step1Results');
-                if (resultsEl) resultsEl.innerHTML = '<div style="color:#71717a;font-size:0.85em;text-align:center;padding:12px;">Zadej jméno a stiskni Enter</div>';
+                if (resultsEl) resultsEl.innerHTML = '<div style="color:var(--text3);font-size:0.85em;text-align:center;padding:12px;">Zadej jméno a stiskni Enter</div>';
             }
             
             if (stepNum === 2) displaySwimmers();
-            if (stepNum === 4) updateTrainingPreview();
+            if (stepNum === 4) { updateTrainingPreview(); const _o = document.getElementById('trainingOutput'), _g = document.getElementById('generateBtn'); if (_g && _o && !_o.innerHTML.trim()) { _g.classList.remove('gen-again'); _g.textContent = '🤖 Vygenerovat trénink'; } }
             if (stepNum === 3) setTimeout(() => { initEquipmentStyles(); rbInitChips(); }, 50);
         }
 
@@ -2053,12 +2062,12 @@ Všichni plavci a tréninky tohoto klubu budou NENÁVRATNĚ smazány!`)) return;
                         .slice(0, 3);
                     const display = top.length > 0 ? top : s.bestTimes.slice(0, 3);
                     timesHtml = display.map(t =>
-                        `<span style="display:block;">${t.code}: <strong style="color:#60a5fa;">${t.timeFormatted}</strong></span>`
+                        `<span style="display:block;">${t.code || t.discipline || ''}: <strong style="color:var(--blue);">${t.timeFormatted}</strong></span>`
                     ).join('');
                 } else if (s.discipliny && Object.keys(s.discipliny).length > 0) {
                     timesHtml = Object.entries(s.discipliny).slice(0,2).map(([d,t]) => `${d}: ${t}`).join('<br>');
                 } else {
-                    timesHtml = '<span style="color:#71717a;">Bez časů</span>';
+                    timesHtml = '<span style="color:var(--text3);">Bez časů</span>';
                 }
 
                 const primary = s.primarni_styly
@@ -2165,6 +2174,7 @@ Všichni plavci a tréninky tohoto klubu budou NENÁVRATNĚ smazány!`)) return;
             const duration = document.getElementById('trainingDuration').value;
             const pool = document.getElementById('poolSize').value;
             const notes = document.getElementById('trainingNotes').value;
+            window.rbCurDuration = parseInt(duration) || null;
 
             // Get training type
             const trainingType = document.getElementById('radioSuchy')?.checked ? 'suchy' : (document.getElementById('radioOw')?.checked ? 'openwater' : 'pool');
@@ -2376,7 +2386,7 @@ Section titles are plain text exactly as in the template below (e.g. "3. HLAVNÍ
 ━━━ OUTPUT FORMAT (write in Czech, be specific and practical) ━━━
 
 === VÝKAZ ===
-HZ VODA: [m]m
+HZ VODA: ${duration} min
 KM CELKEM: [km]km
 NOHY: [m]m
 TECHNIKA: [m]m
@@ -2447,7 +2457,7 @@ COACH TIP: [One practical coaching cue for today's session]
                 document.getElementById('trainingActions').style.display = 'block';
                 document.getElementById('trainingBackBtn').style.display = 'none';
                 const genBtn2 = document.getElementById('generateBtn');
-                if (genBtn2) { genBtn2.disabled = false; genBtn2.textContent = '🔄 Generovat znovu'; genBtn2.style.opacity = '1'; }
+                if (genBtn2) { genBtn2.disabled = false; genBtn2.textContent = '🔄 Generovat znovu'; genBtn2.style.opacity = '1'; genBtn2.classList.add('gen-again'); }
                 const yarmillBtn = document.getElementById('yarmillBtn');
                 if (yarmillBtn) yarmillBtn.style.display = '';
                 resetTrainingChat();
@@ -2464,7 +2474,7 @@ COACH TIP: [One practical coaching cue for today's session]
                 clearInterval(genTimer);
                 output.innerHTML = '';
                 const genBtnErr = document.getElementById('generateBtn');
-                if (genBtnErr) { genBtnErr.disabled = false; genBtnErr.textContent = '🤖 Vygenerovat trénink'; genBtnErr.style.opacity = '1'; }
+                if (genBtnErr) { genBtnErr.disabled = false; genBtnErr.textContent = '🤖 Vygenerovat trénink'; genBtnErr.style.opacity = '1'; genBtnErr.classList.remove('gen-again'); }
                 let errMsg = error.message;
                 let errHint = '';
                 if (errMsg.includes('fetch') || errMsg.includes('Failed') || errMsg.includes('network')) {
@@ -2519,7 +2529,7 @@ COACH TIP: [One practical coaching cue for today's session]
                 <div class="training-output">
                     <div style="text-align:center;margin-bottom:20px;padding-bottom:15px;border-bottom:1px solid var(--border);">
                         <h2 style="color:var(--text);font-size:1.4em;margin-bottom:8px;">${isSuchy ? '🏋️' : '🏊'} ${new Date().toLocaleDateString('cs-CZ')}</h2>
-                        ${rbHeaderChips(isSuchy, swimmers, duration, pool, targetMeters, race)}
+                        ${rbHeaderChips(isSuchy, swimmers, duration, pool, plannedMeters || targetMeters, race)}
                     </div>
                     ${methodologyBadge}
                     ${window.rbFreeMode ? '' : `<div style="margin-bottom:15px;color:var(--text);font-size:0.9em;"><strong>Přítomní:</strong> ${swimmers.map(s => s.jmeno).join(', ')}</div>`}
@@ -2528,50 +2538,50 @@ COACH TIP: [One practical coaching cue for today's session]
                 <div id="stopwatchPanel"></div>
 
                 <!-- FEEDBACK FORMULÁŘ -->
-                <div style="background:#3f3f46;border:1px solid #52525b;border-radius:12px;padding:20px;margin-top:16px;">
-                    <h3 style="color:#fafafa;font-size:1em;font-weight:600;margin-bottom:16px;">📋 Trenérské poznámky</h3>
+                <div style="background:var(--surface2);border:1px solid var(--border2);border-radius:12px;padding:20px;margin-top:16px;">
+                    <h3 style="color:var(--text);font-size:1em;font-weight:600;margin-bottom:16px;">📋 Trenérské poznámky</h3>
 
                     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
                         <div>
-                            <label style="color:#a1a1aa;font-size:0.82em;display:block;margin-bottom:6px;">${isSuchy ? '⏱️ Odcvičeno (min)' : '📏 Zaplavali jsme (m)'}</label>
+                            <label style="color:var(--text2);font-size:0.82em;display:block;margin-bottom:6px;">${isSuchy ? '⏱️ Odcvičeno (min)' : '📏 Zaplavali jsme (m)'}</label>
                             <input type="number" id="fbMeters" value="${isSuchy ? duration : plannedMeters}"
-                                style="width:100%;padding:10px;background:#27272a;border:1px solid #52525b;border-radius:8px;color:#e4e4e7;font-family:Inter,sans-serif;font-size:0.9em;">
+                                style="width:100%;padding:10px;background:var(--surface3);border:1px solid var(--border2);border-radius:8px;color:var(--text);font-family:Inter,sans-serif;font-size:0.9em;">
                         </div>
                         <div>
-                            <label style="color:#a1a1aa;font-size:0.82em;display:block;margin-bottom:6px;">⭐ Hodnocení tréninku</label>
+                            <label style="color:var(--text2);font-size:0.82em;display:block;margin-bottom:6px;">⭐ Hodnocení tréninku</label>
                             <div style="display:flex;gap:6px;padding-top:6px;">
-                                <button onclick="setRating(1)" id="star1" style="width:36px;height:36px;background:#27272a;border:1px solid #52525b;border-radius:6px;color:#a1a1aa;cursor:pointer;font-size:1.1em;font-family:Inter,sans-serif;">★</button>
-                                <button onclick="setRating(2)" id="star2" style="width:36px;height:36px;background:#27272a;border:1px solid #52525b;border-radius:6px;color:#a1a1aa;cursor:pointer;font-size:1.1em;font-family:Inter,sans-serif;">★</button>
-                                <button onclick="setRating(3)" id="star3" style="width:36px;height:36px;background:#27272a;border:1px solid #52525b;border-radius:6px;color:#a1a1aa;cursor:pointer;font-size:1.1em;font-family:Inter,sans-serif;">★</button>
-                                <button onclick="setRating(4)" id="star4" style="width:36px;height:36px;background:#27272a;border:1px solid #52525b;border-radius:6px;color:#a1a1aa;cursor:pointer;font-size:1.1em;font-family:Inter,sans-serif;">★</button>
-                                <button onclick="setRating(5)" id="star5" style="width:36px;height:36px;background:#27272a;border:1px solid #52525b;border-radius:6px;color:#a1a1aa;cursor:pointer;font-size:1.1em;font-family:Inter,sans-serif;">★</button>
+                                <button onclick="setRating(1)" id="star1" style="width:36px;height:36px;background:var(--surface3);border:1px solid var(--border2);border-radius:6px;color:var(--text2);cursor:pointer;font-size:1.1em;font-family:Inter,sans-serif;">★</button>
+                                <button onclick="setRating(2)" id="star2" style="width:36px;height:36px;background:var(--surface3);border:1px solid var(--border2);border-radius:6px;color:var(--text2);cursor:pointer;font-size:1.1em;font-family:Inter,sans-serif;">★</button>
+                                <button onclick="setRating(3)" id="star3" style="width:36px;height:36px;background:var(--surface3);border:1px solid var(--border2);border-radius:6px;color:var(--text2);cursor:pointer;font-size:1.1em;font-family:Inter,sans-serif;">★</button>
+                                <button onclick="setRating(4)" id="star4" style="width:36px;height:36px;background:var(--surface3);border:1px solid var(--border2);border-radius:6px;color:var(--text2);cursor:pointer;font-size:1.1em;font-family:Inter,sans-serif;">★</button>
+                                <button onclick="setRating(5)" id="star5" style="width:36px;height:36px;background:var(--surface3);border:1px solid var(--border2);border-radius:6px;color:var(--text2);cursor:pointer;font-size:1.1em;font-family:Inter,sans-serif;">★</button>
                             </div>
                         </div>
                     </div>
 
                     <div style="margin-bottom:14px;">
-                        <label style="color:#a1a1aa;font-size:0.82em;display:block;margin-bottom:6px;">📝 Poznámka trenéra</label>
+                        <label style="color:var(--text2);font-size:0.82em;display:block;margin-bottom:6px;">📝 Poznámka trenéra</label>
                         <textarea id="fbNote" placeholder="Jak to šlo? Co bylo těžké? Kdo byl unavený? Co vynechat příště?..."
-                            style="width:100%;padding:10px;background:#27272a;border:1px solid #52525b;border-radius:8px;color:#e4e4e7;font-family:Inter,sans-serif;font-size:0.88em;height:80px;resize:vertical;line-height:1.5;"></textarea>
+                            style="width:100%;padding:10px;background:var(--surface3);border:1px solid var(--border2);border-radius:8px;color:var(--text);font-family:Inter,sans-serif;font-size:0.88em;height:80px;resize:vertical;line-height:1.5;"></textarea>
                     </div>
 
                     <div style="margin-bottom:14px;">
-                        <label style="color:#a1a1aa;font-size:0.82em;display:block;margin-bottom:8px;">💪 Jak zvládli hlavní série?</label>
+                        <label style="color:var(--text2);font-size:0.82em;display:block;margin-bottom:8px;">💪 Jak zvládli hlavní série?</label>
                         <div style="display:flex;gap:8px;flex-wrap:wrap;">
                             <button onclick="setDifficulty('easy')" id="diff_easy"
-                                style="padding:8px 16px;background:#27272a;border:1px solid #52525b;border-radius:8px;color:#a1a1aa;cursor:pointer;font-family:Inter,sans-serif;font-size:0.85em;">
+                                style="padding:8px 16px;background:var(--surface3);border:1px solid var(--border2);border-radius:8px;color:var(--text2);cursor:pointer;font-family:Inter,sans-serif;font-size:0.85em;">
                                 ✅ Bez problémů
                             </button>
                             <button onclick="setDifficulty('ok')" id="diff_ok"
-                                style="padding:8px 16px;background:#27272a;border:1px solid #52525b;border-radius:8px;color:#a1a1aa;cursor:pointer;font-family:Inter,sans-serif;font-size:0.85em;">
+                                style="padding:8px 16px;background:var(--surface3);border:1px solid var(--border2);border-radius:8px;color:var(--text2);cursor:pointer;font-family:Inter,sans-serif;font-size:0.85em;">
                                 👍 Ok, zvládli
                             </button>
                             <button onclick="setDifficulty('hard')" id="diff_hard"
-                                style="padding:8px 16px;background:#27272a;border:1px solid #52525b;border-radius:8px;color:#a1a1aa;cursor:pointer;font-family:Inter,sans-serif;font-size:0.85em;">
+                                style="padding:8px 16px;background:var(--surface3);border:1px solid var(--border2);border-radius:8px;color:var(--text2);cursor:pointer;font-family:Inter,sans-serif;font-size:0.85em;">
                                 😤 Těžké
                             </button>
                             <button onclick="setDifficulty('toohard')" id="diff_toohard"
-                                style="padding:8px 16px;background:#27272a;border:1px solid #52525b;border-radius:8px;color:#a1a1aa;cursor:pointer;font-family:Inter,sans-serif;font-size:0.85em;">
+                                style="padding:8px 16px;background:var(--surface3);border:1px solid var(--border2);border-radius:8px;color:var(--text2);cursor:pointer;font-family:Inter,sans-serif;font-size:0.85em;">
                                 ❌ Příliš těžké
                             </button>
                         </div>
@@ -2664,7 +2674,7 @@ COACH TIP: [One practical coaching cue for today's session]
             [1,2,3,4,5].forEach(i => {
                 const btn = document.getElementById('star' + i);
                 if (btn) {
-                    btn.style.background = i <= n ? '#f59e0b' : '#27272a';
+                    btn.style.background = i <= n ? '#f59e0b' : 'var(--surface3)';
                     btn.style.color = i <= n ? '#18181b' : '#a1a1aa';
                     btn.style.borderColor = i <= n ? '#f59e0b' : '#52525b';
                 }
@@ -2677,7 +2687,7 @@ COACH TIP: [One practical coaching cue for today's session]
             ['easy','ok','hard','toohard'].forEach(id => {
                 const btn = document.getElementById('diff_' + id);
                 if (!btn) return;
-                btn.style.background = id === d ? colors[id] + '20' : '#27272a';
+                btn.style.background = id === d ? colors[id] + '20' : 'var(--surface3)';
                 btn.style.borderColor = id === d ? colors[id] : '#52525b';
                 btn.style.color = id === d ? colors[id] : '#a1a1aa';
             });
@@ -2714,8 +2724,8 @@ COACH TIP: [One practical coaching cue for today's session]
                     <div style="text-align:center;padding:20px;">
                         <div style="font-size:2em;margin-bottom:8px;">✅</div>
                         <div style="color:#4ade80;font-weight:600;margin-bottom:4px;">Trénink uložen!</div>
-                        <div style="color:#a1a1aa;font-size:0.85em;">${meters}m zaplaváno • Hodnocení: ${'★'.repeat(rating)}${'☆'.repeat(5-rating)}</div>
-                        ${note ? `<div style="color:#a1a1aa;font-size:0.82em;margin-top:6px;font-style:italic;">"${note}"</div>` : ''}
+                        <div style="color:var(--text2);font-size:0.85em;">${meters}m zaplaváno • Hodnocení: ${'★'.repeat(rating)}${'☆'.repeat(5-rating)}</div>
+                        ${note ? `<div style="color:var(--text2);font-size:0.82em;margin-top:6px;font-style:italic;">"${note}"</div>` : ''}
                     </div>
                 `;
             }
@@ -2847,8 +2857,8 @@ COACH TIP: [One practical coaching cue for today's session]
                         <div class="swimmer-stat-header">
                             <div class="mini-avatar">${init}</div>
                             <div>
-                                <div style="font-weight:600;color:#fafafa;font-size:0.95em;">${swimmer}</div>
-                                <div style="font-size:0.8em;color:#a1a1aa;">${tr.length} tréninků${swimmerData?.cspsId ? ' • 🔗 ČSPS' : ''}</div>
+                                <div style="font-weight:600;color:var(--text);font-size:0.95em;">${swimmer}</div>
+                                <div style="font-size:0.8em;color:var(--text2);">${tr.length} tréninků${swimmerData?.cspsId ? ' • 🔗 ČSPS' : ''}</div>
                             </div>
                         </div>
                         <div class="stat-row"><span>Docházka:</span><strong>${att}%</strong></div>
@@ -3047,9 +3057,9 @@ COACH TIP: [One practical coaching cue for today's session]
             
             let dialogHTML = `
                 <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.9); z-index: 2000; display: flex; align-items: center; justify-content: center; padding: 20px;" id="stylesDialog">
-                    <div style="background: #27272a; border-radius: 12px; padding: 30px; max-width: 600px; width: 100%; max-height: 80vh; overflow-y: auto;">
-                        <h2 style="color: #fafafa; margin-bottom: 10px; font-size: 1.3em;">🎯 Doplň primární styly</h2>
-                        <p style="color: #a1a1aa; margin-bottom: 25px; font-size: 0.9em;">AI nemohla určit primární styly u těchto plavců. Vyber 1-2 hlavní styly pro každého:</p>
+                    <div style="background: var(--surface3); border-radius: 12px; padding: 30px; max-width: 600px; width: 100%; max-height: 80vh; overflow-y: auto;">
+                        <h2 style="color: var(--text); margin-bottom: 10px; font-size: 1.3em;">🎯 Doplň primární styly</h2>
+                        <p style="color: var(--text2); margin-bottom: 25px; font-size: 0.9em;">AI nemohla určit primární styly u těchto plavců. Vyber 1-2 hlavní styly pro každého:</p>
                         
                         <div id="stylesForm">
             `;
@@ -3057,18 +3067,18 @@ COACH TIP: [One practical coaching cue for today's session]
             needsManualStyles.forEach((item, idx) => {
                 const swimmer = item.swimmer;
                 dialogHTML += `
-                    <div style="background: #3f3f46; border: 1px solid #52525b; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
-                        <div style="color: #fafafa; font-weight: 600; margin-bottom: 12px;">${swimmer.jmeno}</div>
+                    <div style="background: var(--surface2); border: 1px solid var(--border2); border-radius: 8px; padding: 16px; margin-bottom: 16px;">
+                        <div style="color: var(--text); font-weight: 600; margin-bottom: 12px;">${swimmer.jmeno}</div>
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
                             <div>
-                                <label style="color: #a1a1aa; font-size: 0.85em; margin-bottom: 4px; display: block;">Primární styl 1:</label>
-                                <select id="style1_${idx}" style="width: 100%; padding: 8px; background: #52525b; border: 1px solid #71717a; border-radius: 6px; color: #e4e4e7;">
+                                <label style="color: var(--text2); font-size: 0.85em; margin-bottom: 4px; display: block;">Primární styl 1:</label>
+                                <select id="style1_${idx}" style="width: 100%; padding: 8px; background: var(--surface3); border: 1px solid #71717a; border-radius: 6px; color: var(--text);">
                                     ${styles.map(s => `<option value="${s}">${s}</option>`).join('')}
                                 </select>
                             </div>
                             <div>
-                                <label style="color: #a1a1aa; font-size: 0.85em; margin-bottom: 4px; display: block;">Primární styl 2 (volitelné):</label>
-                                <select id="style2_${idx}" style="width: 100%; padding: 8px; background: #52525b; border: 1px solid #71717a; border-radius: 6px; color: #e4e4e7;">
+                                <label style="color: var(--text2); font-size: 0.85em; margin-bottom: 4px; display: block;">Primární styl 2 (volitelné):</label>
+                                <select id="style2_${idx}" style="width: 100%; padding: 8px; background: var(--surface3); border: 1px solid #71717a; border-radius: 6px; color: var(--text);">
                                     <option value="">-- žádný --</option>
                                     ${styles.map(s => `<option value="${s}">${s}</option>`).join('')}
                                 </select>
@@ -3124,9 +3134,9 @@ COACH TIP: [One practical coaching cue for today's session]
             
             let dialogHTML = `
                 <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.9); z-index: 2000; display: flex; align-items: center; justify-content: center; padding: 20px;" id="editStylesDialog">
-                    <div style="background: #27272a; border-radius: 12px; padding: 30px; max-width: 700px; width: 100%; max-height: 80vh; overflow-y: auto;">
-                        <h2 style="color: #fafafa; margin-bottom: 10px; font-size: 1.3em;">✏️ Upravit primární styly</h2>
-                        <p style="color: #a1a1aa; margin-bottom: 25px; font-size: 0.9em;">Uprav primární styly pro každého plavce:</p>
+                    <div style="background: var(--surface3); border-radius: 12px; padding: 30px; max-width: 700px; width: 100%; max-height: 80vh; overflow-y: auto;">
+                        <h2 style="color: var(--text); margin-bottom: 10px; font-size: 1.3em;">✏️ Upravit primární styly</h2>
+                        <p style="color: var(--text2); margin-bottom: 25px; font-size: 0.9em;">Uprav primární styly pro každého plavce:</p>
                         
                         <div id="editStylesForm">
             `;
@@ -3134,18 +3144,18 @@ COACH TIP: [One practical coaching cue for today's session]
             appData.swimmers.forEach((swimmer, idx) => {
                 const currentStyles = swimmer.primarni_styly || ['Volný způsob'];
                 dialogHTML += `
-                    <div style="background: #3f3f46; border: 1px solid #52525b; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
-                        <div style="color: #fafafa; font-weight: 600; margin-bottom: 12px;">${swimmer.jmeno}</div>
+                    <div style="background: var(--surface2); border: 1px solid var(--border2); border-radius: 8px; padding: 16px; margin-bottom: 16px;">
+                        <div style="color: var(--text); font-weight: 600; margin-bottom: 12px;">${swimmer.jmeno}</div>
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
                             <div>
-                                <label style="color: #a1a1aa; font-size: 0.85em; margin-bottom: 4px; display: block;">Primární styl 1:</label>
-                                <select id="editStyle1_${idx}" style="width: 100%; padding: 8px; background: #52525b; border: 1px solid #71717a; border-radius: 6px; color: #e4e4e7;">
+                                <label style="color: var(--text2); font-size: 0.85em; margin-bottom: 4px; display: block;">Primární styl 1:</label>
+                                <select id="editStyle1_${idx}" style="width: 100%; padding: 8px; background: var(--surface3); border: 1px solid #71717a; border-radius: 6px; color: var(--text);">
                                     ${styles.map(s => `<option value="${s}" ${currentStyles[0] === s ? 'selected' : ''}>${s}</option>`).join('')}
                                 </select>
                             </div>
                             <div>
-                                <label style="color: #a1a1aa; font-size: 0.85em; margin-bottom: 4px; display: block;">Primární styl 2:</label>
-                                <select id="editStyle2_${idx}" style="width: 100%; padding: 8px; background: #52525b; border: 1px solid #71717a; border-radius: 6px; color: #e4e4e7;">
+                                <label style="color: var(--text2); font-size: 0.85em; margin-bottom: 4px; display: block;">Primární styl 2:</label>
+                                <select id="editStyle2_${idx}" style="width: 100%; padding: 8px; background: var(--surface3); border: 1px solid #71717a; border-radius: 6px; color: var(--text);">
                                     <option value="">-- žádný --</option>
                                     ${styles.map(s => `<option value="${s}" ${currentStyles[1] === s ? 'selected' : ''}>${s}</option>`).join('')}
                                 </select>
@@ -3201,14 +3211,14 @@ COACH TIP: [One practical coaching cue for today's session]
             
             const raceDiv = document.createElement('div');
             raceDiv.id = id;
-            raceDiv.style.cssText = 'background: #3f3f46; padding: 12px; border-radius: 8px; margin-bottom: 8px;';
+            raceDiv.style.cssText = 'background: var(--surface2); padding: 12px; border-radius: 8px; margin-bottom: 8px;';
             raceDiv.innerHTML = `
                 <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
-                    <input type="text" placeholder="Název závodu" style="flex: 2; padding: 8px; background: #52525b; border: 1px solid #71717a; border-radius: 6px; color: #e4e4e7;" class="race-name">
-                    <input type="date" style="flex: 1; padding: 8px; background: #52525b; border: 1px solid #71717a; border-radius: 6px; color: #e4e4e7;" class="race-date">
-                    <button onclick="removeRaceField('${id}')" style="padding: 8px 12px; background: #ef4444; border: none; border-radius: 6px; color: #fafafa; cursor: pointer;">×</button>
+                    <input type="text" placeholder="Název závodu" style="flex: 2; padding: 8px; background: var(--surface3); border: 1px solid #71717a; border-radius: 6px; color: var(--text);" class="race-name">
+                    <input type="date" style="flex: 1; padding: 8px; background: var(--surface3); border: 1px solid #71717a; border-radius: 6px; color: var(--text);" class="race-date">
+                    <button onclick="removeRaceField('${id}')" style="padding: 8px 12px; background: #ef4444; border: none; border-radius: 6px; color: var(--text); cursor: pointer;">×</button>
                 </div>
-                <button onclick="showEntriesDialog('${id}')" style="width: 100%; padding: 8px; background: #3f3f46; border: 1px solid #60a5fa; border-radius: 6px; color: #60a5fa; cursor: pointer; font-size: 0.85em;">
+                <button onclick="showEntriesDialog('${id}')" style="width: 100%; padding: 8px; background: var(--surface2); border: 1px solid #60a5fa; border-radius: 6px; color: #60a5fa; cursor: pointer; font-size: 0.85em;">
                     📋 Přidat přihlášky
                 </button>
                 <div class="race-entries" style="display: none; margin-top: 8px;"></div>
@@ -3239,21 +3249,21 @@ COACH TIP: [One practical coaching cue for today's session]
             
             let dialogHTML = `
                 <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.9); z-index: 2000; display: flex; align-items: center; justify-content: center; padding: 20px;" id="entriesDialog">
-                    <div style="background: #27272a; border-radius: 12px; padding: 30px; max-width: 800px; width: 100%; max-height: 80vh; overflow-y: auto;">
-                        <h2 style="color: #fafafa; margin-bottom: 10px; font-size: 1.3em;">📋 Přihlášky na: ${raceName}</h2>
-                        <p style="color: #a1a1aa; margin-bottom: 25px; font-size: 0.9em;">Vyber plavce a jejich disciplíny:</p>
+                    <div style="background: var(--surface3); border-radius: 12px; padding: 30px; max-width: 800px; width: 100%; max-height: 80vh; overflow-y: auto;">
+                        <h2 style="color: var(--text); margin-bottom: 10px; font-size: 1.3em;">📋 Přihlášky na: ${raceName}</h2>
+                        <p style="color: var(--text2); margin-bottom: 25px; font-size: 0.9em;">Vyber plavce a jejich disciplíny:</p>
                         
                         <div id="entriesForm">
             `;
             
             appData.swimmers.forEach((swimmer, idx) => {
                 dialogHTML += `
-                    <div style="background: #3f3f46; border: 1px solid #52525b; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
+                    <div style="background: var(--surface2); border: 1px solid var(--border2); border-radius: 8px; padding: 16px; margin-bottom: 16px;">
                         <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; margin-bottom: 12px;">
                             <input type="checkbox" class="swimmer-checkbox" data-swimmer-idx="${idx}" style="width: 18px; height: 18px; cursor: pointer;">
-                            <span style="color: #fafafa; font-weight: 600;">${swimmer.jmeno}</span>
+                            <span style="color: var(--text); font-weight: 600;">${swimmer.jmeno}</span>
                         </label>
-                        <div class="disciplines-grid" data-swimmer-idx="${idx}" style="display: none; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; padding-top: 12px; border-top: 1px solid #52525b;">
+                        <div class="disciplines-grid" data-swimmer-idx="${idx}" style="display: none; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border2);">
                             ${disciplines.map(d => `
                                 <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 0.85em;">
                                     <input type="checkbox" value="${d}" style="width: 16px; height: 16px; cursor: pointer;">
@@ -3323,9 +3333,9 @@ COACH TIP: [One practical coaching cue for today's session]
             if (entries.length > 0) {
                 entriesDiv.style.display = 'block';
                 entriesDiv.innerHTML = `
-                    <div style="background: #27272a; padding: 10px; border-radius: 6px; font-size: 0.85em;">
+                    <div style="background: var(--surface3); padding: 10px; border-radius: 6px; font-size: 0.85em;">
                         <strong style="color: #4ade80;">✅ Přihlášeno ${entries.length} plavců</strong>
-                        <div style="color: #a1a1aa; margin-top: 4px;">
+                        <div style="color: var(--text2); margin-top: 4px;">
                             ${entries.map(e => `${e.name}: ${e.disciplines.length} disciplín`).join(' • ')}
                         </div>
                     </div>
@@ -3399,9 +3409,9 @@ COACH TIP: [One practical coaching cue for today's session]
             const racesJson = JSON.stringify(sorted).replace(/"/g, '&quot;');
             let dialogHTML = `
                 <div style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.92);z-index:2000;display:flex;align-items:center;justify-content:center;padding:20px;" id="cspsRacesDialog">
-                    <div style="background:#27272a;border-radius:12px;padding:24px;max-width:700px;width:100%;max-height:85vh;display:flex;flex-direction:column;">
-                        <h2 style="color:#fafafa;margin-bottom:6px;font-size:1.2em;">🏊 Závody z ČSPS</h2>
-                        <p style="color:#a1a1aa;margin-bottom:16px;font-size:0.85em;">Tým: ${minAge > 0 ? minAge + '–' + maxAge + ' let' : 'neznámý věk'} • ${sorted.length} závodů</p>
+                    <div style="background:var(--surface3);border-radius:12px;padding:24px;max-width:700px;width:100%;max-height:85vh;display:flex;flex-direction:column;">
+                        <h2 style="color:var(--text);margin-bottom:6px;font-size:1.2em;">🏊 Závody z ČSPS</h2>
+                        <p style="color:var(--text2);margin-bottom:16px;font-size:0.85em;">Tým: ${minAge > 0 ? minAge + '–' + maxAge + ' let' : 'neznámý věk'} • ${sorted.length} závodů</p>
                         <div style="overflow-y:auto;flex:1;margin-bottom:16px;">
             `;
 
@@ -3409,15 +3419,15 @@ COACH TIP: [One practical coaching cue for today's session]
                 const relevant = isRaceRelevant(race, minAge, maxAge);
                 const date = new Date(race.date).toLocaleDateString('cs-CZ', {day:'numeric', month:'short'});
                 const daysUntil = Math.ceil((new Date(race.date) - new Date()) / (1000*60*60*24));
-                const tagsBadge = race.tags?.length > 0 ? race.tags.map(t => `<span style="background:#3f3f46;color:#a1a1aa;padding:2px 6px;border-radius:4px;font-size:0.75em;">${t}</span>`).join(' ') : '';
-                const poolBadge = race.poolLength ? `<span style="color:#71717a;font-size:0.8em;">${race.poolLength}m</span>` : '';
+                const tagsBadge = race.tags?.length > 0 ? race.tags.map(t => `<span style="background:var(--surface2);color:var(--text2);padding:2px 6px;border-radius:4px;font-size:0.75em;">${t}</span>`).join(' ') : '';
+                const poolBadge = race.poolLength ? `<span style="color:var(--text3);font-size:0.8em;">${race.poolLength}m</span>` : '';
 
                 dialogHTML += `
-                    <label style="display:flex;align-items:flex-start;gap:10px;padding:12px;background:${relevant ? '#2d3748' : '#3f3f46'};border:1px solid ${relevant ? '#4a5568' : '#52525b'};border-radius:8px;margin-bottom:6px;cursor:pointer;">
+                    <label style="display:flex;align-items:flex-start;gap:10px;padding:12px;background:${relevant ? '#2d3748' : '#3f3f46'};border:1px solid ${relevant ? '#4a5568' : 'var(--border2)'};border-radius:8px;margin-bottom:6px;cursor:pointer;">
                         <input type="checkbox" value="${idx}" style="width:18px;height:18px;cursor:pointer;margin-top:2px;flex-shrink:0;">
                         <div style="flex:1;min-width:0;">
-                            <div style="color:#fafafa;font-weight:600;font-size:0.92em;margin-bottom:3px;">${race.name}</div>
-                            <div style="color:#a1a1aa;font-size:0.82em;margin-bottom:4px;">
+                            <div style="color:var(--text);font-weight:600;font-size:0.92em;margin-bottom:3px;">${race.name}</div>
+                            <div style="color:var(--text2);font-size:0.82em;margin-bottom:4px;">
                                 📅 ${date} <span style="color:${daysUntil<=14?'#f59e0b':'#71717a'};">(za ${daysUntil}d)</span> • 📍 ${race.location} ${poolBadge}
                             </div>
                             <div style="display:flex;flex-wrap:wrap;gap:4px;">${tagsBadge}</div>
@@ -3467,14 +3477,14 @@ COACH TIP: [One practical coaching cue for today's session]
                 
                 const raceDiv = document.createElement('div');
                 raceDiv.id = id;
-                raceDiv.style.cssText = 'background: #3f3f46; padding: 12px; border-radius: 8px; margin-bottom: 8px;';
+                raceDiv.style.cssText = 'background: var(--surface2); padding: 12px; border-radius: 8px; margin-bottom: 8px;';
                 raceDiv.innerHTML = `
                     <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
-                        <input type="text" placeholder="Název závodu" value="${race.name}" style="flex: 2; padding: 8px; background: #52525b; border: 1px solid #71717a; border-radius: 6px; color: #e4e4e7;" class="race-name">
-                        <input type="date" value="${race.date}" style="flex: 1; padding: 8px; background: #52525b; border: 1px solid #71717a; border-radius: 6px; color: #e4e4e7;" class="race-date">
-                        <button onclick="removeRaceField('${id}')" style="padding: 8px 12px; background: #ef4444; border: none; border-radius: 6px; color: #fafafa; cursor: pointer;">×</button>
+                        <input type="text" placeholder="Název závodu" value="${race.name}" style="flex: 2; padding: 8px; background: var(--surface3); border: 1px solid #71717a; border-radius: 6px; color: var(--text);" class="race-name">
+                        <input type="date" value="${race.date}" style="flex: 1; padding: 8px; background: var(--surface3); border: 1px solid #71717a; border-radius: 6px; color: var(--text);" class="race-date">
+                        <button onclick="removeRaceField('${id}')" style="padding: 8px 12px; background: #ef4444; border: none; border-radius: 6px; color: var(--text); cursor: pointer;">×</button>
                     </div>
-                    <button onclick="showEntriesDialog('${id}')" style="width: 100%; padding: 8px; background: #3f3f46; border: 1px solid #60a5fa; border-radius: 6px; color: #60a5fa; cursor: pointer; font-size: 0.85em;">
+                    <button onclick="showEntriesDialog('${id}')" style="width: 100%; padding: 8px; background: var(--surface2); border: 1px solid #60a5fa; border-radius: 6px; color: #60a5fa; cursor: pointer; font-size: 0.85em;">
                         📋 Přidat přihlášky
                     </button>
                     <div class="race-entries" style="display: none; margin-top: 8px;"></div>
@@ -3754,7 +3764,7 @@ COACH TIP: [One practical coaching cue for today's session]
         function renderCSPSTab() {
             const list = document.getElementById('cspsSwimmersList');
             if (appData.swimmers.length === 0) {
-                list.innerHTML = '<div style="color: #a1a1aa; text-align: center; padding: 20px; font-size: 0.9em;">Nejprve přidej plavce (záložka Trénink → krok 1)</div>';
+                list.innerHTML = '<div style="color: var(--text2); text-align: center; padding: 20px; font-size: 0.9em;">Nejprve přidej plavce (záložka Trénink → krok 1)</div>';
                 return;
             }
 
@@ -3769,31 +3779,31 @@ COACH TIP: [One practical coaching cue for today's session]
                 if (hasTimeS) {
                     const topTimes = s.bestTimes.slice(0, 6);
                     timesHtml = `
-                        <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid #52525b;">
-                            <div style="color: #a1a1aa; font-size: 0.8em; margin-bottom: 8px;">📊 Nejlepší časy z ČSPS:</div>
+                        <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border2);">
+                            <div style="color: var(--text2); font-size: 0.8em; margin-bottom: 8px;">📊 Nejlepší časy z ČSPS:</div>
                             <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 6px;">
                                 ${topTimes.map(t => `
-                                    <div style="background: #27272a; padding: 6px 10px; border-radius: 6px; font-size: 0.82em;">
-                                        <span style="color: #a1a1aa;">${t.discipline} (${t.poolLength}m)</span>
+                                    <div style="background: var(--surface3); padding: 6px 10px; border-radius: 6px; font-size: 0.82em;">
+                                        <span style="color: var(--text2);">${t.discipline} (${t.poolLength}m)</span>
                                         <span style="color: #60a5fa; font-weight: 600; float: right;">${t.timeFormatted}</span>
                                         ${t.improved ? '<span style="color: #4ade80; font-size: 0.9em;"> 🏆</span>' : ''}
                                     </div>
                                 `).join('')}
                             </div>
-                            ${s.bestTimes.length > 6 ? `<div style="color: #a1a1aa; font-size: 0.8em; margin-top: 6px;">+ ${s.bestTimes.length - 6} dalších časů</div>` : ''}
+                            ${s.bestTimes.length > 6 ? `<div style="color: var(--text2); font-size: 0.8em; margin-top: 6px;">+ ${s.bestTimes.length - 6} dalších časů</div>` : ''}
                         </div>
                     `;
                 }
 
                 return `
-                    <div style="background: #27272a; border: 1px solid #52525b; border-radius: 10px; padding: 16px; margin-bottom: 12px;">
+                    <div style="background: var(--surface3); border: 1px solid var(--border2); border-radius: 10px; padding: 16px; margin-bottom: 12px;">
                         <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
-                            <div style="width: 44px; height: 44px; background: #52525b; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; color: #fafafa; flex-shrink: 0;">${initials}</div>
+                            <div style="width: 44px; height: 44px; background: var(--surface3); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; color: var(--text); flex-shrink: 0;">${initials}</div>
                             <div style="flex: 1;">
-                                <div style="font-weight: 600; color: #fafafa;">${s.jmeno}</div>
-                                <div style="font-size: 0.8em; color: #a1a1aa;">${s.vek ? s.vek + ' let • ' : ''}${lastSync ? '🔄 Sync: ' + lastSync : 'Nesynchronizováno'}</div>
+                                <div style="font-weight: 600; color: var(--text);">${s.jmeno}</div>
+                                <div style="font-size: 0.8em; color: var(--text2);">${s.vek ? s.vek + ' let • ' : ''}${lastSync ? '🔄 Sync: ' + lastSync : 'Nesynchronizováno'}</div>
                             </div>
-                            <button onclick="syncSwimmer(${idx})" id="syncBtn_${idx}" style="padding: 8px 14px; background: ${hasCspsId ? '#60a5fa' : '#52525b'}; border: none; border-radius: 8px; color: ${hasCspsId ? '#18181b' : '#a1a1aa'}; font-weight: 600; cursor: pointer; font-size: 0.82em; font-family: Inter, sans-serif; flex-shrink: 0;">
+                            <button onclick="syncSwimmer(${idx})" id="syncBtn_${idx}" style="padding: 8px 14px; background: ${hasCspsId ? '#60a5fa' : 'var(--border2)'}; border: none; border-radius: 8px; color: ${hasCspsId ? '#18181b' : 'var(--text2)'}; font-weight: 600; cursor: pointer; font-size: 0.82em; font-family: Inter, sans-serif; flex-shrink: 0;">
                                 ${hasCspsId ? '🔄 Sync' : '➕ Nastavit ID'}
                             </button>
                         </div>
@@ -3804,12 +3814,12 @@ COACH TIP: [One practical coaching cue for today's session]
                                 placeholder="ČSPS ID (např. 63458897)" 
                                 value="${s.cspsId || ''}"
                                 onchange="saveCspsId(${idx})"
-                                style="flex: 1; padding: 8px 12px; background: #3f3f46; border: 1px solid ${hasCspsId ? '#60a5fa' : '#52525b'}; border-radius: 6px; color: #e4e4e7; font-size: 0.85em;">
+                                style="flex: 1; padding: 8px 12px; background: var(--surface2); border: 1px solid ${hasCspsId ? '#60a5fa' : 'var(--border2)'}; border-radius: 6px; color: var(--text); font-size: 0.85em;">
                             <a href="https://is.czechswimming.cz" target="_blank" style="color: #60a5fa; font-size: 0.8em; white-space: nowrap; text-decoration: none;">
                                 🔗 Najít ID
                             </a>
                         </div>
-                        ${hasCspsId ? '' : '<div style="color: #a1a1aa; font-size: 0.78em; margin-top: 6px;">Najdi plavce na is.czechswimming.cz — ID je číslo v URL</div>'}
+                        ${hasCspsId ? '' : '<div style="color: var(--text2); font-size: 0.78em; margin-top: 6px;">Najdi plavce na is.czechswimming.cz — ID je číslo v URL</div>'}
                         
                         ${timesHtml}
                     </div>
@@ -3955,7 +3965,7 @@ COACH TIP: [One practical coaching cue for today's session]
             
             btn.innerHTML = '⏳ Načítám...';
             btn.disabled = true;
-            list.innerHTML = '<div style="text-align: center; padding: 20px; color: #a1a1aa;">⏳ Načítám doporučení...</div>';
+            list.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--text2);">⏳ Načítám doporučení...</div>';
 
             try {
                 const swimmers = appData.swimmers.map(s => ({
@@ -3989,7 +3999,7 @@ COACH TIP: [One practical coaching cue for today's session]
                 const races = Object.values(raceMap).sort((a, b) => a.date.localeCompare(b.date));
 
                 if (races.length === 0) {
-                    list.innerHTML = '<div style="color: #a1a1aa; text-align: center; padding: 20px;">Žádné vhodné závody nenalezeny</div>';
+                    list.innerHTML = '<div style="color: var(--text2); text-align: center; padding: 20px;">Žádné vhodné závody nenalezeny</div>';
                     return;
                 }
 
@@ -4005,12 +4015,12 @@ COACH TIP: [One practical coaching cue for today's session]
                     const tagsBadge = race.tags?.length > 0 ? race.tags.join(' • ') : '';
 
                     return `
-                        <div style="background: #27272a; border: 1px solid #52525b; border-left: 3px solid ${color}; border-radius: 10px; padding: 16px; margin-bottom: 10px;">
+                        <div style="background: var(--surface3); border: 1px solid var(--border2); border-left: 3px solid ${color}; border-radius: 10px; padding: 16px; margin-bottom: 10px;">
                             <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 8px;">
                                 <div style="flex: 1;">
-                                    <div style="font-weight: 600; color: #fafafa; margin-bottom: 4px;">${race.name}</div>
-                                    <div style="color: #a1a1aa; font-size: 0.85em;">
-                                        📅 ${date} ${daysUntil > 0 ? `<span style="color: ${daysUntil <= 14 ? '#f59e0b' : '#a1a1aa'};">(za ${daysUntil} dní)</span>` : ''}
+                                    <div style="font-weight: 600; color: var(--text); margin-bottom: 4px;">${race.name}</div>
+                                    <div style="color: var(--text2); font-size: 0.85em;">
+                                        📅 ${date} ${daysUntil > 0 ? `<span style="color: ${daysUntil <= 14 ? '#f59e0b' : 'var(--text2)'};">(za ${daysUntil} dní)</span>` : ''}
                                         • 📍 ${race.location}
                                         ${poolBadge ? `• 🏊 ${poolBadge}` : ''}
                                     </div>
@@ -4021,12 +4031,12 @@ COACH TIP: [One practical coaching cue for today's session]
                                     ${race.url ? `<a href="${race.url}" target="_blank" style="color: #60a5fa; font-size: 0.8em; text-decoration: none; display: block; margin-top: 4px;">🔗 Detail</a>` : ''}
                                 </div>
                             </div>
-                            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;padding-top:8px;border-top:1px solid #3f3f46;">
+                            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;padding-top:8px;border-top:1px solid var(--border);">
                                 <div style="display:flex;flex-wrap:wrap;gap:4px;">
-                                    ${race.suitableFor.map(name => `<span style="background:#3f3f46;color:#e4e4e7;padding:2px 8px;border-radius:10px;font-size:0.75em;">👤 ${name}</span>`).join('')}
+                                    ${race.suitableFor.map(name => `<span style="background:var(--surface2);color:var(--text);padding:2px 8px;border-radius:10px;font-size:0.75em;">👤 ${name}</span>`).join('')}
                                 </div>
                                 <button onclick="addRaceFromRecommendation('${race.name.replace(/'/g,"\'")}','${race.date}')" 
-                                    style="padding:5px 12px;background:#3f3f46;border:1px solid #60a5fa;border-radius:6px;color:#60a5fa;cursor:pointer;font-size:0.78em;font-family:Inter,sans-serif;white-space:nowrap;flex-shrink:0;">
+                                    style="padding:5px 12px;background:var(--surface2);border:1px solid #60a5fa;border-radius:6px;color:#60a5fa;cursor:pointer;font-size:0.78em;font-family:Inter,sans-serif;white-space:nowrap;flex-shrink:0;">
                                     ➕ Přidat do závodů
                                 </button>
                             </div>
@@ -4047,13 +4057,13 @@ COACH TIP: [One practical coaching cue for today's session]
         function showAddFromCSPSDialog() {
             const html = `
                 <div style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.9);z-index:2000;display:flex;align-items:center;justify-content:center;padding:20px;" id="addFromCSPSDialog">
-                    <div style="background:#27272a;border-radius:12px;padding:30px;max-width:600px;width:100%;max-height:85vh;overflow-y:auto;">
-                        <h2 style="color:#fafafa;margin-bottom:8px;font-size:1.3em;">🔗 Přidat plavce z ČSPS</h2>
-                        <p style="color:#a1a1aa;margin-bottom:20px;font-size:0.9em;">Vyhledej plavce podle jména — automaticky se přidá s ČSPS ID a časy</p>
+                    <div style="background:var(--surface3);border-radius:12px;padding:30px;max-width:600px;width:100%;max-height:85vh;overflow-y:auto;">
+                        <h2 style="color:var(--text);margin-bottom:8px;font-size:1.3em;">🔗 Přidat plavce z ČSPS</h2>
+                        <p style="color:var(--text2);margin-bottom:20px;font-size:0.9em;">Vyhledej plavce podle jména — automaticky se přidá s ČSPS ID a časy</p>
                         
                         <div style="display:flex;gap:8px;margin-bottom:16px;">
                             <input type="text" id="cspsSearchInput" placeholder="Jméno plavce (min. 3 znaky)..." 
-                                style="flex:1;padding:12px;background:#3f3f46;border:1px solid #52525b;border-radius:8px;color:#e4e4e7;font-size:0.95em;font-family:Inter,sans-serif;"
+                                style="flex:1;padding:12px;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;color:var(--text);font-size:0.95em;font-family:Inter,sans-serif;"
                                 onkeydown="if(event.key==='Enter') searchCSPSSwimmers()">
                             <button onclick="searchCSPSSwimmers()" id="cspsSearchBtn"
                                 style="padding:12px 20px;background:#60a5fa;border:none;border-radius:8px;color:#18181b;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;white-space:nowrap;">
@@ -4062,11 +4072,11 @@ COACH TIP: [One practical coaching cue for today's session]
                         </div>
                         
                         <div id="cspsSearchResults" style="min-height:60px;">
-                            <div style="color:#a1a1aa;text-align:center;padding:20px;font-size:0.9em;">Zadej jméno plavce a stiskni Enter nebo klikni Hledat</div>
+                            <div style="color:var(--text2);text-align:center;padding:20px;font-size:0.9em;">Zadej jméno plavce a stiskni Enter nebo klikni Hledat</div>
                         </div>
                         
                         <button onclick="document.getElementById('addFromCSPSDialog').remove()" 
-                            style="width:100%;margin-top:20px;padding:12px;background:#52525b;border:none;border-radius:8px;color:#e4e4e7;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;">
+                            style="width:100%;margin-top:20px;padding:12px;background:var(--surface3);border:none;border-radius:8px;color:var(--text);font-weight:600;cursor:pointer;font-family:Inter,sans-serif;">
                             Zavřít
                         </button>
                     </div>
@@ -4089,7 +4099,7 @@ COACH TIP: [One practical coaching cue for today's session]
 
             btn.innerHTML = '⏳';
             btn.disabled = true;
-            results.innerHTML = '<div style="color:#a1a1aa;text-align:center;padding:20px;font-size:0.9em;">⏳ Hledám...</div>';
+            results.innerHTML = '<div style="color:var(--text2);text-align:center;padding:20px;font-size:0.9em;">⏳ Hledám...</div>';
 
             try {
                 const r = await fetch(`${WORKER_URL}/search?q=${encodeURIComponent(query)}`);
@@ -4097,19 +4107,19 @@ COACH TIP: [One practical coaching cue for today's session]
                 const swimmers = await r.json();
 
                 if (!swimmers.length) {
-                    results.innerHTML = '<div style="color:#a1a1aa;text-align:center;padding:20px;font-size:0.9em;">Žádný plavec nenalezen</div>';
+                    results.innerHTML = '<div style="color:var(--text2);text-align:center;padding:20px;font-size:0.9em;">Žádný plavec nenalezen</div>';
                     return;
                 }
 
                 results.innerHTML = swimmers.map((s, idx) => {
                     const alreadyAdded = appData.swimmers.some(sw => sw.cspsId === s.cspsId);
                     return `
-                        <div style="background:#3f3f46;border:1px solid #52525b;border-radius:8px;padding:14px;margin-bottom:8px;display:flex;align-items:center;gap:12px;">
+                        <div style="background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:14px;margin-bottom:8px;display:flex;align-items:center;gap:12px;">
                             <div style="flex:1;">
-                                <div style="font-weight:600;color:#fafafa;">${s.name}</div>
-                                <div style="color:#a1a1aa;font-size:0.82em;margin-top:2px;">
+                                <div style="font-weight:600;color:var(--text);">${s.name}</div>
+                                <div style="color:var(--text2);font-size:0.82em;margin-top:2px;">
                                     ${s.birthYear ? `📅 ${s.birthYear}` : ''} ${s.club ? `• 🏊 ${s.club}` : ''}
-                                    <span style="color:#71717a;"> • ID: ${s.cspsId}</span>
+                                    <span style="color:var(--text3);"> • ID: ${s.cspsId}</span>
                                 </div>
                             </div>
                             ${alreadyAdded 
@@ -4266,7 +4276,7 @@ COACH TIP: [One practical coaching cue for today's session]
                 const swimmers = await r.json();
 
                 if (!swimmers.length) {
-                    results.innerHTML = '<div style="color:#a1a1aa;text-align:center;padding:20px;font-size:0.9em;">Žádný plavec nenalezen</div>';
+                    results.innerHTML = '<div style="color:var(--text2);text-align:center;padding:20px;font-size:0.9em;">Žádný plavec nenalezen</div>';
                     return;
                 }
 
@@ -4274,11 +4284,11 @@ COACH TIP: [One practical coaching cue for today's session]
                     const alreadyAdded = appData.swimmers.some(sw => sw.cspsId === s.cspsId);
                     const initials = s.name.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase();
                     return `
-                        <div style="background:#27272a;border:1px solid #52525b;border-radius:8px;padding:14px;margin-bottom:8px;display:flex;align-items:center;gap:12px;">
-                            <div style="width:40px;height:40px;background:#52525b;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600;color:#fafafa;flex-shrink:0;font-size:0.9em;">${initials}</div>
+                        <div style="background:var(--surface3);border:1px solid var(--border2);border-radius:8px;padding:14px;margin-bottom:8px;display:flex;align-items:center;gap:12px;">
+                            <div style="width:40px;height:40px;background:var(--surface3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600;color:var(--text);flex-shrink:0;font-size:0.9em;">${initials}</div>
                             <div style="flex:1;">
-                                <div style="font-weight:600;color:#fafafa;font-size:0.95em;">${s.name}</div>
-                                <div style="color:#a1a1aa;font-size:0.82em;margin-top:2px;">
+                                <div style="font-weight:600;color:var(--text);font-size:0.95em;">${s.name}</div>
+                                <div style="color:var(--text2);font-size:0.82em;margin-top:2px;">
                                     ${s.birthYear ? `${s.birthYear}` : ''} ${s.club ? `• ${s.club}` : ''}
                                 </div>
                             </div>
@@ -4398,14 +4408,14 @@ COACH TIP: [One practical coaching cue for today's session]
             const id = 'race_' + raceCounter++;
             const raceDiv = document.createElement('div');
             raceDiv.id = id;
-            raceDiv.style.cssText = 'background:#3f3f46;padding:12px;border-radius:8px;margin-bottom:8px;';
+            raceDiv.style.cssText = 'background:var(--surface2);padding:12px;border-radius:8px;margin-bottom:8px;';
             raceDiv.innerHTML = `
                 <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
-                    <input type="text" value="${name}" style="flex:2;padding:8px;background:#52525b;border:1px solid #71717a;border-radius:6px;color:#e4e4e7;" class="race-name">
-                    <input type="date" value="${date}" style="flex:1;padding:8px;background:#52525b;border:1px solid #71717a;border-radius:6px;color:#e4e4e7;" class="race-date">
-                    <button onclick="removeRaceField('${id}')" style="padding:8px 12px;background:#ef4444;border:none;border-radius:6px;color:#fafafa;cursor:pointer;">×</button>
+                    <input type="text" value="${name}" style="flex:2;padding:8px;background:var(--surface3);border:1px solid #71717a;border-radius:6px;color:var(--text);" class="race-name">
+                    <input type="date" value="${date}" style="flex:1;padding:8px;background:var(--surface3);border:1px solid #71717a;border-radius:6px;color:var(--text);" class="race-date">
+                    <button onclick="removeRaceField('${id}')" style="padding:8px 12px;background:#ef4444;border:none;border-radius:6px;color:var(--text);cursor:pointer;">×</button>
                 </div>
-                <button onclick="showEntriesDialog('${id}')" style="width:100%;padding:8px;background:#3f3f46;border:1px solid #60a5fa;border-radius:6px;color:#60a5fa;cursor:pointer;font-size:0.85em;">
+                <button onclick="showEntriesDialog('${id}')" style="width:100%;padding:8px;background:var(--surface2);border:1px solid #60a5fa;border-radius:6px;color:#60a5fa;cursor:pointer;font-size:0.85em;">
                     📋 Přidat přihlášky
                 </button>
                 <div class="race-entries" style="display:none;margin-top:8px;"></div>
@@ -4577,7 +4587,7 @@ COACH TIP: [One practical coaching cue for today's session]
                     plugins: {
                         legend: { display: false },
                         tooltip: {
-                            backgroundColor: '#27272a',
+                            backgroundColor: 'var(--surface3)',
                             borderColor: '#52525b',
                             borderWidth: 1,
                             callbacks: {
@@ -4620,12 +4630,12 @@ COACH TIP: [One practical coaching cue for today's session]
 
             const grid = document.getElementById('perfAllTimesGrid');
             grid.innerHTML = bestTimes.map(t => `
-                <div style="background:#27272a;border:1px solid #52525b;border-radius:8px;padding:12px;cursor:pointer;"
+                <div style="background:var(--surface3);border:1px solid var(--border2);border-radius:8px;padding:12px;cursor:pointer;"
                     onclick="document.getElementById('perfDisciplineSelect').value='${t.code}';document.getElementById('perfPoolSelect').value='${t.poolLength}';updatePerformanceChart()">
-                    <div style="color:#a1a1aa;font-size:0.8em;">${t.discipline}</div>
+                    <div style="color:var(--text2);font-size:0.8em;">${t.discipline}</div>
                     <div style="color:#60a5fa;font-size:1.2em;font-weight:700;margin:4px 0;">${t.timeFormatted}</div>
                     <div style="display:flex;justify-content:space-between;align-items:center;">
-                        <span style="color:#71717a;font-size:0.75em;">${t.poolLength}m • ${t.date}</span>
+                        <span style="color:var(--text3);font-size:0.75em;">${t.poolLength}m • ${t.date}</span>
                         <span style="color:#4ade80;font-size:0.75em;font-weight:600;">${t.points} b</span>
                     </div>
                 </div>
@@ -4655,26 +4665,26 @@ COACH TIP: [One practical coaching cue for today's session]
             const bestYear = Object.entries(byYear).sort((a,b) => b[1]-a[1])[0];
 
             document.getElementById('perfStatsGrid').innerHTML = `
-                <div style="background:#27272a;border-radius:8px;padding:14px;text-align:center;">
+                <div style="background:var(--surface3);border-radius:8px;padding:14px;text-align:center;">
                     <div style="font-size:1.8em;font-weight:700;color:#60a5fa;">${totalRaces}</div>
-                    <div style="color:#a1a1aa;font-size:0.82em;margin-top:4px;">Závodů absolvováno</div>
+                    <div style="color:var(--text2);font-size:0.82em;margin-top:4px;">Závodů absolvováno</div>
                 </div>
-                <div style="background:#27272a;border-radius:8px;padding:14px;text-align:center;">
+                <div style="background:var(--surface3);border-radius:8px;padding:14px;text-align:center;">
                     <div style="font-size:1.8em;font-weight:700;color:#4ade80;">${disciplines.length}</div>
-                    <div style="color:#a1a1aa;font-size:0.82em;margin-top:4px;">Disciplín</div>
+                    <div style="color:var(--text2);font-size:0.82em;margin-top:4px;">Disciplín</div>
                 </div>
-                <div style="background:#27272a;border-radius:8px;padding:14px;text-align:center;">
+                <div style="background:var(--surface3);border-radius:8px;padding:14px;text-align:center;">
                     <div style="font-size:1.8em;font-weight:700;color:#f59e0b;">${pbs}</div>
-                    <div style="color:#a1a1aa;font-size:0.82em;margin-top:4px;">Osobních rekordů</div>
+                    <div style="color:var(--text2);font-size:0.82em;margin-top:4px;">Osobních rekordů</div>
                 </div>
-                <div style="background:#27272a;border-radius:8px;padding:14px;text-align:center;">
+                <div style="background:var(--surface3);border-radius:8px;padding:14px;text-align:center;">
                     <div style="font-size:1.8em;font-weight:700;color:#a78bfa;">${avgPoints}</div>
-                    <div style="color:#a1a1aa;font-size:0.82em;margin-top:4px;">Průměr bodů</div>
+                    <div style="color:var(--text2);font-size:0.82em;margin-top:4px;">Průměr bodů</div>
                 </div>
                 ${bestYear ? `
-                <div style="background:#27272a;border-radius:8px;padding:14px;text-align:center;">
+                <div style="background:var(--surface3);border-radius:8px;padding:14px;text-align:center;">
                     <div style="font-size:1.8em;font-weight:700;color:#fb923c;">${bestYear[0]}</div>
-                    <div style="color:#a1a1aa;font-size:0.82em;margin-top:4px;">Nejaktivnější rok (${bestYear[1]} výsledků)</div>
+                    <div style="color:var(--text2);font-size:0.82em;margin-top:4px;">Nejaktivnější rok (${bestYear[1]} výsledků)</div>
                 </div>` : ''}
             `;
             document.getElementById('perfStatsContainer').style.display = 'block';
@@ -4802,25 +4812,25 @@ COACH TIP: [One practical coaching cue for today's session]
                 <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
                     <span style="font-size:2em;">${phase.icon}</span>
                     <div>
-                        <div style="color:#fafafa;font-weight:700;font-size:1.1em;">${phase.name}</div>
+                        <div style="color:var(--text);font-weight:700;font-size:1.1em;">${phase.name}</div>
                         <div style="color:${phase.color};font-size:0.85em;font-weight:600;">Aktuální fáze sezóny</div>
                     </div>
                 </div>
-                <div style="color:#e4e4e7;font-size:0.9em;margin-bottom:12px;">${phase.description}</div>
+                <div style="color:var(--text);font-size:0.9em;margin-bottom:12px;">${phase.description}</div>
                 <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
                     ${phase.focus.map(f => `<span style="background:${phase.color}30;border:1px solid ${phase.color};color:${phase.color};padding:3px 10px;border-radius:8px;font-size:0.8em;">${f}</span>`).join('')}
                 </div>
                 <div style="display:flex;gap:16px;flex-wrap:wrap;">
-                    <div style="color:#a1a1aa;font-size:0.85em;">📊 Objem: <strong style="color:#fafafa;">${phase.weeklyVolume}/týden</strong></div>
-                    <div style="color:#a1a1aa;font-size:0.85em;">🏊 Bazén: <strong style="color:#fafafa;">${phase.poolLength === 'krátký' ? '25m' : '50m'}</strong></div>
+                    <div style="color:var(--text2);font-size:0.85em;">📊 Objem: <strong style="color:var(--text);">${phase.weeklyVolume}/týden</strong></div>
+                    <div style="color:var(--text2);font-size:0.85em;">🏊 Bazén: <strong style="color:var(--text);">${phase.poolLength === 'krátký' ? '25m' : '50m'}</strong></div>
                 </div>
-                <div style="margin-top:12px;padding:12px;background:rgba(0,0,0,0.2);border-radius:8px;color:#a1a1aa;font-size:0.85em;">
+                <div style="margin-top:12px;padding:12px;background:rgba(0,0,0,0.2);border-radius:8px;color:var(--text2);font-size:0.85em;">
                     💡 ${phase.tips}
                 </div>
                 <div style="margin-top:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-                    <span style="color:#a1a1aa;font-size:0.82em;white-space:nowrap;">⚙️ Změnit fázi:</span>
+                    <span style="color:var(--text2);font-size:0.82em;white-space:nowrap;">⚙️ Změnit fázi:</span>
                     <select onchange="setManualSeasonPhase(this.value)"
-                        style="flex:1;padding:8px 12px;background:rgba(0,0,0,0.3);border:1px solid ${phase.color}50;border-radius:8px;color:#fafafa;font-family:Inter,sans-serif;font-size:0.82em;cursor:pointer;">
+                        style="flex:1;padding:8px 12px;background:rgba(0,0,0,0.3);border:1px solid ${phase.color}50;border-radius:8px;color:var(--text);font-family:Inter,sans-serif;font-size:0.82em;cursor:pointer;">
                         <option value="auto" ${!localStorage.getItem('swimSeasonPhase_'+(currentClubId||'default')) ? 'selected' : ''}>🤖 Automaticky</option>
                         <option value="prep" ${localStorage.getItem('swimSeasonPhase_'+(currentClubId||'default'))==='prep' ? 'selected' : ''}>🔧 Přípravné</option>
                         <option value="base" ${localStorage.getItem('swimSeasonPhase_'+(currentClubId||'default'))==='base' ? 'selected' : ''}>💪 Základní</option>
@@ -4848,11 +4858,11 @@ COACH TIP: [One practical coaching cue for today's session]
                 const monthLabels = p.months.map(m => monthNames[m-1]).join('–');
 
                 return `
-                    <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;padding:12px;background:${isCurrent ? p.color+'20' : '#27272a'};border:1px solid ${isCurrent ? p.color : '#52525b'};border-radius:8px;">
+                    <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;padding:12px;background:${isCurrent ? p.color+'20' : 'var(--surface3)'};border:1px solid ${isCurrent ? p.color : 'var(--border2)'};border-radius:8px;">
                         <div style="font-size:1.5em;flex-shrink:0;">${p.icon}</div>
                         <div style="flex:1;">
-                            <div style="font-weight:600;color:${isCurrent ? '#fafafa' : '#a1a1aa'};font-size:0.9em;">${p.name}</div>
-                            <div style="color:#71717a;font-size:0.78em;">${monthLabels} • ${p.weeklyVolume}</div>
+                            <div style="font-weight:600;color:${isCurrent ? 'var(--text)' : 'var(--text2)'};font-size:0.9em;">${p.name}</div>
+                            <div style="color:var(--text3);font-size:0.78em;">${monthLabels} • ${p.weeklyVolume}</div>
                         </div>
                         ${isCurrent ? `<span style="background:${p.color};color:#18181b;padding:3px 10px;border-radius:8px;font-size:0.75em;font-weight:700;">NYNÍ</span>` : ''}
                         ${isPast ? `<span style="color:#4ade80;font-size:0.85em;">✓</span>` : ''}
@@ -4864,13 +4874,13 @@ COACH TIP: [One practical coaching cue for today's session]
             document.getElementById('seasonPhasesList').innerHTML = SEASON_PHASES.map(p => {
                 const monthNames = ['Leden','Únor','Březen','Duben','Květen','Červen','Červenec','Srpen','Září','Říjen','Listopad','Prosinec'];
                 return `
-                    <div style="border:1px solid #52525b;border-radius:8px;padding:14px;margin-bottom:8px;">
+                    <div style="border:1px solid var(--border2);border-radius:8px;padding:14px;margin-bottom:8px;">
                         <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
                             <span>${p.icon}</span>
-                            <strong style="color:#fafafa;">${p.name}</strong>
-                            <span style="color:#71717a;font-size:0.8em;">${p.months.map(m => monthNames[m-1]).join(', ')}</span>
+                            <strong style="color:var(--text);">${p.name}</strong>
+                            <span style="color:var(--text3);font-size:0.8em;">${p.months.map(m => monthNames[m-1]).join(', ')}</span>
                         </div>
-                        <div style="color:#a1a1aa;font-size:0.85em;">${p.description}</div>
+                        <div style="color:var(--text2);font-size:0.85em;">${p.description}</div>
                     </div>
                 `;
             }).join('');
@@ -4881,7 +4891,7 @@ COACH TIP: [One practical coaching cue for today's session]
             const swimmerValue = document.getElementById('seasonSwimmerSelect').value;
             const resultDiv = document.getElementById('seasonTrainingResult');
 
-            resultDiv.innerHTML = '<div style="color:#a1a1aa;padding:16px;text-align:center;">⏳ Generuji trénink pro ' + phase.name + '...</div>';
+            resultDiv.innerHTML = '<div style="color:var(--text2);padding:16px;text-align:center;">⏳ Generuji trénink pro ' + phase.name + '...</div>';
 
             // Vyber plavce
             let selectedSwimmers;
@@ -4949,14 +4959,14 @@ Použij české názvy disciplín. Každá série: X× Ym styl @interval`;
                 const text = data.content?.[0]?.text || '';
 
                 resultDiv.innerHTML = `
-                    <div style="background:#27272a;border:1px solid ${phase.color};border-radius:10px;padding:16px;">
+                    <div style="background:var(--surface3);border:1px solid ${phase.color};border-radius:10px;padding:16px;">
                         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
                             <div style="font-weight:600;color:${phase.color};">${phase.icon} ${phase.name}</div>
-                            <button onclick="saveSeasonTraining(this)" style="padding:6px 14px;background:#3f3f46;border:1px solid #52525b;border-radius:6px;color:#e4e4e7;cursor:pointer;font-size:0.82em;font-family:Inter,sans-serif;">
+                            <button onclick="saveSeasonTraining(this)" style="padding:6px 14px;background:var(--surface2);border:1px solid var(--border2);border-radius:6px;color:var(--text);cursor:pointer;font-size:0.82em;font-family:Inter,sans-serif;">
                                 💾 Uložit do historie
                             </button>
                         </div>
-                        <div style="color:#e4e4e7;font-size:0.88em;line-height:1.7;white-space:pre-wrap;">${text}</div>
+                        <div style="color:var(--text);font-size:0.88em;line-height:1.7;white-space:pre-wrap;">${text}</div>
                     </div>
                 `;
                 resultDiv.dataset.training = text;
@@ -5919,6 +5929,7 @@ Použij české názvy disciplín. Každá série: X× Ym styl @interval`;
         }
 
         function recalcTrainingTotals(text) {
+            if (window.rbCurDuration && text) text = text.replace(/^HZ VODA:.*$/im, 'HZ VODA: ' + window.rbCurDuration + ' min');
             const r = computeTrainingMeters(text);
             if (!r) return text;
             const { total, secTotals, secIdx, secs, lines } = r;
@@ -5929,7 +5940,7 @@ Použij české názvy disciplín. Každá série: X× Ym styl @interval`;
                 for (const k of secs) {
                     if (secIdx[k] === i) return l.replace(/\(\s*~?\d+\s*m\s*\)/, '(' + secTotals[k] + 'm)');
                 }
-                if (/^HZ VODA:/i.test(l) && hzIsTotal) return 'HZ VODA: ' + total + 'm';
+                if (/^HZ VODA:/i.test(l)) return window.rbCurDuration ? 'HZ VODA: ' + window.rbCurDuration + ' min' : l;
                 if (/^KM CELKEM:/i.test(l)) return 'KM CELKEM: ' + (total / 1000).toFixed(1).replace(/\.0$/, '') + 'km';
                 if (/^NOHY:/i.test(l) && secTotals['4'] !== undefined) return 'NOHY: ' + secTotals['4'] + 'm';
                 if (/^TECHNIKA:/i.test(l) && secTotals['5'] !== undefined) return 'TECHNIKA: ' + secTotals['5'] + 'm';
@@ -6702,7 +6713,7 @@ Na konci jeden řádek: CELKEM: ${duration} min, a pak jedna věta COACH TIP.`;
                 document.getElementById('trainingActions').style.display = 'block';
                 document.getElementById('trainingBackBtn').style.display = 'none';
                 const genBtn2 = document.getElementById('generateBtn');
-                if (genBtn2) { genBtn2.disabled = false; genBtn2.textContent = '🔄 Generovat znovu'; genBtn2.style.opacity = '1'; }
+                if (genBtn2) { genBtn2.disabled = false; genBtn2.textContent = '🔄 Generovat znovu'; genBtn2.style.opacity = '1'; genBtn2.classList.add('gen-again'); }
                 const yarmillBtn = document.getElementById('yarmillBtn');
                 if (yarmillBtn) yarmillBtn.style.display = 'none';
                 resetTrainingChat();
@@ -6714,7 +6725,7 @@ Na konci jeden řádek: CELKEM: ${duration} min, a pak jedna věta COACH TIP.`;
                 clearInterval(genTimer);
                 output.innerHTML = '';
                 const genBtnErr = document.getElementById('generateBtn');
-                if (genBtnErr) { genBtnErr.disabled = false; genBtnErr.textContent = '🤖 Vygenerovat trénink'; genBtnErr.style.opacity = '1'; }
+                if (genBtnErr) { genBtnErr.disabled = false; genBtnErr.textContent = '🤖 Vygenerovat trénink'; genBtnErr.style.opacity = '1'; genBtnErr.classList.remove('gen-again'); }
                 let errMsg = error.message;
                 let errHint = '';
                 if (errMsg.includes('fetch') || errMsg.includes('Failed') || errMsg.includes('network')) {
@@ -7456,7 +7467,7 @@ Na konci jeden řádek: CELKEM: ${duration} min, a pak jedna věta COACH TIP.`;
                 let P; try { P = JSON.parse(raw); } catch (e) { alert('Neplatný balíček.'); return; }
                 if (!P.robutek) { alert('Neplatný balíček.'); return; }
                 const box = document.createElement('div');
-                box.style.cssText = 'position:fixed;top:16px;right:16px;z-index:999999;background:#18181b;color:#fafafa;border:2px solid #ec4899;border-radius:12px;padding:14px 18px;font:14px Inter,Arial,sans-serif;max-width:360px;box-shadow:0 8px 30px rgba(0,0,0,.4);';
+                box.style.cssText = 'position:fixed;top:16px;right:16px;z-index:999999;background:#18181b;color:var(--text);border:2px solid #ec4899;border-radius:12px;padding:14px 18px;font:14px Inter,Arial,sans-serif;max-width:360px;box-shadow:0 8px 30px rgba(0,0,0,.4);';
                 const say = h => { box.innerHTML = '<b>🤖 Robůtek → Yarmill</b><br>' + h; };
                 document.body.appendChild(box); say('Získávám přihlášení…');
                 let tok = null; const of = window.fetch;
