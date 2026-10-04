@@ -831,7 +831,7 @@
             <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
                 <div>
                     <h1 style="font-size:clamp(0.95em,3vw,1.3em);font-weight:700;">🤖 Mattyho tréninkový robůtek</h1>
-                    <p style="font-size:0.75em;color:var(--text3);">šup do vody • žádné výmluvy • makáme 🏊 <span style="opacity:0.6;font-size:0.9em;color:var(--green);cursor:help;" title="v3.14 — bazénový vzhled (modrá + tyrkys, sjednocená tlačítka a karty); v3.13 — HZ VODA v minutách, jemnější „Generovat znovu“; v3.12 — vtip celý, světlý režim sjednocen (ČSPS, Sezóna…), mobil: záložky, týden, rozvrh; v3.11 — volba režimu po Trénovat (Podle účasti / Na míru), hlavička výstupu se štítky; v3.10 — režim Na míru (podle cíle, bez ohledu na účast); v3.9 — zaměření tréninku (typ + 2 styly), záložka Yarmill: rozvrh, generátor období (auto/na míru, 25/50 m), zápis plánu i skutečnosti přes záložku, plán → skutečnost">v3.14 🌊</span></p>
+                    <p style="font-size:0.75em;color:var(--text3);">šup do vody • žádné výmluvy • makáme 🏊 <span style="opacity:0.6;font-size:0.9em;color:var(--green);cursor:help;" title="v3.15 — oprava součtu metrů (podnadpisy bloků, vnořené série); v3.14 — bazénový vzhled (modrá + tyrkys, sjednocená tlačítka a karty); v3.13 — HZ VODA v minutách, jemnější „Generovat znovu“; v3.12 — vtip celý, světlý režim sjednocen (ČSPS, Sezóna…), mobil: záložky, týden, rozvrh; v3.11 — volba režimu po Trénovat (Podle účasti / Na míru), hlavička výstupu se štítky; v3.10 — režim Na míru (podle cíle, bez ohledu na účast); v3.9 — zaměření tréninku (typ + 2 styly), záložka Yarmill: rozvrh, generátor období (auto/na míru, 25/50 m), zápis plánu i skutečnosti přes záložku, plán → skutečnost">v3.15 🌊</span></p>
                 </div>
                 <div style="display:flex;align-items:center;gap:8px;">
                     <select id="clubSelector" onchange="switchClub(this.value)"
@@ -5943,7 +5943,11 @@ Použij české názvy disciplín. Každá série: X× Ym styl @interval`;
                     return;
                 }
                 if (/SUCH[ÁA] P[ŘR][ÍI]PRAVA/i.test(l)) { sec = null; return; }
-                if (!sec || /^(•|Cíl|Rep\b|COACH|CELKEM|===)/i.test(l)) return;
+                if (!sec || /^\s*(•|Cíl|Rep\b|COACH|CELKEM|===|Pozn)/i.test(l)) return;
+                // podnadpisy bloků („BLOK A — … (1000m):“) jsou mezisoučty → nepočítat
+                if (/^\s*(BLOK|BLOCK|SÉRIE|SERIE|SADA|ČÁST|PART)\b/i.test(l) || /\(\s*~?\d+\s*m\s*\)\s*:?\s*$/.test(l)) return;
+                const nest = l.match(/(\d+)\s*[x×]\s*\(\s*(\d+)\s*[x×]\s*(\d+)\s*m/);
+                if (nest) { secTotals[sec] += (+nest[1]) * (+nest[2]) * (+nest[3]); return; }
                 const m = l.match(/(\d+)\s*[x×]\s*(\d+)\s*m\b|(\d+)\s*m\b/);
                 if (m) secTotals[sec] += m[1] ? (+m[1]) * (+m[2]) : (+m[3]);
             });
