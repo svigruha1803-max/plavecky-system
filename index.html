@@ -781,6 +781,12 @@
         @media (max-width: 360px) {
             .tab-btn { font-size: 0.55em; padding: 10px 1px; }
         }
+        .rb-chip{padding:10px 12px;background:var(--surface2);border:2px solid var(--border);border-radius:12px;cursor:pointer;user-select:none;font-size:0.82em;font-weight:600;color:var(--text);text-align:center;line-height:1.3;}
+        .rb-chip small{font-weight:400;color:var(--text3);font-size:0.85em;}
+        .rb-chip.rb-sm{padding:7px 14px;border-radius:20px;}
+        .rb-card{background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:16px;}
+        .rb-card h3{color:var(--text);font-size:1em;font-weight:700;margin:0 0 12px;}
+        .ym-row input,.ym-row select{padding:7px 8px;font-size:0.8em;}
     </style>
 </head>
 <body>
@@ -791,7 +797,7 @@
             <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
                 <div>
                     <h1 style="font-size:clamp(0.95em,3vw,1.3em);font-weight:700;">🤖 Mattyho tréninkový robůtek</h1>
-                    <p style="font-size:0.75em;color:var(--text3);">šup do vody • žádné výmluvy • makáme 🏊 <span style="opacity:0.6;font-size:0.9em;color:var(--green);cursor:help;" title="v3.8 — tisk suché přípravy s ikonkami, checklist na odškrtávání cviků naživo, anti-repeat výběr cviků, knihovna cviků i v Historii/Knihovně">v3.8 🏋️</span></p>
+                    <p style="font-size:0.75em;color:var(--text3);">šup do vody • žádné výmluvy • makáme 🏊 <span style="opacity:0.6;font-size:0.9em;color:var(--green);cursor:help;" title="v3.9 — zaměření tréninku (typ + 2 styly), záložka Yarmill: rozvrh, generátor období (auto/na míru, 25/50 m), zápis plánu i skutečnosti přes záložku, plán → skutečnost">v3.9 📒</span></p>
                 </div>
                 <div style="display:flex;align-items:center;gap:8px;">
                     <select id="clubSelector" onchange="switchClub(this.value)"
@@ -825,6 +831,7 @@
             <button class="tab-btn" onclick="switchMainTab('compare')">🏅 Porovnání</button>
             <button class="tab-btn" onclick="switchMainTab('stats')">📊 Statistiky</button>
             <button class="tab-btn" onclick="switchMainTab('history')">📜 Historie</button>
+            <button class="tab-btn" onclick="switchMainTab('yarmill')">📒 Yarmill</button>
         </div>
 
         <!-- TRAINING TAB -->
@@ -1073,6 +1080,28 @@
                         <input type="number" id="targetMeters" placeholder="Nech prázdné — AI zvolí automaticky" min="1000" max="10000" step="100" style="margin-top:8px;">
                         <div style="color:var(--text3);font-size:0.75em;margin-top:5px;">60min ≈ 2500m • 90min ≈ 3800m • 120min ≈ 5000m</div>
                     </div>
+                </div>
+
+
+                <!-- Zaměření tréninku (v3.9) -->
+                <div style="margin-bottom:20px;" id="focusWrap">
+                    <label>🎯 Zaměření tréninku</label>
+                    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin-top:8px;" id="focusTypeGrid">
+                        <div class="rb-chip" data-group="ftyp" data-val="auto" data-active="1" onclick="rbPick(this)">🤖 Auto<br><small>podle fáze</small></div>
+                        <div class="rb-chip" data-group="ftyp" data-val="vytrvalost" data-active="0" onclick="rbPick(this)">🫁 Vytrvalost<br><small>A1–A2, dlouhé úseky</small></div>
+                        <div class="rb-chip" data-group="ftyp" data-val="intervaly" data-active="0" onclick="rbPick(this)">⏱️ Intervaly<br><small>A3–A4</small></div>
+                        <div class="rb-chip" data-group="ftyp" data-val="kratke" data-active="0" onclick="rbPick(this)">⚡ Krátké časy<br><small>sprint, rychlost</small></div>
+                        <div class="rb-chip" data-group="ftyp" data-val="technika" data-active="0" onclick="rbPick(this)">🎓 Technika<br><small>drily, regenerace</small></div>
+                    </div>
+                    <div style="color:var(--text3);font-size:0.75em;margin:12px 0 6px;">Styly (max 2, první = hlavní):</div>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;" id="focusStyleGrid">
+                        <div class="rb-chip rb-sm" data-group="fsty" data-val="VZ" data-active="0" onclick="rbPickStyle(this)">Kraul</div>
+                        <div class="rb-chip rb-sm" data-group="fsty" data-val="Z" data-active="0" onclick="rbPickStyle(this)">Znak</div>
+                        <div class="rb-chip rb-sm" data-group="fsty" data-val="P" data-active="0" onclick="rbPickStyle(this)">Prsa</div>
+                        <div class="rb-chip rb-sm" data-group="fsty" data-val="M" data-active="0" onclick="rbPickStyle(this)">Motýl</div>
+                        <div class="rb-chip rb-sm" data-group="fsty" data-val="PZ" data-active="0" onclick="rbPickStyle(this)">Polohový</div>
+                    </div>
+                    <div id="focusStyleOrder" style="color:var(--text3);font-size:0.75em;margin-top:6px;"></div>
                 </div>
 
                 <!-- Pomůcky — toggle karty -->
@@ -1509,6 +1538,71 @@
         </div>
 
         <!-- STATISTICS TAB -->
+        <!-- YARMILL TAB (v3.9) -->
+        <div id="yarmill-tab-main" class="main-tab-content">
+            <h2>📒 Yarmill</h2>
+            <p style="color:var(--text3);font-size:0.85em;margin-bottom:16px;">Plán a skutečnost do Yarmillu ČSPS. Robůtek připraví balíček (schránka) → v Yarmillu klikneš na záložku <b>🤖 Robůtek → Yarmill</b> a zapíše se to samo.</p>
+
+            <div class="rb-card">
+                <h3>① Napojení (jednou)</h3>
+                <ol style="color:var(--text2);font-size:0.85em;line-height:1.7;padding-left:18px;margin:0 0 12px;">
+                    <li>Zapni lištu záložek (Ctrl+Shift+B).</li>
+                    <li>Přetáhni tlačítko níže na lištu záložek.</li>
+                    <li>Použití: Robůtek → „Zkopírovat pro Yarmill“ → otevři csps.yarmill.com (Plán nebo Skutečnost, týdenní pohled) → klikni na záložku.</li>
+                </ol>
+                <a id="rbBookmarklet" href="#" onclick="alert('Tohle tlačítko přetáhni na lištu záložek — klikat se na něj má až v Yarmillu.');return false;" style="display:inline-block;padding:10px 18px;background:linear-gradient(135deg,#ec4899,#f43f5e);color:#fff;border-radius:10px;font-weight:700;text-decoration:none;cursor:grab;">🤖 Robůtek → Yarmill</a>
+                <div style="display:grid;grid-template-columns:120px 1fr;gap:10px;margin-top:16px;align-items:start;">
+                    <label style="margin:6px 0 0;">ID skupiny</label>
+                    <input type="number" id="ymGroup" onchange="ymSaveCfg()">
+                    <label style="margin:6px 0 0;">Svěřenci<br><small style="font-weight:400;color:var(--text3);">ID;jméno, 1 na řádek</small></label>
+                    <textarea id="ymUsers" rows="5" onchange="ymSaveCfg()" style="font-family:monospace;font-size:0.8em;"></textarea>
+                </div>
+            </div>
+
+            <div class="rb-card">
+                <h3>② Rozvrh skupiny</h3>
+                <div id="ymSchedule"></div>
+                <button class="btn btn-secondary" onclick="ymAddRow()" style="padding:8px 14px;margin-top:8px;">➕ Přidat jednotku</button>
+                <div style="margin-top:14px;">
+                    <label>Volné dny (svátky, prázdniny) <small style="font-weight:400;color:var(--text3);">— data nebo rozsahy RRRR-MM-DD..RRRR-MM-DD, 1 na řádek</small></label>
+                    <textarea id="ymOff" rows="4" onchange="ymSaveCfg()" style="font-family:monospace;font-size:0.8em;margin-top:6px;"></textarea>
+                </div>
+            </div>
+
+            <div class="rb-card">
+                <h3>③ Vygenerovat období</h3>
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;">
+                    <div><label>Od</label><input type="date" id="ymFrom"></div>
+                    <div><label>Do</label><input type="date" id="ymTo"></div>
+                    <div><label>Režim</label>
+                        <select id="ymTyp">
+                            <option value="auto">🤖 Auto podle fáze sezóny</option>
+                            <option value="vytrvalost">🫁 Vytrvalost</option>
+                            <option value="intervaly">⏱️ Intervaly</option>
+                            <option value="kratke">⚡ Krátké časy</option>
+                            <option value="technika">🎓 Technika</option>
+                        </select></div>
+                    <div><label>Styly</label>
+                        <select id="ymSty1"><option value="">auto (kraul)</option><option>VZ</option><option>Z</option><option>P</option><option>M</option><option>PZ</option></select>
+                        <select id="ymSty2" style="margin-top:6px;"><option value="">— 2. styl —</option><option>VZ</option><option>Z</option><option>P</option><option>M</option><option>PZ</option></select></div>
+                    <div><label>Bazén</label>
+                        <select id="ymPool"><option value="">podle rozvrhu</option><option value="25">25 m</option><option value="50">50 m</option></select></div>
+                </div>
+                <button class="btn" onclick="ymGenerate()" style="margin-top:14px;">⚙️ Vygenerovat náhled</button>
+                <div id="ymPreview" style="margin-top:14px;"></div>
+            </div>
+
+            <div class="rb-card">
+                <h3>④ Plán → Skutečnost</h3>
+                <p style="color:var(--text3);font-size:0.82em;margin:0 0 10px;">Zkopíruje skupinový plán z Yarmillu do skutečnosti všem svěřencům. Dny, kde už svěřenec něco má, přeskočí.</p>
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;">
+                    <div><label>Od</label><input type="date" id="ymP2RFrom"></div>
+                    <div><label>Do</label><input type="date" id="ymP2RTo"></div>
+                </div>
+                <button class="btn" onclick="ymCopyP2R()" style="margin-top:14px;">📋 Zkopírovat pro Yarmill</button>
+            </div>
+        </div>
+
         <div id="stats-tab-main" class="main-tab-content">
             <h2>📊 Statistiky</h2>
             <div class="stats-cards" id="statsCards"></div>
@@ -1836,7 +1930,7 @@ Všichni plavci a tréninky tohoto klubu budou NENÁVRATNĚ smazány!`)) return;
             
             if (stepNum === 2) displaySwimmers();
             if (stepNum === 4) updateTrainingPreview();
-            if (stepNum === 3) setTimeout(initEquipmentStyles, 50);
+            if (stepNum === 3) setTimeout(() => { initEquipmentStyles(); rbInitChips(); }, 50);
         }
 
         function updateExistingSwimmersNotice() {
@@ -2243,6 +2337,7 @@ NOT listed = NOT used. Ever.
 ━━━ SWIMMERS ━━━
 ${swimmersInfo}
 ${notes ? 'COACH NOTES: ' + notes : ''}
+${getFocusPromptBlock(pool)}
 ${(() => {
     const d = getDrylandConfig();
     if (!d || d.types.length === 0) return '';
@@ -3435,6 +3530,7 @@ COACH TIP: [One practical coaching cue for today's session]
             toggle('poolSizeWrap', !isSuchy);
             toggle('targetMetersWrap', !isSuchy);
             toggle('equipmentWrap', !isSuchy);
+            toggle('focusWrap', !isSuchy);
             toggle('drylandSupplementWrap', !isSuchy);
             toggle('drylandStandaloneWrap', isSuchy);
 
@@ -3632,6 +3728,7 @@ COACH TIP: [One practical coaching cue for today's session]
             if (tab === 'week') renderWeekPlan();
             if (tab === 'library') renderLibrary();
             if (tab === 'compare') renderComparison();
+            if (tab === 'yarmill') initYarmillTab();
         }
 
         function renderCSPSTab() {
@@ -6149,7 +6246,7 @@ Použij české názvy disciplín. Každá série: X× Ym styl @interval`;
 
 
         // ── YARMILL EXPORT ───────────────────────────────────────────────────
-        function copyToYarmill() {
+        function copyToYarmillLegacy() {
             if (!appData.currentTraining) return;
             if (appData.currentTraining.type === 'suchy') {
                 alert('📋 Yarmill export je jen pro bazénové tréninky (metry ve VÝKAZu).');
@@ -7041,6 +7138,371 @@ Na konci jeden řádek: CELKEM: ${duration} min, a pak jedna věta COACH TIP.`;
         safeInit('cspsTab', () => {
             if (document.getElementById('csps-tab-main')?.classList.contains('active')) renderCSPSTab();
         });
+
+        // ═══ v3.9 — ZAMĚŘENÍ + YARMILL ═══════════════════════════════════════
+        const RB_STY = { VZ: 'kraul', Z: 'znak', P: 'prsa', M: 'motýl', PZ: 'polohový' };
+        const RB_TYP = { vytrvalost: 'Vytrvalost (A1–A2)', intervaly: 'Intervaly (A3–A4)', kratke: 'Krátké časy / rychlost', technika: 'Technika / regenerace' };
+        let rbFocusStyles = [];
+
+        function rbChipStyle(el, on) {
+            el.dataset.active = on ? '1' : '0';
+            el.style.background = on ? 'rgba(79,142,247,0.12)' : 'var(--surface2)';
+            el.style.borderColor = on ? 'var(--blue)' : 'var(--border)';
+        }
+        function rbPick(el) {
+            document.querySelectorAll('.rb-chip[data-group="' + el.dataset.group + '"]').forEach(c => rbChipStyle(c, c === el));
+        }
+        function rbPickStyle(el) {
+            const v = el.dataset.val;
+            if (rbFocusStyles.includes(v)) rbFocusStyles = rbFocusStyles.filter(x => x !== v);
+            else { rbFocusStyles.push(v); if (rbFocusStyles.length > 2) rbFocusStyles.shift(); }
+            document.querySelectorAll('.rb-chip[data-group="fsty"]').forEach(c => rbChipStyle(c, rbFocusStyles.includes(c.dataset.val)));
+            const o = document.getElementById('focusStyleOrder');
+            if (o) o.textContent = rbFocusStyles.length ? 'Hlavní: ' + RB_STY[rbFocusStyles[0]] + (rbFocusStyles[1] ? ' · vedlejší: ' + RB_STY[rbFocusStyles[1]] : '') : '';
+        }
+        function rbInitChips() { document.querySelectorAll('.rb-chip').forEach(c => rbChipStyle(c, c.dataset.active === '1')); }
+        function rbGetFocus() {
+            const t = document.querySelector('.rb-chip[data-group="ftyp"][data-active="1"]');
+            return { typ: t ? t.dataset.val : 'auto', styles: rbFocusStyles.slice() };
+        }
+        function getFocusPromptBlock(pool) {
+            const f = rbGetFocus();
+            if (f.typ === 'auto' && !f.styles.length) return '';
+            const L = ['━━━ COACH FOCUS (OVERRIDES SEASON FOCUS, NON-NEGOTIABLE) ━━━'];
+            if (f.typ !== 'auto') {
+                L.push('Training type: ' + RB_TYP[f.typ]);
+                if (f.typ === 'vytrvalost') L.push('Main set: aerobic A1–A2 (65–80%), long reps 200–800m, short rest 10–30s, main set 45–55% of volume.');
+                if (f.typ === 'intervaly') L.push('Main set: threshold/VO2 intervals A3–A4 (85–95%) on fixed send-off, reps 100–400m, main set 35–45% of volume + aerobic filler.');
+                if (f.typ === 'kratke') L.push('Main set: max speed / race pace, reps 15–50m' + (pool === '50m' ? ' (25m only from start to half-pool)' : '') + ', long rest 1:1–1:3, quality 600–1000m, starts and turns. Lower total volume (~85–90% of target).');
+                if (f.typ === 'technika') L.push('Main set: technique & drills, A1 only, many drill progressions, low intensity, regeneration.');
+            }
+            if (f.styles.length) {
+                L.push('Strokes: main = ' + RB_STY[f.styles[0]] + (f.styles[1] ? ', secondary = ' + RB_STY[f.styles[1]] + ' (split main set ~60/40)' : ' (main set fully in this stroke)') + '. Drills and kick sets in these strokes. Warm-up/cool-down may be mixed.');
+            }
+            return L.join('\n');
+        }
+
+        // ── Yarmill konfigurace ────────────────────────────────────────────────
+        const YM_KEY = 'robYarmillCfg';
+        const YM_DEFAULT = {
+            group: 151,
+            users: '918;Halva Patrik\n994;Vafková Nikola\n1306;Sedláčková Gabriela\n3066;Vítek Marek\n3067;Řezaninová Kateřina\n3172;Marková Barbora\n3174;Španková Veronika\n3175;Kočí Jolana\n3755;Bartko Artem\n3762;Umarov Abubakar',
+            schedule: [
+                { d: 0, k: 'V', slot: 'D', min: 60, cas: '6–7', misto: '', pool: 25 },
+                { d: 1, k: 'ALT_SV', slot: 'O', min: 120, cas: '', misto: 'Lužánky', pool: 25 },
+                { d: 2, k: 'V', slot: 'O', min: 120, cas: '17–19', misto: 'Tesla', pool: 25 },
+                { d: 3, k: 'V', slot: 'O', min: 120, cas: '17–19', misto: 'Tesla', pool: 25 }
+            ],
+            off: '2026-09-28\n2026-10-28..2026-10-30\n2026-11-17\n2026-12-23..2027-01-03\n2027-01-29\n2027-03-25..2027-03-26\n2027-03-29\n2027-05-01\n2027-05-08\n# jarní prázdniny Brno-město 2027 — doplň termín'
+        };
+        function ymCfg() {
+            try { const c = JSON.parse(localStorage.getItem(YM_KEY)); if (c && c.schedule) return c; } catch (e) {}
+            return JSON.parse(JSON.stringify(YM_DEFAULT));
+        }
+        function ymSaveCfg() {
+            const c = ymCfg();
+            c.group = parseInt(document.getElementById('ymGroup').value) || 151;
+            c.users = document.getElementById('ymUsers').value;
+            c.off = document.getElementById('ymOff').value;
+            c.schedule = [...document.querySelectorAll('#ymSchedule .ym-row')].map(r => ({
+                d: +r.querySelector('[data-f=d]').value, k: r.querySelector('[data-f=k]').value,
+                slot: r.querySelector('[data-f=slot]').value, min: +r.querySelector('[data-f=min]').value || 60,
+                cas: r.querySelector('[data-f=cas]').value, misto: r.querySelector('[data-f=misto]').value,
+                pool: +r.querySelector('[data-f=pool]').value
+            }));
+            localStorage.setItem(YM_KEY, JSON.stringify(c));
+        }
+        function ymUsers() {
+            return ymCfg().users.split('\n').map(l => l.trim()).filter(Boolean).map(l => { const [id, ...n] = l.split(';'); return { id: parseInt(id), name: n.join(';').trim() }; }).filter(u => u.id);
+        }
+        function ymOffSet() {
+            const s = new Set();
+            ymCfg().off.split('\n').map(l => l.trim()).filter(l => l && !l.startsWith('#')).forEach(l => {
+                const [a, b] = l.split('..');
+                let d = new Date(a + 'T12:00:00'); const e = new Date((b || a) + 'T12:00:00');
+                while (d <= e) { s.add(ymIso(d)); d.setDate(d.getDate() + 1); }
+            });
+            return s;
+        }
+        function ymIso(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+        function ymIsoWeek(d) {
+            const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+            const day = t.getUTCDay() || 7; t.setUTCDate(t.getUTCDate() + 4 - day);
+            const y0 = new Date(Date.UTC(t.getUTCFullYear(), 0, 1));
+            return Math.ceil(((t - y0) / 86400000 + 1) / 7);
+        }
+        const YM_DAYS = ['Po', 'Út', 'St', 'Čt', 'Pá', 'So', 'Ne'];
+
+        function ymRenderSchedule() {
+            const c = ymCfg();
+            const opt = (arr, v) => arr.map(([val, lab]) => '<option value="' + val + '"' + (String(val) === String(v) ? ' selected' : '') + '>' + lab + '</option>').join('');
+            document.getElementById('ymSchedule').innerHTML = c.schedule.map((r, i) =>
+                '<div class="ym-row" style="display:grid;grid-template-columns:60px 1.6fr 90px 70px 80px 1fr 70px 34px;gap:6px;margin-bottom:6px;">' +
+                '<select data-f="d" onchange="ymSaveCfg()">' + opt(YM_DAYS.map((x, j) => [j, x]), r.d) + '</select>' +
+                '<select data-f="k" onchange="ymSaveCfg()">' + opt([['V', '🏊 Voda'], ['S', '🏋️ Suchý'], ['ALT_SV', 'lichý týden suchý / sudý voda'], ['ALT_VS', 'lichý týden voda / sudý suchý']], r.k) + '</select>' +
+                '<select data-f="slot" onchange="ymSaveCfg()">' + opt([['D', 'dopoledne'], ['O', 'odpoledne']], r.slot) + '</select>' +
+                '<input data-f="min" type="number" value="' + r.min + '" title="minut" onchange="ymSaveCfg()">' +
+                '<input data-f="cas" value="' + (r.cas || '') + '" placeholder="čas" onchange="ymSaveCfg()">' +
+                '<input data-f="misto" value="' + (r.misto || '') + '" placeholder="místo" onchange="ymSaveCfg()">' +
+                '<select data-f="pool" onchange="ymSaveCfg()">' + opt([[25, '25 m'], [50, '50 m']], r.pool) + '</select>' +
+                '<button onclick="ymDelRow(' + i + ')" style="background:var(--surface3);border:1px solid var(--border2);border-radius:8px;color:var(--text2);cursor:pointer;">✕</button></div>'
+            ).join('');
+        }
+        function ymAddRow() { const c = ymCfg(); c.schedule.push({ d: 4, k: 'V', slot: 'O', min: 120, cas: '', misto: '', pool: 25 }); localStorage.setItem(YM_KEY, JSON.stringify(c)); ymRenderSchedule(); }
+        function ymDelRow(i) { const c = ymCfg(); c.schedule.splice(i, 1); localStorage.setItem(YM_KEY, JSON.stringify(c)); ymRenderSchedule(); }
+
+        function initYarmillTab() {
+            const c = ymCfg();
+            document.getElementById('ymGroup').value = c.group;
+            document.getElementById('ymUsers').value = c.users;
+            document.getElementById('ymOff').value = c.off;
+            ymRenderSchedule();
+            const t = new Date(), mon = new Date(t); mon.setDate(t.getDate() - ((t.getDay() + 6) % 7));
+            const sun = new Date(mon); sun.setDate(mon.getDate() + 6);
+            ['ymFrom', 'ymP2RFrom'].forEach(id => { const e = document.getElementById(id); if (!e.value) e.value = ymIso(mon); });
+            ['ymTo', 'ymP2RTo'].forEach(id => { const e = document.getElementById(id); if (!e.value) e.value = ymIso(sun); });
+            document.getElementById('rbBookmarklet').href = ymBookmarkletHref();
+        }
+
+        // ── Fáze sezóny → typ ───────────────────────────────────────────────────
+        const YM_SEASON = [ // sezóna 2026/27 (bez závodů do prosince)
+            { od: '2026-09-01', do: '2026-10-18', typ: 'vytrvalost', name: 'Všeobecná příprava – aerobní rozvoj', k: 1.0 },
+            { od: '2026-10-19', do: '2026-11-01', typ: 'intervaly', name: 'Aerobní rozvoj + prahová zátěž', k: 1.0 },
+            { od: '2026-11-02', do: '2026-11-08', typ: 'technika', name: 'Odlehčovací týden', k: 0.9 },
+            { od: '2026-11-09', do: '2026-12-06', typ: 'intervaly', name: 'Speciální příprava – práh, VO2max', k: 1.0 },
+            { od: '2026-12-07', do: '2026-12-13', typ: 'kratke', name: 'Speciální příprava – rychlost, kvalita', k: 1.0 },
+            { od: '2026-12-14', do: '2026-12-22', typ: 'technika', name: 'Odlehčení + kontrolní testy', k: 0.9 }
+        ];
+        function ymPhase(iso) {
+            const p = YM_SEASON.find(x => iso >= x.od && iso <= x.do);
+            if (p) return p;
+            const m = parseInt(iso.slice(5, 7));
+            const sp = (typeof SEASON_PHASES !== 'undefined') ? SEASON_PHASES.find(x => x.months && x.months.includes(m)) : null;
+            const map = { base: 'vytrvalost', develop: 'intervaly', race: 'kratke', openwater: 'vytrvalost', rest: 'technika' };
+            return { typ: sp ? (map[sp.id] || 'vytrvalost') : 'vytrvalost', name: sp ? sp.name : 'Trénink', k: 1.0 };
+        }
+
+        // ── Generátor jednotky ──────────────────────────────────────────────────
+        function ymSession(iso, row, typ, styles, pool, i, motivName, k) {
+            const S1 = styles[0] || 'VZ', S2 = styles[1] || S1;
+            const two = S1 !== S2;
+            const dry = ['zahřátí + mobilita 20 min, core stabilita 30 min, kruhový trénink s vlastní vahou (dřepy, výpady, kliky, přítahy s gumou) 40 min, švihadlo/obratnost 15 min, hra + protažení 15 min',
+                'zahřátí/běh 20 min, mobilita ramen s gumou 20 min, core 25 min, výbušnost (výskoky, medicinbal) 25 min, hra 20 min, strečink 10 min',
+                'zahřátí 15 min, síla s gumou (plavecký tah, rotátory) 30 min, core 25 min, kruhový trénink 30 min, hra 10 min, strečink 10 min',
+                'zahřátí + koordinace 20 min, stabilita/propriocepce 25 min, síla vlastní vahou 30 min, výbušnost 20 min, hra + strečink 25 min'];
+            let kind = row.k;
+            if (kind === 'ALT_SV') kind = ymIsoWeek(new Date(iso + 'T12:00:00')) % 2 ? 'S' : 'V';
+            if (kind === 'ALT_VS') kind = ymIsoWeek(new Date(iso + 'T12:00:00')) % 2 ? 'V' : 'S';
+            if (kind === 'S') {
+                return { d: iso, slot: row.slot, t: 'S', min: row.min, km: 0, no: 0, te: 0, motiv: motivName + ' | suchá příprava',
+                    txt: 'Suchá příprava ' + row.min + ' min' + (row.misto ? ' (' + row.misto + ')' : '') + ' | ' + dry[i % dry.length] };
+            }
+            const u25 = '25', z25 = pool === 50 ? ' (25 ze startu do půlky)' : '';
+            const pick = (a, n) => a[n % a.length];
+            const st = (a, b) => two ? a + '/' + b : a;
+            const R = [[800, '800 rozplav (400 VZ, 200 Z, 200 P)'], [1000, '1000 rozplav (VZ/PZ/Z/P po 250)'], [800, '600 rozplav + 4×50 stupňovaně']];
+            const T = [[400, '8×50 technika ' + S1 + ' (drily)'], [600, '6×100 technika ' + st(S1, S2) + ' (drily)'], [400, two ? '4×50 ' + S1 + ' + 4×50 ' + S2 + ' technika' : '8×50 technika ' + S1 + ' (catch-up, jednoruč)']];
+            const N = [[800, '8×100 nohy ' + S1], [600, '6×100 nohy ' + S2 + ' (posl. 25 rychle)'], [900, '6×150 nohy ' + st(S1, S2)], [1000, '10×100 nohy s ploutvemi']];
+            const D = [[400, '4×100 pull'], [600, '6×100 pull s plaketami'], [400, '4×100 PZ'], [400, pool === 25 ? '8×50 starty + obrátky' : '8×50 starty']];
+            const M = {
+                vytrvalost: [[2000, '6×200 ' + S1 + ' A1–A2 (P 20 s) + 4×200 ' + S2 + ' A1'], [2400, '4×300 ' + S1 + ' A2 + 4×300 ' + S2 + ' A1'], [1800, '12×100 ' + S1 + ' A2 (P 15 s) + 6×100 ' + S2 + ' A1'], [2000, '3×400 ' + S1 + ' A1 + 2×400 ' + S2 + ' A1']],
+                intervaly: [[1800, '6×200 ' + S1 + ' A3 na interval + 6×100 ' + S2 + ' A3'], [1600, '8×100 ' + S1 + ' A4 VO2 (P 1:1) + 4×200 ' + S2 + ' A3'], [2000, '10×200 ' + st(S1, S2) + ' A3 na 3:00'], [1800, '3×(4×100 ' + S1 + ' A3 + 2×100 ' + S2 + ' A3)']],
+                kratke: [[1400, '12×' + u25 + ' ' + S1 + ' sprint (P 45 s)' + z25 + ' + 6×50 ' + S2 + ' max ze startu + 8×100 A1'], [1600, '16×' + u25 + ' ' + S1 + ' max (P 30–45 s)' + z25 + ' + 4×50 ' + S2 + ' sprint + 10×100 A2 lehce'], [1400, '8×50 ' + S1 + ' závodní tempo (P 1:30) + 8×' + u25 + ' ' + S2 + ' sprint' + z25 + ' + 8×100 A1']],
+                technika: [[1400, '7×200 polohový A1 technicky'], [1200, '12×100 ' + st(S1, S2) + ' technicky čistě A1'], [1600, '4×(2×100 ' + S1 + ' drily + 2×100 ' + S2 + ' plavání A1)']]
+            };
+            const MON = { vytrvalost: [1000, '10×100 ' + S1 + ' A1–A2 (P 15 s)'], intervaly: [1000, '5×200 ' + S1 + ' A3 (P 30 s)'], kratke: [800, '8×50 ' + S1 + ' sprint + 400 A1'], technika: [600, '6×100 ' + st(S1, S2) + ' technicky'] };
+            let parts;
+            if (row.min <= 75) {
+                const tgt = Math.round((typ === 'technika' ? 2100 : 2500) * (row.min / 60) * k / 100) * 100;
+                parts = [[400, '400 rozplav'], pick([[400, '8×50 technika ' + S1], [300, '6×50 technika ' + st(S1, S2)]], i), [400, '4×100 nohy ' + S1], MON[typ]];
+                const s = parts.reduce((a, p) => a + p[0], 0);
+                const v = Math.max(200, tgt - s);
+                parts.push([v, v + ' vyplav']);
+            } else {
+                const base = { vytrvalost: 4900, intervaly: 4800, kratke: 4300, technika: 4400 }[typ];
+                const tgt = Math.round(base * (row.min / 120) * k / 100) * 100;
+                const dp = pick(D, i + 3);
+                parts = [pick(R, i), pick(T, i + 1), pick(N, i + 2), pick(M[typ], i), dp];
+                let s = parts.reduce((a, p) => a + p[0], 0), v = tgt - s;
+                if (v < 200) { parts = parts.filter(p => p !== dp); s = parts.reduce((a, p) => a + p[0], 0); v = tgt - s; }
+                v = Math.min(600, Math.max(200, Math.round(v / 100) * 100));
+                parts.push([v, v + ' vyplav']);
+            }
+            const m = parts.reduce((a, p) => a + p[0], 0);
+            const tech = parts.find(p => /technika/.test(p[1]) && parts.indexOf(p) === 1);
+            const kick = parts.find(p => /nohy/.test(p[1]));
+            const head = 'Voda' + (row.cas ? ' ' + row.cas : ' ' + row.min + ' min') + ' (' + [row.misto, pool + ' m'].filter(Boolean).join(', ') + ')';
+            return { d: iso, slot: row.slot, t: 'V', min: row.min, km: m / 1000, no: kick ? kick[0] / 1000 : 0, te: tech ? tech[0] / 1000 : 0,
+                motiv: motivName, txt: head + ' | ' + motivName + ' | ' + (m / 1000).toFixed(1).replace('.', ',') + ' km: ' + parts.map(p => p[1]).join(', ') };
+        }
+
+        let ymSessions = [];
+        function ymGenerate() {
+            ymSaveCfg();
+            const c = ymCfg(), off = ymOffSet();
+            const from = document.getElementById('ymFrom').value, to = document.getElementById('ymTo').value;
+            if (!from || !to || from > to) { alert('Zadej platné Od–Do.'); return; }
+            const typSel = document.getElementById('ymTyp').value;
+            const styles = [document.getElementById('ymSty1').value, document.getElementById('ymSty2').value].filter(Boolean);
+            const poolSel = document.getElementById('ymPool').value;
+            ymSessions = []; let i = 0;
+            for (let d = new Date(from + 'T12:00:00'); ymIso(d) <= to; d.setDate(d.getDate() + 1)) {
+                const iso = ymIso(d), wd = (d.getDay() + 6) % 7;
+                if (off.has(iso)) continue;
+                c.schedule.filter(r => r.d === wd).forEach(r => {
+                    const ph = ymPhase(iso);
+                    const typ = typSel === 'auto' ? ph.typ : typSel;
+                    const name = typSel === 'auto' ? ph.name : RB_TYP[typ] + (styles.length ? ' – ' + styles.map(s => RB_STY[s]).join(' + ') : '');
+                    ymSessions.push(ymSession(iso, r, typ, styles, poolSel ? +poolSel : r.pool, i++, name, typSel === 'auto' ? ph.k : 1));
+                });
+            }
+            ymRenderPreview();
+        }
+        function ymRenderPreview() {
+            const el = document.getElementById('ymPreview');
+            if (!ymSessions.length) { el.innerHTML = '<div style="color:var(--text3);">Žádné jednotky v období.</div>'; return; }
+            const km = ymSessions.reduce((a, s) => a + s.km, 0);
+            el.innerHTML = '<div style="color:var(--text2);font-size:0.85em;margin-bottom:8px;">' + ymSessions.length + ' jednotek · ' + km.toFixed(1) + ' km</div>' +
+                '<div style="max-height:420px;overflow:auto;border:1px solid var(--border);border-radius:10px;">' +
+                ymSessions.map((s, j) => '<div style="display:grid;grid-template-columns:96px 1fr 28px;gap:8px;padding:8px 10px;border-bottom:1px solid var(--border);font-size:0.8em;">' +
+                    '<div><b>' + YM_DAYS[(new Date(s.d + 'T12:00:00').getDay() + 6) % 7] + ' ' + s.d.slice(8) + '.' + s.d.slice(5, 7) + '.</b><br><span style="color:var(--text3);">' + (s.slot === 'D' ? 'dopo' : 'odpo') + ' · ' + (s.t === 'S' ? 'suchý ' + s.min + "'" : s.km.toFixed(1) + ' km') + '</span></div>' +
+                    '<div style="color:var(--text2);">' + s.txt.replace(/</g, '&lt;') + '</div>' +
+                    '<button onclick="ymSessions.splice(' + j + ',1);ymRenderPreview()" title="Odebrat" style="background:none;border:none;color:var(--text3);cursor:pointer;">✕</button></div>').join('') +
+                '</div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px;">' +
+                '<button class="btn btn-secondary" onclick="ymCopySessions([\'P\'])" style="padding:10px;">📋 Do plánu skupiny</button>' +
+                '<button class="btn btn-secondary" onclick="ymCopySessions([\'R\'])" style="padding:10px;">📋 Do skutečnosti</button>' +
+                '<button class="btn" onclick="ymCopySessions([\'P\',\'R\'])" style="padding:10px;">📋 Plán + skutečnost</button></div>';
+        }
+        function ymCopy(payload, label) {
+            const txt = JSON.stringify(payload);
+            const done = () => alert('✅ ' + label + ' zkopírováno.\n\nTeď otevři csps.yarmill.com (Plán nebo Skutečnost – týden) a klikni na záložku „🤖 Robůtek → Yarmill“.');
+            navigator.clipboard.writeText(txt).then(done).catch(() => { prompt('Zkopíruj tento balíček (Ctrl+C):', txt); });
+        }
+        function ymCopySessions(targets) {
+            if (!ymSessions.length) return;
+            ymCopy({ robutek: 1, mode: 'sessions', targets, group: ymCfg().group, users: ymUsers().map(u => u.id), sessions: ymSessions }, ymSessions.length + ' jednotek');
+        }
+        function ymCopyP2R() {
+            ymSaveCfg();
+            const from = document.getElementById('ymP2RFrom').value, to = document.getElementById('ymP2RTo').value;
+            if (!from || !to || from > to) { alert('Zadej platné Od–Do.'); return; }
+            ymCopy({ robutek: 1, mode: 'p2r', group: ymCfg().group, users: ymUsers().map(u => u.id), from, to }, 'Plán → skutečnost ' + from + ' – ' + to);
+        }
+
+        // ── Aktuální trénink → Yarmill ──────────────────────────────────────────
+        function copyToYarmill() {
+            const t = appData.currentTraining;
+            if (!t) return;
+            const old = document.getElementById('yarmillModal'); if (old) old.remove();
+            const text = t.content || '';
+            const num = re => { const m = text.match(re); return m ? parseFloat(m[1].replace(',', '.')) : 0; };
+            const isDry = t.type === 'suchy';
+            const km = isDry ? 0 : (num(/KM CELKEM[:\s]+([\d.,]+)/i) || num(/CELKEM[:\s]+([\d.,]+)\s*m/i) / 1000);
+            const nohy = isDry ? 0 : num(/NOHY[:\s]+([\d.,]+)/i);
+            const tech = isDry ? 0 : num(/TECHNIKA[:\s]+([\d.,]+)/i);
+            const body = (text.split(/=== TRÉNINK ===/i)[1] || text).split('\n').map(l => l.trim()).filter(Boolean).join(' · ');
+            const div = document.createElement('div');
+            div.id = 'yarmillModal';
+            div.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:10000;display:flex;align-items:center;justify-content:center;padding:16px;';
+            div.innerHTML = '<div style="background:var(--surface);border:1px solid var(--border2);border-radius:16px;padding:22px;max-width:440px;width:100%;">' +
+                '<div style="font-weight:700;color:var(--text);margin-bottom:4px;">📒 Zapsat do Yarmillu</div>' +
+                '<div style="color:var(--text3);font-size:0.78em;margin-bottom:14px;">' + (isDry ? 'Suchý trénink · ' + t.duration + ' min' : km.toFixed(1) + ' km · nohy ' + (nohy / 1000).toFixed(1) + ' km · technika ' + (tech / 1000).toFixed(1) + ' km · ' + t.duration + ' min') + '</div>' +
+                '<label>Datum</label><input type="date" id="ymOneDate" value="' + ymIso(new Date()) + '" style="margin:6px 0 10px;">' +
+                '<label>Část dne</label><select id="ymOneSlot" style="margin:6px 0 10px;"><option value="O">odpoledne</option><option value="D">dopoledne</option></select>' +
+                '<label>Kam</label><select id="ymOneTarget" style="margin:6px 0 16px;"><option value="R">Skutečnost – všichni svěřenci</option><option value="P">Plán skupiny</option><option value="PR">Plán + skutečnost</option></select>' +
+                '<div style="display:flex;gap:8px;"><button class="btn btn-secondary" onclick="closeYarmillModal()" style="flex:1;padding:10px;">Zrušit</button>' +
+                '<button class="btn" id="ymOneGo" style="flex:2;padding:10px;">📋 Zkopírovat pro Yarmill</button></div></div>';
+            document.body.appendChild(div);
+            document.getElementById('ymOneGo').onclick = () => {
+                const s = { d: document.getElementById('ymOneDate').value, slot: document.getElementById('ymOneSlot').value, t: isDry ? 'S' : 'V', min: t.duration,
+                    km: Math.round(km * 10) / 10, no: Math.round(nohy / 100) / 10, te: Math.round(tech / 100) / 10,
+                    motiv: (t.race && t.race !== 'Běžný trénink') ? t.race : (isDry ? 'Suchá příprava' : 'Trénink'),
+                    txt: (isDry ? 'Suchá příprava ' + t.duration + ' min | ' : 'Voda ' + t.duration + ' min (' + (t.pool || '') + ') | ' + km.toFixed(1).replace('.', ',') + ' km: ') + body.slice(0, 1800) };
+                const tg = document.getElementById('ymOneTarget').value;
+                closeYarmillModal();
+                ymCopy({ robutek: 1, mode: 'sessions', targets: tg === 'PR' ? ['P', 'R'] : [tg], group: ymCfg().group, users: ymUsers().map(u => u.id), sessions: [s] }, 'Trénink ' + s.d);
+            };
+        }
+
+        // ── Bookmarklet (běží na csps.yarmill.com) ──────────────────────────────
+        function ymBookmarkletHref() { return 'javascript:' + encodeURIComponent('(' + ymBookmarklet.toString() + ')()'); }
+        function ymBookmarklet() {
+            (async () => {
+                const sleep = ms => new Promise(r => setTimeout(r, ms));
+                if (!/yarmill\.com$/.test(location.host)) { alert('Klikni na záložku na stránce csps.yarmill.com'); return; }
+                let raw = '';
+                try { raw = await navigator.clipboard.readText(); } catch (e) {}
+                if (!raw || raw.indexOf('"robutek"') < 0) raw = prompt('Vlož balíček z Robůtka (Ctrl+V):') || '';
+                let P; try { P = JSON.parse(raw); } catch (e) { alert('Neplatný balíček.'); return; }
+                if (!P.robutek) { alert('Neplatný balíček.'); return; }
+                const box = document.createElement('div');
+                box.style.cssText = 'position:fixed;top:16px;right:16px;z-index:999999;background:#18181b;color:#fafafa;border:2px solid #ec4899;border-radius:12px;padding:14px 18px;font:14px Inter,Arial,sans-serif;max-width:360px;box-shadow:0 8px 30px rgba(0,0,0,.4);';
+                const say = h => { box.innerHTML = '<b>🤖 Robůtek → Yarmill</b><br>' + h; };
+                document.body.appendChild(box); say('Získávám přihlášení…');
+                let tok = null; const of = window.fetch;
+                window.fetch = function (u, o) { try { const h = o && o.headers; const hh = h instanceof Headers ? Object.fromEntries(h) : (h || {}); const a = hh.Authorization || hh.authorization; if (a) tok = a; } catch (e) {} return of.apply(this, arguments); };
+                const nb = document.querySelector('[aria-label="Jít na další týden"]'), pb = document.querySelector('[aria-label="Jít na předchozí týden"]');
+                if (!nb || !pb) { window.fetch = of; say('❌ Otevři Plán nebo Skutečnost v týdenním pohledu a klikni znovu.'); return; }
+                nb.click(); for (let i = 0; i < 40 && !tok; i++) await sleep(200);
+                pb.click(); await sleep(600); window.fetch = of;
+                if (!tok) { say('❌ Nepodařilo se získat přihlášení. Obnov stránku (F5) a zkus znovu.'); return; }
+                const H = { Authorization: tok, 'Content-Type': 'application/json', Accept: 'application/json' };
+                const API = 'https://csps.api.yarmill.com/api/', CORE = 'https://core.ms.yarmill.com/api/';
+                const get = u => fetch(u, { headers: H }).then(r => { if (!r.ok) throw new Error(r.status); return r.json(); });
+                const T = s => s + 'T00:00:00';
+                const reqs = []; let skipped = 0;
+                const ACT = { D: { hz: 57, km: 58, no: 12, te: 13, sh: 59 }, O: { hz: 62, km: 64, no: 66, te: 78, sh: 82 } };
+                const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                const sessActs = s => { const a = [[23, 1]]; const m = ACT[s.slot] || ACT.O;
+                    if (s.t === 'S') { a.push([31, 1], [m.sh, s.min]); } else { a.push([1, 1], [m.hz, s.min], [m.km, s.km]); if (s.no) a.push([m.no, s.no]); if (s.te) a.push([m.te, s.te]); }
+                    return a; };
+                const existing = async (uid, from, to) => { const j = await get(CORE + 'reality/week/athlete?userId=' + uid + '&startDate=' + T(from) + '&endDate=' + T(to));
+                    const s = new Set(); (j.DayActivities || []).concat(j.DayAttributes || []).forEach(x => s.add(x.Date.slice(0, 10))); return s; };
+                try {
+                    if (P.mode === 'sessions') {
+                        const dates = P.sessions.map(s => s.d).sort(); const from = dates[0], to = dates[dates.length - 1];
+                        if (P.targets.indexOf('P') >= 0) P.sessions.forEach(s => {
+                            sessActs(s).forEach(([id, v]) => reqs.push(['TrainingDayActivity', { activityItemId: id, day: T(s.d), state: 'P', userGroupId: P.group, userId: null, value: v }]));
+                            reqs.push(['TrainingDayAttribute', { attributeId: s.slot === 'D' ? 1 : 9, state: 'P', value: '<p>' + esc(s.txt) + '</p>', date: T(s.d), userGroupId: P.group, userId: null }]);
+                            if (s.motiv) reqs.push(['TrainingDayAttribute', { attributeId: 1002, state: 'P', value: '<p>' + esc(s.motiv) + '</p>', date: T(s.d), userGroupId: P.group, userId: null }]);
+                        });
+                        if (P.targets.indexOf('R') >= 0) for (const uid of P.users) {
+                            say('Kontroluji existující záznamy… (' + uid + ')');
+                            const ex = P.overwrite ? new Set() : await existing(uid, from, to);
+                            P.sessions.forEach(s => {
+                                if (ex.has(s.d)) { skipped++; return; }
+                                sessActs(s).forEach(([id, v]) => reqs.push(['TrainingDayActivity', { activityItemId: id, day: T(s.d), state: 'R', userGroupId: null, userId: uid, value: v }]));
+                                reqs.push(['TrainingDayAttribute', { attributeId: s.slot === 'D' ? 7 : 2, state: 'R', value: '<p>' + esc(s.txt) + '</p>', date: T(s.d), userGroupId: null, userId: uid }]);
+                            });
+                        }
+                    } else if (P.mode === 'p2r') {
+                        say('Načítám plán ' + P.from + ' – ' + P.to + '…');
+                        const plan = await get(CORE + 'plan/week/group?userGroupId=' + P.group + '&startDate=' + T(P.from) + '&endDate=' + T(P.to));
+                        const map = { 1: 7, 9: 2 };
+                        for (const uid of P.users) {
+                            say('Kontroluji existující záznamy… (' + uid + ')');
+                            const ex = P.overwrite ? new Set() : await existing(uid, P.from, P.to);
+                            const sk = new Set();
+                            (plan.DayActivities || []).forEach(a => { const d = a.Date.slice(0, 10); if (ex.has(d)) { sk.add(d); return; }
+                                reqs.push(['TrainingDayActivity', { activityItemId: a.ActivityItemId, day: a.Date, state: 'R', userGroupId: null, userId: uid, value: a.Value }]); });
+                            (plan.DayAttributes || []).forEach(a => { const d = a.Date.slice(0, 10); if (!map[a.AttributeItemId] || ex.has(d)) return;
+                                reqs.push(['TrainingDayAttribute', { attributeId: map[a.AttributeItemId], state: 'R', value: a.Value, date: a.Date, userGroupId: null, userId: uid }]); });
+                            skipped += sk.size;
+                        }
+                    } else { say('❌ Neznámý typ balíčku.'); return; }
+                } catch (e) { say('❌ Chyba při načítání: ' + e.message); return; }
+                if (!reqs.length) { say('Nic k zápisu.' + (skipped ? ' Přeskočeno ' + skipped + ' dnů (už vyplněno).' : '')); return; }
+                let i = 0, done = 0; const fail = [];
+                const w = async () => { while (i < reqs.length) { const [p, b] = reqs[i++];
+                    try { const r = await fetch(API + p, { method: 'POST', headers: H, body: JSON.stringify(b) }); if (!r.ok) fail.push(r.status); } catch (e) { fail.push('x'); }
+                    done++; if (done % 20 === 0) say('Zapisuji… ' + done + ' / ' + reqs.length); } };
+                await Promise.all([1, 2, 3, 4, 5, 6].map(w));
+                say((fail.length ? '⚠️ Hotovo s chybami: ' + fail.length + ' z ' + reqs.length + ' (např. ' + fail[0] + ')' : '✅ Zapsáno ' + reqs.length + ' položek.') +
+                    (skipped ? '<br>Přeskočeno ' + skipped + ' dnů s existujícím záznamem.' : '') + '<br><small>Obnov stránku (F5) pro zobrazení.</small><br><button id="rbx" style="margin-top:8px;padding:4px 10px;">Zavřít</button>');
+                const x = document.getElementById('rbx'); if (x) x.onclick = () => box.remove();
+            })();
+        }
+
     </script>
 </body>
 </html>
