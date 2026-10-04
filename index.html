@@ -21,49 +21,57 @@
         }
 
         :root {
-            --bg: #0f0f13;
-            --surface: #16161d;
-            --surface2: #1e1e28;
-            --surface3: #252533;
+            --bg: #0a141d;
+            --surface: #0f1c27;
+            --surface2: #132331;
+            --surface3: #182b3b;
             --border: rgba(255,255,255,0.07);
             --border2: rgba(255,255,255,0.12);
-            --text: #f0f0f5;
-            --text2: #9898b0;
-            --text3: #5a5a70;
-            --blue: #4f8ef7;
-            --blue-glow: rgba(79,142,247,0.15);
-            --green: #3dd68c;
-            --green-glow: rgba(61,214,140,0.15);
+            --text: #e7f0f7;
+            --text2: #8fa9bf;
+            --text3: #57708a;
+            --blue: #38a3ee;
+            --blue-glow: rgba(56,163,238,0.14);
+            --accent: #22c3b8;
+            --accent-ink: #5eead4;
+            --accent-glow: rgba(34,195,184,0.14);
+            --green: #34d399;
+            --green-glow: rgba(52,211,153,0.14);
             --amber: #f5a623;
             --red: #f05454;
-            --purple: #9b6dff;
+            --purple: #5b9be6;
             --radius: 14px;
-            --radius-sm: 8px;
+            --radius-sm: 10px;
+            --shadow: 0 1px 2px rgba(0,0,0,0.25), 0 6px 20px rgba(0,0,0,0.18);
         }
 
         [data-theme="light"] {
-            --bg: #f4f4f8;
+            --bg: #f2f6f9;
             --surface: #ffffff;
-            --surface2: #f8f8fc;
-            --surface3: #eeeef5;
-            --border: rgba(0,0,0,0.08);
-            --border2: rgba(0,0,0,0.14);
-            --text: #18181f;
-            --text2: #4a4a6a;
-            --text3: #9090b0;
-            --blue: #2563eb;
-            --blue-glow: rgba(37,99,235,0.1);
+            --surface2: #f7fafc;
+            --surface3: #edf3f7;
+            --border: rgba(15,40,60,0.08);
+            --border2: rgba(15,40,60,0.14);
+            --text: #0f2233;
+            --text2: #46617a;
+            --text3: #8aa0b3;
+            --blue: #0a74b8;
+            --blue-glow: rgba(10,116,184,0.09);
+            --accent: #0ea5a0;
+            --accent-ink: #0b7d79;
+            --accent-glow: rgba(14,165,160,0.10);
             --green: #16a34a;
             --green-glow: rgba(22,163,74,0.1);
             --amber: #d97706;
             --red: #dc2626;
-            --purple: #7c3aed;
+            --purple: #2b6cb0;
+            --shadow: 0 1px 2px rgba(15,40,60,0.05), 0 6px 18px rgba(15,40,60,0.06);
         }
 
         [data-theme="light"] body {
             background-image:
-                radial-gradient(ellipse at 20% 0%, rgba(37,99,235,0.05) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 100%, rgba(124,58,237,0.04) 0%, transparent 50%);
+                radial-gradient(ellipse at 15% 0%, rgba(10,116,184,0.07) 0%, transparent 55%),
+                radial-gradient(ellipse at 85% 100%, rgba(14,165,160,0.06) 0%, transparent 55%);
         }
 
         [data-theme="light"] .header {
@@ -83,7 +91,7 @@
             min-height: 100vh;
             overflow-x: hidden;
             background-image:
-                radial-gradient(ellipse at 20% 0%, rgba(79,142,247,0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 20% 0%, rgba(24,140,210,0.08) 0%, transparent 50%),
                 radial-gradient(ellipse at 80% 100%, rgba(155,109,255,0.06) 0%, transparent 50%);
         }
 
@@ -227,12 +235,12 @@
         .step.active .step-number {
             background: var(--blue);
             color: #fff;
-            box-shadow: 0 0 16px rgba(79,142,247,0.4);
+            box-shadow: 0 0 16px rgba(24,140,210,0.4);
         }
 
         .step.completed .step-number {
             background: var(--green);
-            color: #0f1f14;
+            color: #ffffff;
             box-shadow: 0 0 16px rgba(61,214,140,0.3);
         }
 
@@ -283,7 +291,7 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(135deg, transparent 60%, rgba(79,142,247,0.03));
+            background: linear-gradient(135deg, transparent 60%, rgba(24,140,210,0.03));
             pointer-events: none;
         }
 
@@ -298,8 +306,8 @@
 
         .swimmer-card.selected {
             border-color: var(--blue);
-            background: rgba(79,142,247,0.08);
-            box-shadow: 0 0 20px rgba(79,142,247,0.15), inset 0 0 20px rgba(79,142,247,0.05);
+            background: rgba(24,140,210,0.08);
+            box-shadow: 0 0 20px rgba(24,140,210,0.15), inset 0 0 20px rgba(24,140,210,0.05);
         }
 
         .swimmer-avatar {
@@ -319,10 +327,10 @@
         }
 
         .swimmer-card.selected .swimmer-avatar {
-            background: linear-gradient(135deg, var(--blue), #6fa8ff);
+            background: var(--blue);
             color: #fff;
             border-color: var(--blue);
-            box-shadow: 0 4px 12px rgba(79,142,247,0.4);
+            box-shadow: 0 4px 12px rgba(24,140,210,0.4);
         }
 
         .swimmer-name {
@@ -340,7 +348,7 @@
 
         /* ── BUTTONS ────────────────────────────────────────────── */
         .btn {
-            background: linear-gradient(135deg, var(--blue), #6fa8ff);
+            background: var(--blue);
             color: #fff;
             padding: 13px 24px;
             border: none;
@@ -353,12 +361,12 @@
             width: 100%;
             touch-action: manipulation;
             letter-spacing: 0.01em;
-            box-shadow: 0 4px 14px rgba(79,142,247,0.25);
+            box-shadow: 0 4px 14px rgba(24,140,210,0.25);
         }
 
         .btn:hover {
             transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(79,142,247,0.35);
+            box-shadow: 0 6px 20px rgba(24,140,210,0.35);
         }
 
         .btn:active { transform: scale(0.98); box-shadow: none; }
@@ -377,8 +385,8 @@
         }
 
         .btn-success {
-            background: linear-gradient(135deg, var(--green), #5ef0a8);
-            color: #0f1f14;
+            background: var(--accent);
+            color: #ffffff;
             box-shadow: 0 4px 14px rgba(61,214,140,0.25);
         }
 
@@ -413,8 +421,8 @@
         input:focus, select:focus, textarea:focus {
             outline: none;
             border-color: var(--blue);
-            background: rgba(79,142,247,0.05);
-            box-shadow: 0 0 0 3px rgba(79,142,247,0.1);
+            background: rgba(24,140,210,0.05);
+            box-shadow: 0 0 0 3px rgba(24,140,210,0.1);
         }
 
         label {
@@ -438,7 +446,7 @@
             text-align: center;
             margin: 14px 0;
             font-weight: 600;
-            border: 1px solid rgba(79,142,247,0.2);
+            border: 1px solid rgba(24,140,210,0.2);
             font-size: 0.9em;
         }
 
@@ -586,7 +594,7 @@
         .history-badge {
             background: var(--blue-glow);
             color: var(--blue);
-            border: 1px solid rgba(79,142,247,0.2);
+            border: 1px solid rgba(24,140,210,0.2);
             padding: 3px 10px;
             border-radius: 20px;
             font-size: 0.75em;
@@ -693,7 +701,7 @@
 
         .bubble {
             position: absolute;
-            background: radial-gradient(circle, rgba(79,142,247,0.2), rgba(124,58,237,0.1), transparent 70%);
+            background: radial-gradient(circle, rgba(24,140,210,0.2), rgba(14,165,160,0.1), transparent 70%);
             border-radius: 50%;
             pointer-events: none;
             animation: bubblePulse 4s ease-in-out infinite;
@@ -706,27 +714,27 @@
             right: 20px;
             width: 52px;
             height: 52px;
-            background: linear-gradient(135deg, var(--blue), #6fa8ff);
+            background: var(--blue);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 1.3em;
             cursor: pointer;
-            box-shadow: 0 4px 20px rgba(79,142,247,0.4);
+            box-shadow: 0 4px 20px rgba(24,140,210,0.4);
             z-index: 50;
             transition: all 0.2s;
         }
 
         .settings-icon:hover {
             transform: scale(1.05) rotate(15deg);
-            box-shadow: 0 6px 24px rgba(79,142,247,0.5);
+            box-shadow: 0 6px 24px rgba(24,140,210,0.5);
         }
 
         /* ── EXPORT BTN ─────────────────────────────────────────── */
         .export-btn {
-            background: linear-gradient(135deg, var(--green), #5ef0a8);
-            color: #0f1f14;
+            background: var(--accent);
+            color: #ffffff;
             box-shadow: 0 4px 14px rgba(61,214,140,0.2);
         }
 
@@ -796,6 +804,23 @@
         .btn.gen-again { background: var(--surface2) !important; color: var(--text) !important; border: 1px solid var(--border2) !important; box-shadow: none !important; padding: 12px !important; font-size: 0.9em !important; }
         .btn:focus { outline: none; }
         .btn:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+
+        /* ═══ v3.14 Bazénový styl ═══ */
+        body { background-color: var(--bg); }
+        .btn { background: var(--blue); box-shadow: 0 2px 8px rgba(10,116,184,0.18); border-radius: var(--radius-sm); font-weight: 600; }
+        .btn:hover { filter: brightness(1.06); transform: translateY(-1px); }
+        .btn-secondary { background: var(--surface2) !important; color: var(--text) !important; border: 1px solid var(--border2) !important; box-shadow: none !important; }
+        #generateBtn:not(.gen-again) { background: var(--accent) !important; color: #fff !important; box-shadow: 0 4px 16px var(--accent-glow) !important; }
+        .section, .rb-card { box-shadow: var(--shadow); }
+        #section1 > div:first-child { background: linear-gradient(160deg, rgba(10,116,184,0.10) 0%, rgba(14,165,160,0.07) 60%, transparent 100%) !important; border-bottom: 1px solid var(--border); }
+        #section1 > div:first-child::after { content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 28px; pointer-events: none;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 28' preserveAspectRatio='none'%3E%3Cpath d='M0 14 Q 75 0 150 14 T 300 14 T 450 14 T 600 14 T 750 14 T 900 14 T 1050 14 T 1200 14 V28 H0Z' fill='%230ea5a0' fill-opacity='0.08'/%3E%3C/svg%3E") repeat-x bottom / 100% 28px; }
+        .bubble { background: radial-gradient(circle, rgba(24,140,210,0.16), rgba(14,165,160,0.08), transparent 70%) !important; }
+        #heroQuickBtn { background: var(--accent) !important; box-shadow: 0 4px 14px var(--accent-glow) !important; }
+        .step.active .step-number { box-shadow: 0 0 0 4px var(--blue-glow); }
+        .tab-btn.active::after { background: var(--accent); height: 3px; }
+        .rb-chip[data-active="1"] { background: var(--blue-glow) !important; border-color: var(--blue) !important; }
+        h2 { letter-spacing: -0.01em; }
     </style>
 </head>
 <body>
@@ -806,7 +831,7 @@
             <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
                 <div>
                     <h1 style="font-size:clamp(0.95em,3vw,1.3em);font-weight:700;">🤖 Mattyho tréninkový robůtek</h1>
-                    <p style="font-size:0.75em;color:var(--text3);">šup do vody • žádné výmluvy • makáme 🏊 <span style="opacity:0.6;font-size:0.9em;color:var(--green);cursor:help;" title="v3.13 — HZ VODA v minutách, jemnější „Generovat znovu“; v3.12 — vtip celý, světlý režim sjednocen (ČSPS, Sezóna…), mobil: záložky, týden, rozvrh; v3.11 — volba režimu po Trénovat (Podle účasti / Na míru), hlavička výstupu se štítky; v3.10 — režim Na míru (podle cíle, bez ohledu na účast); v3.9 — zaměření tréninku (typ + 2 styly), záložka Yarmill: rozvrh, generátor období (auto/na míru, 25/50 m), zápis plánu i skutečnosti přes záložku, plán → skutečnost">v3.13 ✨</span></p>
+                    <p style="font-size:0.75em;color:var(--text3);">šup do vody • žádné výmluvy • makáme 🏊 <span style="opacity:0.6;font-size:0.9em;color:var(--green);cursor:help;" title="v3.14 — bazénový vzhled (modrá + tyrkys, sjednocená tlačítka a karty); v3.13 — HZ VODA v minutách, jemnější „Generovat znovu“; v3.12 — vtip celý, světlý režim sjednocen (ČSPS, Sezóna…), mobil: záložky, týden, rozvrh; v3.11 — volba režimu po Trénovat (Podle účasti / Na míru), hlavička výstupu se štítky; v3.10 — režim Na míru (podle cíle, bez ohledu na účast); v3.9 — zaměření tréninku (typ + 2 styly), záložka Yarmill: rozvrh, generátor období (auto/na míru, 25/50 m), zápis plánu i skutečnosti přes záložku, plán → skutečnost">v3.14 🌊</span></p>
                 </div>
                 <div style="display:flex;align-items:center;gap:8px;">
                     <select id="clubSelector" onchange="switchClub(this.value)"
@@ -869,7 +894,7 @@
 
 
                 <!-- HERO — vždy plná výška -->
-                <div style="margin:-24px -20px 24px;padding:44px 28px 40px;position:relative;overflow:hidden;background:linear-gradient(135deg,rgba(79,142,247,0.13) 0%,rgba(124,58,237,0.1) 50%,rgba(61,214,140,0.06) 100%);border-bottom:1px solid var(--border);">
+                <div style="margin:-24px -20px 24px;padding:44px 28px 40px;position:relative;overflow:hidden;background:linear-gradient(135deg,rgba(24,140,210,0.13) 0%,rgba(14,165,160,0.1) 50%,rgba(61,214,140,0.06) 100%);border-bottom:1px solid var(--border);">
                     <div class="bubble" style="width:320px;height:320px;top:-120px;right:-80px;animation-delay:0s;"></div>
                     <div class="bubble" style="width:180px;height:180px;bottom:-70px;left:-50px;animation-delay:2s;opacity:0.5;"></div>
                     <div class="bubble" style="width:90px;height:90px;top:30px;left:35%;animation-delay:3.5s;opacity:0.35;"></div>
@@ -877,7 +902,7 @@
                     <div style="position:relative;z-index:1;">
                         <!-- Top řádek — jen emoji + nadpis -->
                         <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;">
-                            <div style="font-size:3.2em;animation:floatEmoji 3s ease-in-out infinite;display:inline-block;filter:drop-shadow(0 8px 20px rgba(79,142,247,0.5));flex-shrink:0;">🏊</div>
+                            <div style="font-size:3.2em;animation:floatEmoji 3s ease-in-out infinite;display:inline-block;filter:drop-shadow(0 8px 20px rgba(24,140,210,0.5));flex-shrink:0;">🏊</div>
                             <div>
                                 <div id="heroTitle" style="font-size:clamp(1.3em,3.5vw,1.8em);font-weight:800;background:linear-gradient(135deg,var(--text) 0%,var(--blue) 50%,var(--purple) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.15;margin-bottom:4px;">
                                     Pojď trénovat!
@@ -897,14 +922,14 @@
                                     <div style="font-size:0.65em;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;">plavců</div>
                                 </div>
                             </div>
-                            <div style="background:var(--blue-glow);border:1px solid rgba(79,142,247,0.2);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:8px;">
+                            <div style="background:var(--blue-glow);border:1px solid rgba(24,140,210,0.2);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:8px;">
                                 <span>📅</span>
                                 <div>
                                     <div style="font-size:0.9em;font-weight:700;color:var(--blue);line-height:1;" id="todayDate">—</div>
                                     <div style="font-size:0.65em;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;">dnes</div>
                                 </div>
                             </div>
-                            <div style="background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.2);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:8px;">
+                            <div style="background:rgba(14,165,160,0.1);border:1px solid rgba(14,165,160,0.2);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:8px;">
                                 <span id="seasonIcon">⚡</span>
                                 <div>
                                     <div style="font-size:0.82em;font-weight:700;color:var(--purple);line-height:1;" id="seasonBadgeText">Závodní</div>
@@ -923,11 +948,11 @@
                                 </div>
                             </div>
                             <!-- Trénovat rychle -->
-                            <div id="heroQuickBtn" style="display:none;background:linear-gradient(135deg,var(--green),#5ef0a8);border-radius:10px;padding:10px 16px;cursor:pointer;box-shadow:0 4px 14px rgba(61,214,140,0.25);flex-direction:row;align-items:center;gap:8px;" onclick="rbChooseMode()">
+                            <div id="heroQuickBtn" style="display:none;background:var(--accent);border-radius:10px;padding:10px 16px;cursor:pointer;box-shadow:0 4px 14px rgba(61,214,140,0.25);flex-direction:row;align-items:center;gap:8px;" onclick="rbChooseMode()">
                                 <span>🚀</span>
                                 <div>
-                                    <div style="font-size:0.85em;font-weight:700;color:#0f1f14;line-height:1;">Trénovat →</div>
-                                    <div style="font-size:0.65em;color:rgba(15,31,20,0.6);">připraveno</div>
+                                    <div style="font-size:0.85em;font-weight:700;color:#ffffff;line-height:1;">Trénovat →</div>
+                                    <div style="font-size:0.65em;color:rgba(255,255,255,0.75);">připraveno</div>
                                 </div>
                             </div>
                         </div>
@@ -942,10 +967,10 @@
                             <input type="text" id="step1SearchInput" placeholder="Hledat plavce v ČSPS..."
                                 style="flex:1;padding:10px 12px;background:var(--surface3);border:1px solid var(--border2);border-radius:8px;color:var(--text);font-size:0.88em;font-family:Inter,sans-serif;"
                                 onkeydown="if(event.key==='Enter') searchStep1()"
-                                onfocus="this.style.borderColor='var(--blue)';this.style.boxShadow='0 0 0 3px rgba(79,142,247,0.1)'"
+                                onfocus="this.style.borderColor='var(--blue)';this.style.boxShadow='0 0 0 3px rgba(24,140,210,0.1)'"
                                 onblur="this.style.borderColor='';this.style.boxShadow=''">
                             <button onclick="searchStep1()" id="step1SearchBtn"
-                                style="padding:10px 16px;background:linear-gradient(135deg,var(--blue),#6fa8ff);border:none;border-radius:8px;color:#fff;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;white-space:nowrap;box-shadow:0 4px 12px rgba(79,142,247,0.25);font-size:0.88em;">
+                                style="padding:10px 16px;background:var(--blue);border:none;border-radius:8px;color:#fff;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;white-space:nowrap;box-shadow:0 4px 12px rgba(24,140,210,0.25);font-size:0.88em;">
                                 🔍 Hledat
                             </button>
                         </div>
@@ -994,7 +1019,7 @@
                     </div>
                     <div style="display:flex;align-items:center;gap:10px;">
                         <!-- Counter -->
-                        <div id="selectedCount" style="background:var(--blue-glow);border:1px solid rgba(79,142,247,0.25);border-radius:20px;padding:6px 16px;font-size:0.85em;font-weight:600;color:var(--blue);">
+                        <div id="selectedCount" style="background:var(--blue-glow);border:1px solid rgba(24,140,210,0.25);border-radius:20px;padding:6px 16px;font-size:0.85em;font-weight:600;color:var(--blue);">
                             0 vybráno
                         </div>
                         <button class="btn btn-secondary" onclick="editPrimaryStyles()" style="width:auto;padding:8px 14px;font-size:0.82em;">
@@ -1030,7 +1055,7 @@
 
 
                 <!-- Režim na míru (v3.10) -->
-                <div id="freeModeWrap" style="display:none;margin-bottom:20px;background:linear-gradient(135deg,rgba(236,72,153,0.1),rgba(124,58,237,0.1));border:1px solid #ec4899;border-radius:14px;padding:14px;">
+                <div id="freeModeWrap" style="display:none;margin-bottom:20px;background:linear-gradient(135deg,rgba(14,165,160,0.1),rgba(14,165,160,0.1));border:1px solid var(--accent);border-radius:14px;padding:14px;">
                     <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
                         <div style="font-weight:700;color:var(--text);">🎯 Režim na míru — bez ohledu na účast</div>
                         <button type="button" onclick="rbExitFree();goToStep(1)" style="padding:6px 12px;background:var(--surface3);border:1px solid var(--border2);border-radius:8px;color:var(--text2);cursor:pointer;font-size:0.78em;">↩ Podle účasti</button>
@@ -1051,7 +1076,7 @@
                     <div style="grid-column:1/-1;">
                         <label>🏊 Typ tréninku</label>
                         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-top:8px;">
-                            <div onclick="selectTrainingType('pool')" id="typePoolLabel" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:rgba(79,142,247,0.08);border:2px solid var(--blue);border-radius:12px;cursor:pointer;transition:all 0.2s;user-select:none;">
+                            <div onclick="selectTrainingType('pool')" id="typePoolLabel" style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:rgba(24,140,210,0.08);border:2px solid var(--blue);border-radius:12px;cursor:pointer;transition:all 0.2s;user-select:none;">
                                 <span style="font-size:1.4em;">🏊</span>
                                 <div>
                                     <div style="font-weight:600;color:var(--text);font-size:0.9em;">Bazén</div>
@@ -1135,11 +1160,11 @@
                 <div style="margin-bottom:20px;" id="equipmentWrap">
                     <label style="margin-bottom:10px;">🛠️ Dostupné pomůcky</label>
                     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px;" id="equipmentGrid">
-                        <div onclick="toggleEquip(this,'Deska')" data-active="1" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 8px;background:rgba(79,142,247,0.12);border:2px solid var(--blue);border-radius:12px;cursor:pointer;transition:all 0.2s;text-align:center;user-select:none;">
+                        <div onclick="toggleEquip(this,'Deska')" data-active="1" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 8px;background:rgba(24,140,210,0.12);border:2px solid var(--blue);border-radius:12px;cursor:pointer;transition:all 0.2s;text-align:center;user-select:none;">
                             <span style="font-size:1.6em;">🏄</span>
                             <span style="font-size:0.75em;font-weight:600;color:var(--text);">Deska</span>
                         </div>
-                        <div onclick="toggleEquip(this,'Pull buoy')" data-active="1" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 8px;background:rgba(79,142,247,0.12);border:2px solid var(--blue);border-radius:12px;cursor:pointer;transition:all 0.2s;text-align:center;user-select:none;">
+                        <div onclick="toggleEquip(this,'Pull buoy')" data-active="1" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 8px;background:rgba(24,140,210,0.12);border:2px solid var(--blue);border-radius:12px;cursor:pointer;transition:all 0.2s;text-align:center;user-select:none;">
                             <span style="font-size:1.6em;">🛟</span>
                             <span style="font-size:0.75em;font-weight:600;color:var(--text);">Piškot</span>
                         </div>
@@ -1190,14 +1215,14 @@
                         <div id="drylandOptions" style="display:none;">
                             <div style="color:var(--text3);font-size:0.78em;margin-bottom:10px;">Vyber typy cvičení:</div>
                             <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;">
-                                <div onclick="toggleDrylandType(this,'stretching')" data-active="1" style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:rgba(79,142,247,0.12);border:2px solid var(--blue);border-radius:10px;cursor:pointer;user-select:none;">
+                                <div onclick="toggleDrylandType(this,'stretching')" data-active="1" style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:rgba(24,140,210,0.12);border:2px solid var(--blue);border-radius:10px;cursor:pointer;user-select:none;">
                                     <span style="font-size:1.3em;">🧘</span>
                                     <div>
                                         <div style="font-size:0.82em;font-weight:600;color:var(--text);">Protahování</div>
                                         <div style="font-size:0.7em;color:var(--text3);">flexi, mobilita</div>
                                     </div>
                                 </div>
-                                <div onclick="toggleDrylandType(this,'core')" data-active="1" style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:rgba(79,142,247,0.12);border:2px solid var(--blue);border-radius:10px;cursor:pointer;user-select:none;">
+                                <div onclick="toggleDrylandType(this,'core')" data-active="1" style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:rgba(24,140,210,0.12);border:2px solid var(--blue);border-radius:10px;cursor:pointer;user-select:none;">
                                     <span style="font-size:1.3em;">💪</span>
                                     <div>
                                         <div style="font-size:0.82em;font-weight:600;color:var(--text);">Core</div>
@@ -1241,31 +1266,31 @@
                     </div>
                     <div style="color:var(--text3);font-size:0.78em;margin-bottom:10px;">Vyber kategorie — AI z nich sestaví vyvážený trénink s obrázky cviků.</div>
                     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;" id="drylandStandaloneCats">
-                        <div onclick="toggleDrylandCat(this)" data-active="1" data-cat="warmup" style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:rgba(79,142,247,0.12);border:2px solid var(--blue);border-radius:10px;cursor:pointer;user-select:none;">
+                        <div onclick="toggleDrylandCat(this)" data-active="1" data-cat="warmup" style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:rgba(24,140,210,0.12);border:2px solid var(--blue);border-radius:10px;cursor:pointer;user-select:none;">
                             <span style="font-size:1.3em;">🧘</span>
                             <div>
                                 <div style="font-size:0.82em;font-weight:600;color:var(--text);">Zahřátí, mobilita</div>
                             </div>
                         </div>
-                        <div onclick="toggleDrylandCat(this)" data-active="1" data-cat="core" style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:rgba(79,142,247,0.12);border:2px solid var(--blue);border-radius:10px;cursor:pointer;user-select:none;">
+                        <div onclick="toggleDrylandCat(this)" data-active="1" data-cat="core" style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:rgba(24,140,210,0.12);border:2px solid var(--blue);border-radius:10px;cursor:pointer;user-select:none;">
                             <span style="font-size:1.3em;">💪</span>
                             <div>
                                 <div style="font-size:0.82em;font-weight:600;color:var(--text);">Core, stabilita</div>
                             </div>
                         </div>
-                        <div onclick="toggleDrylandCat(this)" data-active="1" data-cat="legs" style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:rgba(79,142,247,0.12);border:2px solid var(--blue);border-radius:10px;cursor:pointer;user-select:none;">
+                        <div onclick="toggleDrylandCat(this)" data-active="1" data-cat="legs" style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:rgba(24,140,210,0.12);border:2px solid var(--blue);border-radius:10px;cursor:pointer;user-select:none;">
                             <span style="font-size:1.3em;">🦵</span>
                             <div>
                                 <div style="font-size:0.82em;font-weight:600;color:var(--text);">Nohy</div>
                             </div>
                         </div>
-                        <div onclick="toggleDrylandCat(this)" data-active="1" data-cat="upper" style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:rgba(79,142,247,0.12);border:2px solid var(--blue);border-radius:10px;cursor:pointer;user-select:none;">
+                        <div onclick="toggleDrylandCat(this)" data-active="1" data-cat="upper" style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:rgba(24,140,210,0.12);border:2px solid var(--blue);border-radius:10px;cursor:pointer;user-select:none;">
                             <span style="font-size:1.3em;">🤸</span>
                             <div>
                                 <div style="font-size:0.82em;font-weight:600;color:var(--text);">Horní tělo</div>
                             </div>
                         </div>
-                        <div onclick="toggleDrylandCat(this)" data-active="1" data-cat="power" style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:rgba(79,142,247,0.12);border:2px solid var(--blue);border-radius:10px;cursor:pointer;user-select:none;">
+                        <div onclick="toggleDrylandCat(this)" data-active="1" data-cat="power" style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:rgba(24,140,210,0.12);border:2px solid var(--blue);border-radius:10px;cursor:pointer;user-select:none;">
                             <span style="font-size:1.3em;">⚡</span>
                             <div>
                                 <div style="font-size:0.82em;font-weight:600;color:var(--text);">Výbušnost, starty</div>
@@ -1299,13 +1324,13 @@
                     </div>
 
                     <!-- Metodika preview -->
-                    <div id="methodologyPreview" style="background:var(--blue-glow);border:1px solid rgba(79,142,247,0.2);border-radius:12px;padding:14px;margin-bottom:16px;display:none;">
+                    <div id="methodologyPreview" style="background:var(--blue-glow);border:1px solid rgba(24,140,210,0.2);border-radius:12px;padding:14px;margin-bottom:16px;display:none;">
                         <div style="color:var(--text3);font-size:0.72em;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;">🧠 Metodika</div>
                         <div id="methodologyPreviewText" style="color:var(--text);font-size:0.85em;font-weight:600;"></div>
                         <div id="methodologyPreviewSub" style="color:var(--text2);font-size:0.78em;margin-top:3px;"></div>
                     </div>
 
-                    <button class="btn" id="generateBtn" onclick="generateTraining()" style="background:linear-gradient(135deg,var(--green),#5ef0a8);color:#0f1f14;font-size:1em;padding:16px;box-shadow:0 4px 20px rgba(61,214,140,0.3);">
+                    <button class="btn" id="generateBtn" onclick="generateTraining()" style="background:var(--accent);color:#ffffff;font-size:1em;padding:16px;box-shadow:0 4px 20px rgba(61,214,140,0.3);">
                         🤖 Vygenerovat trénink
                     </button>
                 </div>
@@ -1321,7 +1346,7 @@
                         <button class="btn btn-secondary" id="qrShareBtn" onclick="showQRCode(null)" style="flex:1;padding:10px;">
                             📱 Sdílet / QR
                         </button>
-                        <button class="btn btn-secondary" id="yarmillBtn" onclick="copyToYarmill()" style="flex:1;padding:10px;background:linear-gradient(135deg,#ec4899,#f43f5e);color:#fff;border:none;">
+                        <button class="btn btn-secondary" id="yarmillBtn" onclick="copyToYarmill()" style="flex:1;padding:10px;background:var(--accent);color:#fff;border:none;">
                             📋 Yarmill
                         </button>
                     </div>
@@ -1348,7 +1373,7 @@
             <div style="background: var(--surface2); border: 1px solid var(--border2); border-radius: 12px; padding: 20px; margin-bottom: 20px;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
                     <h3 style="color: var(--text); font-size: 1.1em; font-weight: 600; margin: 0;">👥 Plavci a ČSPS ID</h3>
-                    <button onclick="syncAllTimes()" id="syncAllBtn" style="padding: 8px 16px; background: #60a5fa; border: none; border-radius: 8px; color: #18181b; font-weight: 600; cursor: pointer; font-size: 0.85em; font-family: Inter, sans-serif;">
+                    <button onclick="syncAllTimes()" id="syncAllBtn" style="padding: 8px 16px; background: var(--blue); border: none; border-radius: 8px; color: #18181b; font-weight: 600; cursor: pointer; font-size: 0.85em; font-family: Inter, sans-serif;">
                         🔄 Sync všichni
                     </button>
                 </div>
@@ -1464,7 +1489,7 @@
                     <select id="seasonSwimmerSelect" style="flex:1;min-width:200px;padding:10px;background:var(--surface3);border:1px solid var(--border2);border-radius:8px;color:var(--text);font-family:Inter,sans-serif;">
                         <option value="all">Celý tým</option>
                     </select>
-                    <button onclick="generateSeasonTraining()" style="padding:10px 24px;background:#60a5fa;border:none;border-radius:8px;color:#18181b;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;">
+                    <button onclick="generateSeasonTraining()" style="padding:10px 24px;background:var(--blue);border:none;border-radius:8px;color:#18181b;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;">
                         🏊 Generovat
                     </button>
                 </div>
@@ -1501,7 +1526,7 @@
                     <button onclick="showDrylandLibraryModal()" style="padding:10px 16px;background:var(--surface3);border:1px solid var(--border2);border-radius:8px;color:var(--text2);font-weight:600;cursor:pointer;font-family:Inter,sans-serif;font-size:0.85em;">
                         📖 Knihovna cviků
                     </button>
-                    <button onclick="saveCurrentToLibrary()" style="padding:10px 18px;background:linear-gradient(135deg,var(--blue),#6fa8ff);border:none;border-radius:8px;color:#fff;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;font-size:0.85em;">
+                    <button onclick="saveCurrentToLibrary()" style="padding:10px 18px;background:var(--blue);border:none;border-radius:8px;color:#fff;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;font-size:0.85em;">
                         💾 Uložit aktuální trénink
                     </button>
                 </div>
@@ -1555,7 +1580,7 @@
                             <option value="50">50m</option>
                         </select>
                     </div>
-                    <button onclick="renderComparison()" style="padding:10px 20px;background:linear-gradient(135deg,var(--blue),#6fa8ff);border:none;border-radius:8px;color:#fff;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;">
+                    <button onclick="renderComparison()" style="padding:10px 20px;background:var(--blue);border:none;border-radius:8px;color:#fff;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;">
                         Porovnat
                     </button>
                 </div>
@@ -1577,7 +1602,7 @@
                     <li>Přetáhni tlačítko níže na lištu záložek.</li>
                     <li>Použití: Robůtek → „Zkopírovat pro Yarmill“ → otevři csps.yarmill.com (Plán nebo Skutečnost, týdenní pohled) → klikni na záložku.</li>
                 </ol>
-                <a id="rbBookmarklet" href="#" onclick="alert('Tohle tlačítko přetáhni na lištu záložek — klikat se na něj má až v Yarmillu.');return false;" style="display:inline-block;padding:10px 18px;background:linear-gradient(135deg,#ec4899,#f43f5e);color:#fff;border-radius:10px;font-weight:700;text-decoration:none;cursor:grab;">🤖 Robůtek → Yarmill</a>
+                <a id="rbBookmarklet" href="#" onclick="alert('Tohle tlačítko přetáhni na lištu záložek — klikat se na něj má až v Yarmillu.');return false;" style="display:inline-block;padding:10px 18px;background:var(--accent);color:#fff;border-radius:10px;font-weight:700;text-decoration:none;cursor:grab;">🤖 Robůtek → Yarmill</a>
                 <div style="display:grid;grid-template-columns:120px 1fr;gap:10px;margin-top:16px;align-items:start;">
                     <label style="margin:6px 0 0;">ID skupiny</label>
                     <input type="number" id="ymGroup" onchange="ymSaveCfg()">
@@ -1737,7 +1762,7 @@
         function getClubs() {
             const saved = localStorage.getItem('swimClubs');
             if (saved) return JSON.parse(saved);
-            return [{ id: 'club_default', name: 'Můj klub', color: '#60a5fa', created: new Date().toISOString() }];
+            return [{ id: 'club_default', name: 'Můj klub', color: '#1a8bd6', created: new Date().toISOString() }];
         }
 
         function saveClubs(clubs) {
@@ -1805,7 +1830,7 @@
         }
 
         function showAddClubDialog() {
-            const colors = ['#60a5fa','#4ade80','#f59e0b','#ef4444','#a78bfa','#fb923c','#34d399','#f472b6'];
+            const colors = ['#1a8bd6','#4ade80','#f59e0b','#ef4444','#a78bfa','#fb923c','#34d399','#f472b6'];
             const colorBtns = colors.map(c =>
                 '<button onclick="selectClubColor(\'' + c + '\')" data-color="' + c + '" class="color-pick-btn" style="width:32px;height:32px;background:' + c + ';border:3px solid transparent;border-radius:8px;cursor:pointer;"></button>'
             ).join('');
@@ -1818,7 +1843,7 @@
                 + '<div style="display:flex;gap:8px;margin-bottom:20px;">' + colorBtns + '</div>'
                 + '<div style="display:flex;gap:10px;">'
                 + '<button onclick="document.getElementById(\'addClubDialog\').remove()" style="flex:1;padding:12px;background:var(--surface2);border:none;border-radius:8px;color:var(--text);cursor:pointer;font-family:Inter,sans-serif;">Zrušit</button>'
-                + '<button onclick="createClub()" style="flex:1;padding:12px;background:#60a5fa;border:none;border-radius:8px;color:#18181b;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;">✅ Vytvořit</button>'
+                + '<button onclick="createClub()" style="flex:1;padding:12px;background:var(--blue);border:none;border-radius:8px;color:#18181b;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;">✅ Vytvořit</button>'
                 + '</div></div></div>';
             document.body.insertAdjacentHTML('beforeend', html);
             window._selectedClubColor = colors[0];
@@ -1837,7 +1862,7 @@
             const name = document.getElementById('newClubName').value.trim();
             if (!name) { alert('Zadej název klubu!'); return; }
             const clubs = getClubs();
-            const newClub = { id: 'club_' + Date.now(), name: name, color: window._selectedClubColor || '#60a5fa', created: new Date().toISOString() };
+            const newClub = { id: 'club_' + Date.now(), name: name, color: window._selectedClubColor || '#1a8bd6', created: new Date().toISOString() };
             clubs.push(newClub);
             saveClubs(clubs);
             document.getElementById('addClubDialog').remove();
@@ -2071,16 +2096,16 @@ Všichni plavci a tréninky tohoto klubu budou NENÁVRATNĚ smazány!`)) return;
                 }
 
                 const primary = s.primarni_styly
-                    ? `<div style="color:#60a5fa;font-weight:500;margin-top:4px;font-size:0.78em;">🎯 ${s.primarni_styly.join(', ')}</div>`
+                    ? `<div style="color:var(--blue);font-weight:500;margin-top:4px;font-size:0.78em;">🎯 ${s.primarni_styly.join(', ')}</div>`
                     : '';
                 const syncBadge = s.cspsId
                     ? `<div style="color:#4ade80;font-size:0.7em;margin-top:2px;">🔗 ČSPS</div>`
                     : '';
 
                 // Barva avataru podle primárního stylu
-                const styleColors = { 'Volný způsob': '#4f8ef7', 'Znak': '#9b6dff', 'Prsa': '#3dd68c', 'Motýl': '#f5a623' };
+                const styleColors = { 'Volný způsob': '#1a8bd6', 'Znak': '#2b6cb0', 'Prsa': '#3dd68c', 'Motýl': '#f5a623' };
                 const mainStyle = s.primarni_styly?.[0] || 'Volný způsob';
-                const avatarColor = styleColors[mainStyle] || '#4f8ef7';
+                const avatarColor = styleColors[mainStyle] || '#1a8bd6';
                 const avatarEmoji = getAvatar(s.jmeno, originalIdx);
 
                 return `
@@ -2136,7 +2161,7 @@ Všichni plavci a tréninky tohoto klubu budou NENÁVRATNĚ smazány!`)) return;
             if (!el) return;
             el.textContent = n === 0 ? '0 vybráno' : `${n} ${n === 1 ? 'plavec' : n < 5 ? 'plavci' : 'plavců'}`;
             el.style.background = n > 0 ? 'rgba(61,214,140,0.15)' : 'var(--blue-glow)';
-            el.style.borderColor = n > 0 ? 'rgba(61,214,140,0.3)' : 'rgba(79,142,247,0.25)';
+            el.style.borderColor = n > 0 ? 'rgba(61,214,140,0.3)' : 'rgba(24,140,210,0.25)';
             el.style.color = n > 0 ? 'var(--green)' : 'var(--blue)';
             // Zvýrazni continue btn
             const btn = document.getElementById('step2ContinueBtn');
@@ -2503,7 +2528,7 @@ COACH TIP: [One practical coaching cue for today's session]
             const methodologyBadge = methodology ? `
                 <div style="background:var(--surface3);border:1px solid var(--border2);border-radius:10px;padding:14px;margin-bottom:16px;">
                     <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
-                        <span style="background:var(--blue-glow);border:1px solid rgba(79,142,247,0.3);color:var(--blue);padding:3px 10px;border-radius:20px;font-size:0.78em;font-weight:600;">
+                        <span style="background:var(--blue-glow);border:1px solid rgba(24,140,210,0.3);color:var(--blue);padding:3px 10px;border-radius:20px;font-size:0.78em;font-weight:600;">
                             🧠 ${methodology.name}
                         </span>
                         <span style="color:var(--text3);font-size:0.78em;">${methodology.ageRange}</span>
@@ -2612,14 +2637,14 @@ COACH TIP: [One practical coaching cue for today's session]
                         <div id="photoScanResult" style="display:none;margin-top:10px;padding:10px;background:var(--surface3);border-radius:8px;">
                             <div style="color:var(--text3);font-size:0.72em;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;">AI rozpoznala:</div>
                             <div id="photoScanText" style="color:var(--text);font-size:0.82em;line-height:1.6;white-space:pre-wrap;"></div>
-                            <button onclick="applyPhotoScanResult()" style="margin-top:8px;padding:7px 14px;background:var(--green);border:none;border-radius:6px;color:#0f1f14;font-weight:600;cursor:pointer;font-size:0.78em;font-family:Inter,sans-serif;">
+                            <button onclick="applyPhotoScanResult()" style="margin-top:8px;padding:7px 14px;background:var(--green);border:none;border-radius:6px;color:#ffffff;font-weight:600;cursor:pointer;font-size:0.78em;font-family:Inter,sans-serif;">
                                 Pouzit tyto metry
                             </button>
                         </div>
                     </div>`}
 
                     <button onclick="saveTrainingWithFeedback()"
-                        style="width:100%;padding:14px;background:#60a5fa;border:none;border-radius:8px;color:#18181b;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;font-size:0.95em;">
+                        style="width:100%;padding:14px;background:var(--blue);border:none;border-radius:8px;color:#18181b;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;font-size:0.95em;">
                         💾 Uložit trénink do historie
                     </button>
                 </div>
@@ -2627,7 +2652,7 @@ COACH TIP: [One practical coaching cue for today's session]
                 <!-- AI CHAT -->
                 <div style="background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:20px;margin-top:16px;">
                     <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
-                        <div style="width:40px;height:40px;background:linear-gradient(135deg,#7c3aed,#4f8ef7);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.2em;flex-shrink:0;box-shadow:0 4px 12px rgba(124,58,237,0.3);">🤖</div>
+                        <div style="width:40px;height:40px;background:var(--blue);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.2em;flex-shrink:0;box-shadow:0 4px 12px rgba(14,165,160,0.3);">🤖</div>
                         <div>
                             <div style="font-weight:700;color:var(--text);font-size:0.95em;">Mattyho robůtek</div>
                             <div style="color:var(--text3);font-size:0.75em;">Chceš upravit trénink? Napiš mi!</div>
@@ -2637,7 +2662,7 @@ COACH TIP: [One practical coaching cue for today's session]
 
                     <!-- Chat zprávy -->
                     <div id="trainingChatMessages" style="max-height:300px;overflow-y:auto;margin-bottom:12px;display:flex;flex-direction:column;gap:10px;">
-                        <div style="background:linear-gradient(135deg,rgba(124,58,237,0.15),rgba(79,142,247,0.15));border:1px solid rgba(124,58,237,0.2);border-radius:10px;padding:12px;max-width:90%;">
+                        <div style="background:linear-gradient(135deg,rgba(14,165,160,0.15),rgba(24,140,210,0.15));border:1px solid rgba(14,165,160,0.2);border-radius:10px;padding:12px;max-width:90%;">
                             <div style="color:var(--text);font-size:0.85em;line-height:1.5;">
                                 Ahoj! Trénink je vygenerovaný. Chceš něco upravit? Třeba:<br>
                                 <span style="color:var(--text2);">• "Zkrať hlavní sadu o 500m"</span><br>
@@ -2655,7 +2680,7 @@ COACH TIP: [One practical coaching cue for today's session]
                             style="flex:1;padding:11px 14px;background:var(--surface3);border:1px solid var(--border2);border-radius:8px;color:var(--text);font-family:Inter,sans-serif;font-size:0.88em;"
                             onkeydown="if(event.key==='Enter' && !event.shiftKey) { event.preventDefault(); sendTrainingChat(); }">
                         <button onclick="sendTrainingChat()" id="chatSendBtn"
-                            style="padding:11px 18px;background:linear-gradient(135deg,#7c3aed,#4f8ef7);border:none;border-radius:8px;color:#fff;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;font-size:0.88em;white-space:nowrap;transition:all 0.2s;">
+                            style="padding:11px 18px;background:var(--blue);border:none;border-radius:8px;color:#fff;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;font-size:0.88em;white-space:nowrap;transition:all 0.2s;">
                             Odeslat
                         </button>
                     </div>
@@ -2683,7 +2708,7 @@ COACH TIP: [One practical coaching cue for today's session]
 
         function setDifficulty(d) {
             window._fbDifficulty = d;
-            const colors = { easy: '#4ade80', ok: '#60a5fa', hard: '#f59e0b', toohard: '#ef4444' };
+            const colors = { easy: '#4ade80', ok: '#1a8bd6', hard: '#f59e0b', toohard: '#ef4444' };
             ['easy','ok','hard','toohard'].forEach(id => {
                 const btn = document.getElementById('diff_' + id);
                 if (!btn) return;
@@ -2781,7 +2806,7 @@ COACH TIP: [One practical coaching cue for today's session]
                                 const m = t.content.match(/(\d+)\s*m(?!\w)/g);
                                 return m ? m.reduce((s, x) => s + parseInt(x), 0) : 0;
                             }),
-                            borderColor: '#60a5fa',
+                            borderColor: '#1a8bd6',
                             backgroundColor: 'rgba(96,165,250,0.1)',
                             tension: 0.3
                         }]
@@ -2800,7 +2825,7 @@ COACH TIP: [One practical coaching cue for today's session]
                     type: 'bar',
                     data: {
                         labels: Object.keys(data),
-                        datasets: [{ label: 'Tréninky', data: Object.values(data), backgroundColor: '#60a5fa' }]
+                        datasets: [{ label: 'Tréninky', data: Object.values(data), backgroundColor: '#1a8bd6' }]
                     },
                     options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
                 });
@@ -2820,7 +2845,7 @@ COACH TIP: [One practical coaching cue for today's session]
                     type: 'doughnut',
                     data: {
                         labels: Object.keys(disc),
-                        datasets: [{ data: Object.values(disc), backgroundColor: ['#60a5fa', '#4ade80', '#f59e0b', '#ef4444'] }]
+                        datasets: [{ data: Object.values(disc), backgroundColor: ['#1a8bd6', '#4ade80', '#f59e0b', '#ef4444'] }]
                     },
                     options: { responsive: true, maintainAspectRatio: false }
                 });
@@ -2864,7 +2889,7 @@ COACH TIP: [One practical coaching cue for today's session]
                         <div class="stat-row"><span>Docházka:</span><strong>${att}%</strong></div>
                         <div class="stat-row"><span>Metry:</span><strong>${(m/1000).toFixed(1)}k</strong></div>
                         <div class="stat-row"><span>Průměr:</span><strong>${tr.length > 0 ? (m/tr.length).toFixed(0) : 0}m</strong></div>
-                        ${bestTime ? `<div class="stat-row"><span>Nejlepší čas:</span><strong style="color:#60a5fa;">${bestTime.timeFormatted} (${bestTime.code})</strong></div>` : ''}
+                        ${bestTime ? `<div class="stat-row"><span>Nejlepší čas:</span><strong style="color:var(--blue);">${bestTime.timeFormatted} (${bestTime.code})</strong></div>` : ''}
                     </div>
                 `;
             }).join('');
@@ -2917,7 +2942,7 @@ COACH TIP: [One practical coaching cue for today's session]
             if (history.length === 0) {
                 list.innerHTML = '<div class="alert alert-info">Zatím žádné tréninky</div>';
             } else {
-                const diffColors = { easy: '#3dd68c', ok: '#4f8ef7', hard: '#f5a623', toohard: '#f05454' };
+                const diffColors = { easy: '#3dd68c', ok: '#1a8bd6', hard: '#f5a623', toohard: '#f05454' };
                 const diffLabels = { easy: 'Bez problémů', ok: 'Ok', hard: 'Těžké', toohard: 'Příliš těžké' };
                 const ratingStars = (n) => '★'.repeat(n || 0) + '☆'.repeat(5 - (n || 0));
 
@@ -3218,7 +3243,7 @@ COACH TIP: [One practical coaching cue for today's session]
                     <input type="date" style="flex: 1; padding: 8px; background: var(--surface3); border: 1px solid #71717a; border-radius: 6px; color: var(--text);" class="race-date">
                     <button onclick="removeRaceField('${id}')" style="padding: 8px 12px; background: #ef4444; border: none; border-radius: 6px; color: var(--text); cursor: pointer;">×</button>
                 </div>
-                <button onclick="showEntriesDialog('${id}')" style="width: 100%; padding: 8px; background: var(--surface2); border: 1px solid #60a5fa; border-radius: 6px; color: #60a5fa; cursor: pointer; font-size: 0.85em;">
+                <button onclick="showEntriesDialog('${id}')" style="width: 100%; padding: 8px; background: var(--surface2); border: 1px solid var(--blue); border-radius: 6px; color: var(--blue); cursor: pointer; font-size: 0.85em;">
                     📋 Přidat přihlášky
                 </button>
                 <div class="race-entries" style="display: none; margin-top: 8px;"></div>
@@ -3484,7 +3509,7 @@ COACH TIP: [One practical coaching cue for today's session]
                         <input type="date" value="${race.date}" style="flex: 1; padding: 8px; background: var(--surface3); border: 1px solid #71717a; border-radius: 6px; color: var(--text);" class="race-date">
                         <button onclick="removeRaceField('${id}')" style="padding: 8px 12px; background: #ef4444; border: none; border-radius: 6px; color: var(--text); cursor: pointer;">×</button>
                     </div>
-                    <button onclick="showEntriesDialog('${id}')" style="width: 100%; padding: 8px; background: var(--surface2); border: 1px solid #60a5fa; border-radius: 6px; color: #60a5fa; cursor: pointer; font-size: 0.85em;">
+                    <button onclick="showEntriesDialog('${id}')" style="width: 100%; padding: 8px; background: var(--surface2); border: 1px solid var(--blue); border-radius: 6px; color: var(--blue); cursor: pointer; font-size: 0.85em;">
                         📋 Přidat přihlášky
                     </button>
                     <div class="race-entries" style="display: none; margin-top: 8px;"></div>
@@ -3506,7 +3531,7 @@ COACH TIP: [One practical coaching cue for today's session]
             const active = el.dataset.active === '1';
             const nowActive = !active;
             el.dataset.active = nowActive ? '1' : '0';
-            el.style.background = nowActive ? 'rgba(79,142,247,0.12)' : 'var(--surface2)';
+            el.style.background = nowActive ? 'rgba(24,140,210,0.12)' : 'var(--surface2)';
             el.style.borderColor = nowActive ? 'var(--blue)' : 'var(--border)';
         }
 
@@ -3526,7 +3551,7 @@ COACH TIP: [One practical coaching cue for today's session]
             // Apply visual state to all equipment cards
             document.querySelectorAll('#equipmentGrid [data-active]').forEach(el => {
                 const active = el.dataset.active === '1';
-                el.style.background = active ? 'rgba(79,142,247,0.12)' : 'var(--surface2)';
+                el.style.background = active ? 'rgba(24,140,210,0.12)' : 'var(--surface2)';
                 el.style.borderColor = active ? 'var(--blue)' : 'var(--border)';
             });
         }
@@ -3551,7 +3576,7 @@ COACH TIP: [One practical coaching cue for today's session]
             const owDot = document.getElementById('typeOwDot');
             const suchyDot = document.getElementById('typeSuchyDot');
             [[poolLabel, poolDot, isPool], [owLabel, owDot, isOw], [suchyLabel, suchyDot, isSuchy]].forEach(([label, dot, active]) => {
-                if (label) { label.style.borderColor = active ? 'var(--blue)' : 'var(--border2)'; label.style.background = active ? 'rgba(79,142,247,0.08)' : 'var(--surface2)'; }
+                if (label) { label.style.borderColor = active ? 'var(--blue)' : 'var(--border2)'; label.style.background = active ? 'rgba(24,140,210,0.08)' : 'var(--surface2)'; }
                 if (dot) { dot.style.background = active ? 'var(--blue)' : 'var(--surface3)'; dot.style.border = active ? 'none' : '2px solid var(--border2)'; dot.innerHTML = active ? '<svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>' : ''; }
             });
 
@@ -3785,7 +3810,7 @@ COACH TIP: [One practical coaching cue for today's session]
                                 ${topTimes.map(t => `
                                     <div style="background: var(--surface3); padding: 6px 10px; border-radius: 6px; font-size: 0.82em;">
                                         <span style="color: var(--text2);">${t.discipline} (${t.poolLength}m)</span>
-                                        <span style="color: #60a5fa; font-weight: 600; float: right;">${t.timeFormatted}</span>
+                                        <span style="color: var(--blue); font-weight: 600; float: right;">${t.timeFormatted}</span>
                                         ${t.improved ? '<span style="color: #4ade80; font-size: 0.9em;"> 🏆</span>' : ''}
                                     </div>
                                 `).join('')}
@@ -3803,7 +3828,7 @@ COACH TIP: [One practical coaching cue for today's session]
                                 <div style="font-weight: 600; color: var(--text);">${s.jmeno}</div>
                                 <div style="font-size: 0.8em; color: var(--text2);">${s.vek ? s.vek + ' let • ' : ''}${lastSync ? '🔄 Sync: ' + lastSync : 'Nesynchronizováno'}</div>
                             </div>
-                            <button onclick="syncSwimmer(${idx})" id="syncBtn_${idx}" style="padding: 8px 14px; background: ${hasCspsId ? '#60a5fa' : 'var(--border2)'}; border: none; border-radius: 8px; color: ${hasCspsId ? '#18181b' : 'var(--text2)'}; font-weight: 600; cursor: pointer; font-size: 0.82em; font-family: Inter, sans-serif; flex-shrink: 0;">
+                            <button onclick="syncSwimmer(${idx})" id="syncBtn_${idx}" style="padding: 8px 14px; background: ${hasCspsId ? 'var(--blue)' : 'var(--border2)'}; border: none; border-radius: 8px; color: ${hasCspsId ? '#18181b' : 'var(--text2)'}; font-weight: 600; cursor: pointer; font-size: 0.82em; font-family: Inter, sans-serif; flex-shrink: 0;">
                                 ${hasCspsId ? '🔄 Sync' : '➕ Nastavit ID'}
                             </button>
                         </div>
@@ -3814,8 +3839,8 @@ COACH TIP: [One practical coaching cue for today's session]
                                 placeholder="ČSPS ID (např. 63458897)" 
                                 value="${s.cspsId || ''}"
                                 onchange="saveCspsId(${idx})"
-                                style="flex: 1; padding: 8px 12px; background: var(--surface2); border: 1px solid ${hasCspsId ? '#60a5fa' : 'var(--border2)'}; border-radius: 6px; color: var(--text); font-size: 0.85em;">
-                            <a href="https://is.czechswimming.cz" target="_blank" style="color: #60a5fa; font-size: 0.8em; white-space: nowrap; text-decoration: none;">
+                                style="flex: 1; padding: 8px 12px; background: var(--surface2); border: 1px solid ${hasCspsId ? 'var(--blue)' : 'var(--border2)'}; border-radius: 6px; color: var(--text); font-size: 0.85em;">
+                            <a href="https://is.czechswimming.cz" target="_blank" style="color: var(--blue); font-size: 0.8em; white-space: nowrap; text-decoration: none;">
                                 🔗 Najít ID
                             </a>
                         </div>
@@ -4004,7 +4029,7 @@ COACH TIP: [One practical coaching cue for today's session]
                 }
 
                 // Prioritní barvy
-                const priorityColors = { 5: '#f59e0b', 4: '#60a5fa', 3: '#4ade80', 2: '#a1a1aa', 1: '#71717a' };
+                const priorityColors = { 5: '#f59e0b', 4: '#1a8bd6', 3: '#4ade80', 2: '#a1a1aa', 1: '#71717a' };
                 const priorityLabels = { 5: 'Mistrovství ČR', 4: 'Český pohár / Kvalifikace', 3: 'Krajský přebor', 2: 'Standardní závod', 1: 'Ostatní' };
 
                 list.innerHTML = races.map(race => {
@@ -4028,7 +4053,7 @@ COACH TIP: [One practical coaching cue for today's session]
                                 </div>
                                 <div style="text-align: right; flex-shrink: 0;">
                                     <div style="font-size: 0.75em; color: ${color}; font-weight: 600;">${priorityLabels[race.priority] || ''}</div>
-                                    ${race.url ? `<a href="${race.url}" target="_blank" style="color: #60a5fa; font-size: 0.8em; text-decoration: none; display: block; margin-top: 4px;">🔗 Detail</a>` : ''}
+                                    ${race.url ? `<a href="${race.url}" target="_blank" style="color: var(--blue); font-size: 0.8em; text-decoration: none; display: block; margin-top: 4px;">🔗 Detail</a>` : ''}
                                 </div>
                             </div>
                             <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;padding-top:8px;border-top:1px solid var(--border);">
@@ -4036,7 +4061,7 @@ COACH TIP: [One practical coaching cue for today's session]
                                     ${race.suitableFor.map(name => `<span style="background:var(--surface2);color:var(--text);padding:2px 8px;border-radius:10px;font-size:0.75em;">👤 ${name}</span>`).join('')}
                                 </div>
                                 <button onclick="addRaceFromRecommendation('${race.name.replace(/'/g,"\'")}','${race.date}')" 
-                                    style="padding:5px 12px;background:var(--surface2);border:1px solid #60a5fa;border-radius:6px;color:#60a5fa;cursor:pointer;font-size:0.78em;font-family:Inter,sans-serif;white-space:nowrap;flex-shrink:0;">
+                                    style="padding:5px 12px;background:var(--surface2);border:1px solid var(--blue);border-radius:6px;color:var(--blue);cursor:pointer;font-size:0.78em;font-family:Inter,sans-serif;white-space:nowrap;flex-shrink:0;">
                                     ➕ Přidat do závodů
                                 </button>
                             </div>
@@ -4066,7 +4091,7 @@ COACH TIP: [One practical coaching cue for today's session]
                                 style="flex:1;padding:12px;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;color:var(--text);font-size:0.95em;font-family:Inter,sans-serif;"
                                 onkeydown="if(event.key==='Enter') searchCSPSSwimmers()">
                             <button onclick="searchCSPSSwimmers()" id="cspsSearchBtn"
-                                style="padding:12px 20px;background:#60a5fa;border:none;border-radius:8px;color:#18181b;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;white-space:nowrap;">
+                                style="padding:12px 20px;background:var(--blue);border:none;border-radius:8px;color:#18181b;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;white-space:nowrap;">
                                 🔍 Hledat
                             </button>
                         </div>
@@ -4125,7 +4150,7 @@ COACH TIP: [One practical coaching cue for today's session]
                             ${alreadyAdded 
                                 ? '<span style="color:#4ade80;font-size:0.85em;font-weight:600;">✅ Již přidán</span>'
                                 : `<button onclick="addSwimmerFromCSPS('${s.cspsId}','${s.name.replace(/'/g,"\'")}',${s.birthYear},'${s.club}')" 
-                                    style="padding:8px 16px;background:#60a5fa;border:none;border-radius:6px;color:#18181b;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;font-size:0.85em;white-space:nowrap;">
+                                    style="padding:8px 16px;background:var(--blue);border:none;border-radius:6px;color:#18181b;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;font-size:0.85em;white-space:nowrap;">
                                     ➕ Přidat
                                 </button>`
                             }
@@ -4295,7 +4320,7 @@ COACH TIP: [One practical coaching cue for today's session]
                             ${alreadyAdded
                                 ? '<span style="color:#4ade80;font-size:0.85em;font-weight:600;flex-shrink:0;">✅ Přidán</span>'
                                 : `<button onclick="addSwimmerStep1(this,'${s.cspsId}','${s.name.replace(/'/g,"\'")}',${s.birthYear},'${s.club}')"
-                                    style="padding:8px 14px;background:#60a5fa;border:none;border-radius:6px;color:#18181b;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;font-size:0.85em;white-space:nowrap;flex-shrink:0;">
+                                    style="padding:8px 14px;background:var(--blue);border:none;border-radius:6px;color:#18181b;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;font-size:0.85em;white-space:nowrap;flex-shrink:0;">
                                     ➕ Přidat
                                 </button>`
                             }
@@ -4415,7 +4440,7 @@ COACH TIP: [One practical coaching cue for today's session]
                     <input type="date" value="${date}" style="flex:1;padding:8px;background:var(--surface3);border:1px solid #71717a;border-radius:6px;color:var(--text);" class="race-date">
                     <button onclick="removeRaceField('${id}')" style="padding:8px 12px;background:#ef4444;border:none;border-radius:6px;color:var(--text);cursor:pointer;">×</button>
                 </div>
-                <button onclick="showEntriesDialog('${id}')" style="width:100%;padding:8px;background:var(--surface2);border:1px solid #60a5fa;border-radius:6px;color:#60a5fa;cursor:pointer;font-size:0.85em;">
+                <button onclick="showEntriesDialog('${id}')" style="width:100%;padding:8px;background:var(--surface2);border:1px solid var(--blue);border-radius:6px;color:var(--blue);cursor:pointer;font-size:0.85em;">
                     📋 Přidat přihlášky
                 </button>
                 <div class="race-entries" style="display:none;margin-top:8px;"></div>
@@ -4548,7 +4573,7 @@ COACH TIP: [One practical coaching cue for today's session]
                 <span style="background:#4ade8020;border:1px solid #4ade80;color:#4ade80;padding:4px 10px;border-radius:8px;font-size:0.8em;">
                     🏆 PB: ${best.timeFormatted}
                 </span>
-                <span style="background:#60a5fa20;border:1px solid #60a5fa;color:#60a5fa;padding:4px 10px;border-radius:8px;font-size:0.8em;">
+                <span style="background:var(--blue)20;border:1px solid var(--blue);color:var(--blue);padding:4px 10px;border-radius:8px;font-size:0.8em;">
                     📅 ${new Date(best.date).toLocaleDateString('cs-CZ')}
                 </span>
             `;
@@ -4570,12 +4595,12 @@ COACH TIP: [One practical coaching cue for today's session]
                     datasets: [{
                         label: disciplineName,
                         data: times,
-                        borderColor: '#60a5fa',
+                        borderColor: '#1a8bd6',
                         backgroundColor: 'rgba(96,165,250,0.1)',
                         borderWidth: 2.5,
                         pointRadius: filtered.map((t,i) => isPBs[i] ? 8 : 5),
-                        pointBackgroundColor: filtered.map((t,i) => isPBs[i] ? '#4ade80' : '#60a5fa'),
-                        pointBorderColor: filtered.map((t,i) => isPBs[i] ? '#4ade80' : '#60a5fa'),
+                        pointBackgroundColor: filtered.map((t,i) => isPBs[i] ? '#4ade80' : '#1a8bd6'),
+                        pointBorderColor: filtered.map((t,i) => isPBs[i] ? '#4ade80' : '#1a8bd6'),
                         pointBorderWidth: 2,
                         tension: 0.3,
                         fill: true,
@@ -4587,7 +4612,7 @@ COACH TIP: [One practical coaching cue for today's session]
                     plugins: {
                         legend: { display: false },
                         tooltip: {
-                            backgroundColor: 'var(--surface3)',
+                            backgroundColor: '#1e2a36',
                             borderColor: '#52525b',
                             borderWidth: 1,
                             callbacks: {
@@ -4633,7 +4658,7 @@ COACH TIP: [One practical coaching cue for today's session]
                 <div style="background:var(--surface3);border:1px solid var(--border2);border-radius:8px;padding:12px;cursor:pointer;"
                     onclick="document.getElementById('perfDisciplineSelect').value='${t.code}';document.getElementById('perfPoolSelect').value='${t.poolLength}';updatePerformanceChart()">
                     <div style="color:var(--text2);font-size:0.8em;">${t.discipline}</div>
-                    <div style="color:#60a5fa;font-size:1.2em;font-weight:700;margin:4px 0;">${t.timeFormatted}</div>
+                    <div style="color:var(--blue);font-size:1.2em;font-weight:700;margin:4px 0;">${t.timeFormatted}</div>
                     <div style="display:flex;justify-content:space-between;align-items:center;">
                         <span style="color:var(--text3);font-size:0.75em;">${t.poolLength}m • ${t.date}</span>
                         <span style="color:#4ade80;font-size:0.75em;font-weight:600;">${t.points} b</span>
@@ -4666,7 +4691,7 @@ COACH TIP: [One practical coaching cue for today's session]
 
             document.getElementById('perfStatsGrid').innerHTML = `
                 <div style="background:var(--surface3);border-radius:8px;padding:14px;text-align:center;">
-                    <div style="font-size:1.8em;font-weight:700;color:#60a5fa;">${totalRaces}</div>
+                    <div style="font-size:1.8em;font-weight:700;color:var(--blue);">${totalRaces}</div>
                     <div style="color:var(--text2);font-size:0.82em;margin-top:4px;">Závodů absolvováno</div>
                 </div>
                 <div style="background:var(--surface3);border-radius:8px;padding:14px;text-align:center;">
@@ -4699,7 +4724,7 @@ COACH TIP: [One practical coaching cue for today's session]
                 id: 'prep',
                 name: 'Přípravné období',
                 months: [9, 10], // Září, Říjen
-                color: '#8b5cf6',
+                color: '#0ea5a0',
                 icon: '🔧',
                 description: 'Budování základů — technika, aerobní základ, síla',
                 focus: ['technika', 'aerobní vytrvalost', 'silová příprava'],
@@ -5403,7 +5428,7 @@ Použij české názvy disciplín. Každá série: X× Ym styl @interval`;
                                 <option value="custom">Vlastní...</option>
                             </select>
                             <input type="text" id="swCustomInterval" placeholder="@1:30" style="display:none;width:80px;padding:7px 10px;background:var(--surface3);border:1px solid var(--border2);border-radius:8px;color:var(--text);font-family:Inter,sans-serif;font-size:0.82em;">
-                            <button onclick="setAllIntervals()" style="padding:7px 14px;background:var(--blue-glow);border:1px solid rgba(79,142,247,0.3);border-radius:8px;color:var(--blue);cursor:pointer;font-family:Inter,sans-serif;font-size:0.82em;font-weight:600;">
+                            <button onclick="setAllIntervals()" style="padding:7px 14px;background:var(--blue-glow);border:1px solid rgba(24,140,210,0.3);border-radius:8px;color:var(--blue);cursor:pointer;font-family:Inter,sans-serif;font-size:0.82em;font-weight:600;">
                                 Nastavit všem
                             </button>
                         </div>
@@ -5412,8 +5437,8 @@ Použij české názvy disciplín. Každá série: X× Ym styl @interval`;
                     <!-- Plavci -->
                     <div style="padding:14px;display:flex;flex-direction:column;gap:8px;" id="swimmersTimers">
                         ${swimmers.map(s => {
-                            const styleColors = { 'Volný způsob': '#4f8ef7', 'Znak': '#9b6dff', 'Prsa': '#3dd68c', 'Motýl': '#f5a623' };
-                            const color = styleColors[s.primarni_styly?.[0]] || '#4f8ef7';
+                            const styleColors = { 'Volný způsob': '#1a8bd6', 'Znak': '#2b6cb0', 'Prsa': '#3dd68c', 'Motýl': '#f5a623' };
+                            const color = styleColors[s.primarni_styly?.[0]] || '#1a8bd6';
                             const swEmoji = getAvatar(s.jmeno, appData.swimmers.indexOf(s));
                             return `
                             <div id="sw_${s.jmeno.replace(/\s/g,'_')}" style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--surface3);border:1px solid var(--border);border-radius:10px;transition:all 0.2s;">
@@ -5434,7 +5459,7 @@ Použij české názvy disciplín. Každá série: X× Ym styl @interval`;
                                 <!-- Start/Stop -->
                                 <button onclick="toggleSwimmerTimer('${s.jmeno}')"
                                     id="sw_btn_${s.jmeno.replace(/\s/g,'_')}"
-                                    style="padding:8px 16px;background:var(--green);border:none;border-radius:8px;color:#0f1f14;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;font-size:0.82em;white-space:nowrap;min-width:64px;transition:all 0.2s;">
+                                    style="padding:8px 16px;background:var(--green);border:none;border-radius:8px;color:#ffffff;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;font-size:0.82em;white-space:nowrap;min-width:64px;transition:all 0.2s;">
                                     ▶ Start
                                 </button>
                             </div>`;
@@ -5443,7 +5468,7 @@ Použij české názvy disciplín. Každá série: X× Ym styl @interval`;
 
                     <!-- Globální ovládání -->
                     <div style="padding:12px 14px;border-top:1px solid var(--border);display:flex;gap:8px;">
-                        <button onclick="startAllTimers()" style="flex:1;padding:10px;background:linear-gradient(135deg,var(--green),#5ef0a8);border:none;border-radius:8px;color:#0f1f14;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;font-size:0.85em;">
+                        <button onclick="startAllTimers()" style="flex:1;padding:10px;background:var(--accent);border:none;border-radius:8px;color:#ffffff;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;font-size:0.85em;">
                             ▶▶ Spustit všechny
                         </button>
                         <button onclick="resetAllTimers()" style="flex:1;padding:10px;background:var(--surface3);border:1px solid var(--border2);border-radius:8px;color:var(--text2);cursor:pointer;font-family:Inter,sans-serif;font-size:0.85em;">
@@ -5530,7 +5555,7 @@ Použij české názvy disciplín. Každá série: X× Ym styl @interval`;
                 if (statusEl) statusEl.textContent = 'Běží...';
                 if (rowEl) rowEl.style.borderColor = 'var(--blue)';
             } else {
-                if (btn) { btn.textContent = '▶ Start'; btn.style.background = 'var(--green)'; btn.style.color = '#0f1f14'; }
+                if (btn) { btn.textContent = '▶ Start'; btn.style.background = 'var(--green)'; btn.style.color = '#ffffff'; }
                 if (statusEl) statusEl.textContent = 'Pozastaveno';
                 if (rowEl) rowEl.style.borderColor = 'var(--border)';
             }
@@ -5588,7 +5613,7 @@ Použij české názvy disciplín. Každá série: X× Ym styl @interval`;
                 const timeEl = document.getElementById('sw_time_' + key);
                 const rowEl = document.getElementById('sw_' + key);
 
-                if (btn) { btn.textContent = '▶ Start'; btn.style.background = 'var(--green)'; btn.style.color = '#0f1f14'; }
+                if (btn) { btn.textContent = '▶ Start'; btn.style.background = 'var(--green)'; btn.style.color = '#ffffff'; }
                 if (statusEl) statusEl.textContent = 'Připraven';
                 if (rowEl) { rowEl.style.borderColor = 'var(--border)'; rowEl.style.background = 'var(--surface3)'; }
 
@@ -6183,7 +6208,7 @@ Použij české názvy disciplín. Každá série: X× Ym styl @interval`;
             const msgs = document.getElementById('trainingChatMessages');
             if (!msgs) return;
             msgs.innerHTML = `
-                <div style="background:linear-gradient(135deg,rgba(124,58,237,0.15),rgba(79,142,247,0.15));border:1px solid rgba(124,58,237,0.2);border-radius:10px;padding:12px;max-width:90%;">
+                <div style="background:linear-gradient(135deg,rgba(14,165,160,0.15),rgba(24,140,210,0.15));border:1px solid rgba(14,165,160,0.2);border-radius:10px;padding:12px;max-width:90%;">
                     <div style="color:var(--text);font-size:0.85em;line-height:1.5;">
                         Ahoj! Trénink je vygenerovaný. Chceš něco upravit? Třeba:<br>
                         <span style="color:var(--text2);">• "Zkrať hlavní sadu o 500m"</span><br>
@@ -6199,8 +6224,8 @@ Použij české názvy disciplín. Každá série: X× Ym styl @interval`;
             if (!msgs) return;
             const div = document.createElement('div');
             div.style.cssText = isUser
-                ? 'align-self:flex-end;background:var(--blue-glow);border:1px solid rgba(79,142,247,0.25);border-radius:10px;padding:10px 14px;max-width:85%;'
-                : 'align-self:flex-start;background:linear-gradient(135deg,rgba(124,58,237,0.12),rgba(79,142,247,0.12));border:1px solid rgba(124,58,237,0.2);border-radius:10px;padding:12px;max-width:92%;';
+                ? 'align-self:flex-end;background:var(--blue-glow);border:1px solid rgba(24,140,210,0.25);border-radius:10px;padding:10px 14px;max-width:85%;'
+                : 'align-self:flex-start;background:linear-gradient(135deg,rgba(14,165,160,0.12),rgba(24,140,210,0.12));border:1px solid rgba(14,165,160,0.2);border-radius:10px;padding:12px;max-width:92%;';
             if (isUser) {
                 div.innerHTML = '<div style="color:var(--text);font-size:0.85em;">' + text + '</div>';
             } else {
@@ -6215,7 +6240,7 @@ Použij české názvy disciplín. Každá série: X× Ym styl @interval`;
             if (!msgs) return;
             const div = document.createElement('div');
             div.id = 'chatLoading';
-            div.style.cssText = 'align-self:flex-start;background:linear-gradient(135deg,rgba(124,58,237,0.12),rgba(79,142,247,0.12));border:1px solid rgba(124,58,237,0.2);border-radius:10px;padding:12px;';
+            div.style.cssText = 'align-self:flex-start;background:linear-gradient(135deg,rgba(14,165,160,0.12),rgba(24,140,210,0.12));border:1px solid rgba(14,165,160,0.2);border-radius:10px;padding:12px;';
             div.innerHTML = '<div style="display:flex;align-items:center;gap:8px;"><span>🤖</span><div style="display:flex;gap:4px;"><div style="width:6px;height:6px;background:var(--blue);border-radius:50%;animation:bounce 1s infinite;"></div><div style="width:6px;height:6px;background:var(--blue);border-radius:50%;animation:bounce 1s infinite 0.2s;"></div><div style="width:6px;height:6px;background:var(--blue);border-radius:50%;animation:bounce 1s infinite 0.4s;"></div></div></div>';
             msgs.appendChild(div);
             msgs.scrollTop = msgs.scrollHeight;
@@ -6313,7 +6338,7 @@ Použij české názvy disciplín. Každá série: X× Ym styl @interval`;
                     btn.style.background = 'var(--green)';
                     setTimeout(() => {
                         btn.textContent = '📋 Kopírovat pro Yarmill';
-                        btn.style.background = 'linear-gradient(135deg,#ec4899,#f43f5e)';
+                        btn.style.background = 'var(--accent)';
                     }, 2000);
                 }
 
@@ -6332,7 +6357,7 @@ Použij české názvy disciplín. Každá série: X× Ym styl @interval`;
             if (existing) existing.remove();
 
             const rows = [
-                { label: 'HZ VODA ODPO', value: hzVoda + 'm', color: '#60a5fa' },
+                { label: 'HZ VODA ODPO', value: hzVoda + 'm', color: 'var(--blue)' },
                 { label: 'KM CELKEM ODPO', value: kmCelkem + 'km', color: '#a78bfa' },
                 { label: 'NOHY ODPO', value: nohy + 'm', color: '#34d399' },
                 { label: 'TECHNIKA ODPO', value: technika + 'm', color: '#f59e0b' },
@@ -6349,16 +6374,16 @@ Použij české názvy disciplín. Každá série: X× Ym styl @interval`;
             div.id = 'yarmillModal';
             div.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:3000;display:flex;align-items:center;justify-content:center;padding:20px;';
             div.innerHTML =
-                '<div style="background:var(--surface2);border:1px solid #ec4899;border-radius:14px;padding:28px;max-width:420px;width:100%;">' +
+                '<div style="background:var(--surface2);border:1px solid var(--accent);border-radius:14px;padding:28px;max-width:420px;width:100%;">' +
                 '<div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">' +
-                '<div style="width:40px;height:40px;background:linear-gradient(135deg,#ec4899,#f43f5e);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2em;">📋</div>' +
+                '<div style="width:40px;height:40px;background:var(--accent);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2em;">📋</div>' +
                 '<div><div style="font-weight:700;color:var(--text);font-size:1em;">Yarmill — hodnoty tréninku</div>' +
                 '<div style="color:var(--text3);font-size:0.78em;">Zadej tyto hodnoty do Yarmillu</div></div></div>' +
                 '<div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px;">' + rowsHtml + '</div>' +
-                '<div style="background:rgba(236,72,153,0.1);border:1px solid rgba(236,72,153,0.2);border-radius:8px;padding:10px 14px;margin-bottom:16px;color:var(--text2);font-size:0.8em;">' +
+                '<div style="background:rgba(14,165,160,0.1);border:1px solid rgba(14,165,160,0.2);border-radius:8px;padding:10px 14px;margin-bottom:16px;color:var(--text2);font-size:0.8em;">' +
                 '💡 Jdi do Yarmillu → vyber den → zadej hodnoty do příslušných políček</div>' +
                 '<button onclick="closeYarmillModal()" ' +
-                'style="width:100%;padding:12px;background:linear-gradient(135deg,#ec4899,#f43f5e);border:none;border-radius:8px;color:#fff;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;">Zavřít</button>' +
+                'style="width:100%;padding:12px;background:var(--accent);border:none;border-radius:8px;color:#fff;font-weight:700;cursor:pointer;font-family:Inter,sans-serif;">Zavřít</button>' +
                 '</div>';
             document.body.appendChild(div);
         }
@@ -6374,7 +6399,7 @@ Použij české názvy disciplín. Každá série: X× Ym styl @interval`;
         function toggleDrylandType(el, type) {
             const active = el.dataset.active === '1';
             el.dataset.active = active ? '0' : '1';
-            el.style.background = !active ? 'rgba(79,142,247,0.12)' : 'var(--surface2)';
+            el.style.background = !active ? 'rgba(24,140,210,0.12)' : 'var(--surface2)';
             el.style.borderColor = !active ? 'var(--blue)' : 'var(--border)';
         }
 
@@ -6505,7 +6530,7 @@ Použij české názvy disciplín. Každá série: X× Ym styl @interval`;
         function toggleDrylandCat(el) {
             const active = el.dataset.active === '1';
             el.dataset.active = active ? '0' : '1';
-            el.style.background = !active ? 'rgba(79,142,247,0.12)' : 'var(--surface2)';
+            el.style.background = !active ? 'rgba(24,140,210,0.12)' : 'var(--surface2)';
             el.style.borderColor = !active ? 'var(--blue)' : 'var(--border)';
         }
 
@@ -6783,7 +6808,7 @@ Na konci jeden řádek: CELKEM: ${duration} min, a pak jedna věta COACH TIP.`;
                 const isPast = d < new Date() && !isToday;
 
                 return `
-                    <div onclick="openDayPlan('${key}')" style="background:${isToday ? 'rgba(79,142,247,0.1)' : 'var(--surface2)'};border:2px solid ${isToday ? 'var(--blue)' : plan ? 'var(--green)' : 'var(--border)'};border-radius:12px;padding:12px 8px;cursor:pointer;transition:all 0.2s;min-height:100px;position:relative;">
+                    <div onclick="openDayPlan('${key}')" style="background:${isToday ? 'rgba(24,140,210,0.1)' : 'var(--surface2)'};border:2px solid ${isToday ? 'var(--blue)' : plan ? 'var(--green)' : 'var(--border)'};border-radius:12px;padding:12px 8px;cursor:pointer;transition:all 0.2s;min-height:100px;position:relative;">
                         <div style="font-weight:700;color:${isToday ? 'var(--blue)' : 'var(--text)'};font-size:0.85em;">${dayNames[i]}</div>
                         <div style="color:var(--text3);font-size:0.72em;margin-bottom:8px;">${d.getDate()}. ${months[d.getMonth()]}</div>
                         ${plan ? `
@@ -6804,7 +6829,7 @@ Na konci jeden řádek: CELKEM: ${duration} min, a pak jedna věta COACH TIP.`;
             const detail = document.getElementById('weekDayDetail');
             detail.style.display = 'block';
 
-            const colors = ['#4f8ef7','#3dd68c','#f5a623','#ef4444','#9b6dff','#ec4899','#14b8a6'];
+            const colors = ['var(--blue)','#3dd68c','#f5a623','#ef4444','var(--purple)','var(--accent)','#14b8a6'];
 
             detail.innerHTML = `
                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
@@ -6856,7 +6881,7 @@ Na konci jeden řádek: CELKEM: ${duration} min, a pak jedna věta COACH TIP.`;
 
                 <div style="display:flex;gap:8px;">
                     ${plan ? `<button onclick="deleteDayPlan('${dateKey}')" style="padding:10px 16px;background:rgba(240,84,84,0.15);border:1px solid rgba(240,84,84,0.3);border-radius:8px;color:#f05454;cursor:pointer;font-family:Inter,sans-serif;font-size:0.85em;">🗑️ Smazat</button>` : ''}
-                    <button onclick="saveDayPlan('${dateKey}')" style="flex:1;padding:10px;background:linear-gradient(135deg,var(--blue),#6fa8ff);border:none;border-radius:8px;color:#fff;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;">
+                    <button onclick="saveDayPlan('${dateKey}')" style="flex:1;padding:10px;background:var(--blue);border:none;border-radius:8px;color:#fff;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;">
                         💾 Uložit
                     </button>
                 </div>
@@ -6968,13 +6993,13 @@ Na konci jeden řádek: CELKEM: ${duration} min, a pak jedna věta COACH TIP.`;
                         <button onclick="deleteFromLibrary('${t.id}')" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:0.85em;padding:2px 6px;" title="Smazat">✕</button>
                     </div>
                     <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;">
-                        ${(t.tags||[]).map(tag => `<span style="background:var(--blue-glow);border:1px solid rgba(79,142,247,0.2);color:var(--blue);padding:2px 8px;border-radius:10px;font-size:0.72em;">${tag}</span>`).join('')}
+                        ${(t.tags||[]).map(tag => `<span style="background:var(--blue-glow);border:1px solid rgba(24,140,210,0.2);color:var(--blue);padding:2px 8px;border-radius:10px;font-size:0.72em;">${tag}</span>`).join('')}
                     </div>
                     <div style="color:var(--text3);font-size:0.78em;margin-bottom:12px;">
                         ${t.duration} min • ${t.targetMeters ? t.targetMeters + 'm • ' : ''}${t.pool || '25m'} • ${new Date(t.savedAt).toLocaleDateString('cs-CZ')}
                     </div>
                     <div style="display:flex;gap:6px;">
-                        <button onclick="loadFromLibrary('${t.id}')" style="flex:1;padding:8px;background:linear-gradient(135deg,var(--green),#5ef0a8);border:none;border-radius:8px;color:#0f1f14;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;font-size:0.82em;">
+                        <button onclick="loadFromLibrary('${t.id}')" style="flex:1;padding:8px;background:var(--accent);border:none;border-radius:8px;color:#ffffff;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;font-size:0.82em;">
                             ▶ Použít
                         </button>
                         <button onclick="showLibraryPreview('${t.id}')" style="padding:8px 12px;background:var(--surface3);border:1px solid var(--border2);border-radius:8px;color:var(--text2);cursor:pointer;font-family:Inter,sans-serif;font-size:0.82em;">
@@ -7062,7 +7087,7 @@ Na konci jeden řádek: CELKEM: ${duration} min, a pak jedna věta COACH TIP.`;
                     <img src="${qrUrl}" style="width:200px;height:200px;border-radius:10px;background:#fff;padding:8px;" onerror="this.style.display='none';document.getElementById('qrFallback').style.display='block'">
                     <div id="qrFallback" style="display:none;color:var(--text3);font-size:0.82em;padding:20px;">QR generátor nedostupný — použij tlačítko níže</div>
                     <div style="margin-top:16px;display:flex;flex-direction:column;gap:8px;">
-                        <button onclick="navigator.share ? navigator.share({title:'Trénink',text:${JSON.stringify(t.content.substring(0,300)+'...')}}):alert('Sdílení není dostupné')" style="padding:10px;background:linear-gradient(135deg,var(--blue),#6fa8ff);border:none;border-radius:8px;color:#fff;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;">
+                        <button onclick="navigator.share ? navigator.share({title:'Trénink',text:${JSON.stringify(t.content.substring(0,300)+'...')}}):alert('Sdílení není dostupné')" style="padding:10px;background:var(--blue);border:none;border-radius:8px;color:#fff;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;">
                             📤 Sdílet přes telefon
                         </button>
                         <button onclick="navigator.clipboard.writeText(${JSON.stringify(t.content)}).then(()=>alert('Zkopírováno!'))" style="padding:10px;background:var(--surface3);border:1px solid var(--border2);border-radius:8px;color:var(--text2);cursor:pointer;font-family:Inter,sans-serif;">
@@ -7100,7 +7125,7 @@ Na konci jeden řádek: CELKEM: ${duration} min, a pak jedna věta COACH TIP.`;
                     t.poolLength == pool &&
                     (t.code?.includes(code) || t.discipline?.includes(code))
                 );
-                return { name: s.jmeno, time: time?.time, formatted: time?.timeFormatted, color: '#4f8ef7' };
+                return { name: s.jmeno, time: time?.time, formatted: time?.timeFormatted, color: '#1a8bd6' };
             }).filter(s => s.time).sort((a, b) => a.time - b.time);
 
             if (data.length === 0) {
@@ -7109,7 +7134,7 @@ Na konci jeden řádek: CELKEM: ${duration} min, a pak jedna věta COACH TIP.`;
             }
 
             const best = data[0].time;
-            const colors = ['#f5a623','#a1a1aa','#cd7f32','#4f8ef7','#3dd68c','#9b6dff','#ec4899'];
+            const colors = ['#f5a623','#a1a1aa','#cd7f32','var(--blue)','#3dd68c','var(--purple)','var(--accent)'];
 
             result.innerHTML = `
                 <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px;">
@@ -7177,7 +7202,7 @@ Na konci jeden řádek: CELKEM: ${duration} min, a pak jedna věta COACH TIP.`;
 
         function rbChipStyle(el, on) {
             el.dataset.active = on ? '1' : '0';
-            el.style.background = on ? 'rgba(79,142,247,0.12)' : 'var(--surface2)';
+            el.style.background = on ? 'rgba(24,140,210,0.12)' : 'var(--surface2)';
             el.style.borderColor = on ? 'var(--blue)' : 'var(--border)';
         }
         function rbPick(el) {
@@ -7467,7 +7492,7 @@ Na konci jeden řádek: CELKEM: ${duration} min, a pak jedna věta COACH TIP.`;
                 let P; try { P = JSON.parse(raw); } catch (e) { alert('Neplatný balíček.'); return; }
                 if (!P.robutek) { alert('Neplatný balíček.'); return; }
                 const box = document.createElement('div');
-                box.style.cssText = 'position:fixed;top:16px;right:16px;z-index:999999;background:#18181b;color:var(--text);border:2px solid #ec4899;border-radius:12px;padding:14px 18px;font:14px Inter,Arial,sans-serif;max-width:360px;box-shadow:0 8px 30px rgba(0,0,0,.4);';
+                box.style.cssText = 'position:fixed;top:16px;right:16px;z-index:999999;background:#18181b;color:var(--text);border:2px solid var(--accent);border-radius:12px;padding:14px 18px;font:14px Inter,Arial,sans-serif;max-width:360px;box-shadow:0 8px 30px rgba(0,0,0,.4);';
                 const say = h => { box.innerHTML = '<b>🤖 Robůtek → Yarmill</b><br>' + h; };
                 document.body.appendChild(box); say('Získávám přihlášení…');
                 let tok = null; const of = window.fetch;
@@ -7564,7 +7589,7 @@ Na konci jeden řádek: CELKEM: ${duration} min, a pak jedna věta COACH TIP.`;
                 '<button onclick="document.getElementById(\'rbModeModal\').remove()" style="background:none;border:none;color:var(--text3);font-size:1.2em;cursor:pointer;">✕</button></div>' +
                 '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;">' +
                 card('👥', 'Podle účasti', 'Vybereš, kdo dorazil — trénink na míru plavcům podle jejich časů z ČSPS.', 'var(--surface2)', 'var(--border2)', "document.getElementById('rbModeModal').remove();rbExitFree();goToStep(2)") +
-                card('🎯', 'Na míru — podle cíle', 'Zvolíš styly, typ (vytrvalost / intervaly / krátké časy) a bazén 25/50 — bez ohledu na to, kdo dorazí.', 'linear-gradient(135deg,rgba(236,72,153,0.10),rgba(124,58,237,0.10))', '#ec4899', "document.getElementById('rbModeModal').remove();rbStartFree()") +
+                card('🎯', 'Na míru — podle cíle', 'Zvolíš styly, typ (vytrvalost / intervaly / krátké časy) a bazén 25/50 — bez ohledu na to, kdo dorazí.', 'linear-gradient(135deg,rgba(14,165,160,0.10),rgba(14,165,160,0.10))', 'var(--accent)', "document.getElementById('rbModeModal').remove();rbStartFree()") +
                 '</div></div>';
             m.addEventListener('click', e => { if (e.target === m) m.remove(); });
             document.body.appendChild(m);
@@ -7574,7 +7599,7 @@ Na konci jeden řádek: CELKEM: ${duration} min, a pak jedna věta COACH TIP.`;
         function rbFreeLabel() { const el = document.getElementById('freeAge'); return el ? el.options[el.selectedIndex].text.replace(/\s*\(.*\)/, '') : 'Skupina'; }
         function rbHeaderChips(isSuchy, swimmers, duration, pool, targetMeters, race) {
             const chip = (txt, accent) => '<span style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;font-size:0.82em;font-weight:600;' +
-                (accent ? 'background:rgba(236,72,153,0.10);border:1px solid rgba(236,72,153,0.35);color:#db2777;' : 'background:var(--surface2);border:1px solid var(--border);color:var(--text2);') + '">' + txt + '</span>';
+                (accent ? 'background:rgba(14,165,160,0.10);border:1px solid rgba(14,165,160,0.35);color:var(--accent-ink);' : 'background:var(--surface2);border:1px solid var(--border);color:var(--text2);') + '">' + txt + '</span>';
             const c = [];
             if (isSuchy) c.push(chip('🏋️ Suchá příprava'));
             else c.push(chip('📏 ' + String(pool).replace('m', ' m')), chip('🏊 ' + Number(targetMeters).toLocaleString('cs-CZ') + ' m'));
