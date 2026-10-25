@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
+<script>/* AI key guard v1 */(function(){var K='robutek_ai_key';var of=window.fetch.bind(window);
+function ask(msg){return new Promise(function(res){var d=document.createElement('div');d.style.cssText='position:fixed;inset:0;z-index:2147483647;background:rgba(0,0,0,.72);display:flex;align-items:center;justify-content:center;font-family:system-ui,sans-serif';d.innerHTML='<div style="background:#fff;color:#111;padding:20px;border-radius:14px;max-width:320px;width:90%;box-shadow:0 10px 40px rgba(0,0,0,.4)"><b style="font-size:16px">Heslo pro AI</b><p style="font-size:13px;margin:6px 0 10px;color:#444">'+msg+'</p><input type="password" style="width:100%;padding:10px;font-size:16px;box-sizing:border-box;border:1px solid #ccc;border-radius:8px"><button style="margin-top:10px;width:100%;padding:10px;font-size:15px;border:0;border-radius:8px;background:#ff7a1a;color:#fff;cursor:pointer">OK</button></div>';document.body.appendChild(d);var i=d.querySelector('input'),b=d.querySelector('button');function go(){var v=i.value.trim();if(!v)return;try{localStorage.setItem(K,v)}catch(e){}d.remove();res(v)}b.onclick=go;i.onkeydown=function(e){if(e.key==='Enter')go()};i.focus();});}
+window.fetch=async function(u,o){var url=typeof u==='string'?u:(u&&u.url)||'';if(!/workers\.dev\/ai(\?|$)/.test(url))return of(u,o);var k='';try{k=localStorage.getItem(K)||''}catch(e){}if(!k)k=await ask('Zadej heslo (stejné jako do Fitka). Zadáváš jen jednou.');o=Object.assign({},o||{});o.headers=Object.assign({},o.headers||{},{'X-App-Key':k});var r=await of(u,o);if(r.status===401){try{localStorage.removeItem(K)}catch(e){}k=await ask('Špatné heslo, zkus to znovu.');o.headers['X-App-Key']=k;r=await of(u,o);}return r;};})();</script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
