@@ -825,6 +825,26 @@ window.fetch=async function(u,o){var url=typeof u==='string'?u:(u&&u.url)||'';if
         .tab-btn.active::after { background: var(--accent); height: 3px; }
         .rb-chip[data-active="1"] { background: var(--blue-glow) !important; border-color: var(--blue) !important; }
         h2 { letter-spacing: -0.01em; }
+
+        /* ═══ v3.17 Zobrazení tréninku ═══ */
+        .tr-wrap { color: var(--text); font-size: 0.95em; }
+        .tr-kpis { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+        .tr-kpi { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 5px 10px; font-size: 0.82em; color: var(--text2); }
+        .tr-kpi b { color: var(--text); }
+        .tr-sec { border-left: 4px solid var(--c); background: var(--surface2); border-radius: 10px; padding: 10px 14px; margin-bottom: 10px; }
+        .tr-h { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 0.92em; color: var(--text); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 6px; }
+        .tr-n { width: 22px; height: 22px; flex: 0 0 22px; border-radius: 50%; background: var(--c); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 0.8em; }
+        .tr-m { margin-left: auto; font-size: 0.85em; font-weight: 800; color: var(--c); white-space: nowrap; text-transform: none; letter-spacing: 0; }
+        .tr-sub { font-weight: 700; font-size: 0.78em; color: var(--text2); text-transform: uppercase; letter-spacing: 0.03em; margin: 8px 0 2px; }
+        .tr-set { padding: 3px 0; line-height: 1.45; color: var(--text); }
+        .tr-set + .tr-set { border-top: 1px dashed var(--border); }
+        .tr-iv { font-family: ui-monospace, Menlo, Consolas, monospace; font-weight: 700; color: var(--blue); }
+        .tr-int { display: inline-block; font-size: 0.74em; padding: 1px 7px; border-radius: 999px; background: var(--blue-glow); color: var(--blue); white-space: nowrap; vertical-align: 1px; }
+        .tr-goal { display: block; font-size: 0.8em; color: var(--text3); margin-top: 1px; }
+        .tr-cue { font-size: 0.8em; color: var(--text3); font-style: italic; margin-top: 6px; }
+        .tr-pause { display: inline-block; font-size: 0.74em; color: var(--text2); background: var(--surface3); border-radius: 6px; padding: 1px 8px; margin: 3px 0; }
+        .tr-total { text-align: right; font-weight: 800; color: var(--text); margin: 2px 2px 10px; }
+        .tr-tip { background: var(--accent-glow); border-left: 4px solid var(--accent); border-radius: 10px; padding: 9px 12px; font-size: 0.85em; color: var(--text); }
     </style>
 </head>
 <body>
@@ -835,7 +855,7 @@ window.fetch=async function(u,o){var url=typeof u==='string'?u:(u&&u.url)||'';if
             <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
                 <div>
                     <h1 style="font-size:clamp(0.95em,3vw,1.3em);font-weight:700;">🤖 Mattyho tréninkový robůtek</h1>
-                    <p style="font-size:0.75em;color:var(--text3);">šup do vody • žádné výmluvy • makáme 🏊 <span style="opacity:0.6;font-size:0.9em;color:var(--green);cursor:help;" title="v3.15 — oprava součtu metrů (podnadpisy bloků, vnořené série); v3.14 — bazénový vzhled (modrá + tyrkys, sjednocená tlačítka a karty); v3.13 — HZ VODA v minutách, jemnější „Generovat znovu“; v3.12 — vtip celý, světlý režim sjednocen (ČSPS, Sezóna…), mobil: záložky, týden, rozvrh; v3.11 — volba režimu po Trénovat (Podle účasti / Na míru), hlavička výstupu se štítky; v3.10 — režim Na míru (podle cíle, bez ohledu na účast); v3.9 — zaměření tréninku (typ + 2 styly), záložka Yarmill: rozvrh, generátor období (auto/na míru, 25/50 m), zápis plánu i skutečnosti přes záložku, plán → skutečnost">v3.15 🌊</span></p>
+                    <p style="font-size:0.75em;color:var(--text3);">šup do vody • žádné výmluvy • makáme 🏊 <span style="opacity:0.6;font-size:0.9em;color:var(--green);cursor:help;" title="v3.15 — oprava součtu metrů (podnadpisy bloků, vnořené série); v3.14 — bazénový vzhled (modrá + tyrkys, sjednocená tlačítka a karty); v3.13 — HZ VODA v minutách, jemnější „Generovat znovu“; v3.12 — vtip celý, světlý režim sjednocen (ČSPS, Sezóna…), mobil: záložky, týden, rozvrh; v3.11 — volba režimu po Trénovat (Podle účasti / Na míru), hlavička výstupu se štítky; v3.10 — režim Na míru (podle cíle, bez ohledu na účast); v3.9 — zaměření tréninku (typ + 2 styly), záložka Yarmill: rozvrh, generátor období (auto/na míru, 25/50 m), zápis plánu i skutečnosti přes záložku, plán → skutečnost">v3.17 🌊</span></p>
                 </div>
                 <div style="display:flex;align-items:center;gap:8px;">
                     <select id="clubSelector" onchange="switchClub(this.value)"
@@ -2452,7 +2472,7 @@ COACH TIP: [One practical coaching cue for today's session]
 5. MAX 1 coaching cue per set (one "•" line). Pick the single most important one.
 6. Per-rep breakdown (Rep 1: ..., Rep 2: ...) ONLY for progressive/descending sets. Even sets: one target line ("Cíl: 3:00–3:05 rovnoměrně").
 7. NO closing summary table, NO per-section time table at the end — VÝKAZ at top covers it. End with CELKEM: [m]m + COACH TIP (max 2 sentences).
-8. HARD LENGTH LIMIT: 30 lines total for the whole TRÉNINK section (all 6 parts combined, VÝKAZ not counted). Count lines before you finish — if over 30, cut coaching cues first, then merge sets, until you're at or under 30. Never exceed it.
+8. HARD LENGTH LIMIT: 22 lines total for the whole TRÉNINK section (all 6 parts combined, VÝKAZ not counted). Count lines before you finish — if over 30, cut coaching cues first, then merge sets, until you're at or under 30. Never exceed it. Max ONE • cue per section (or none). Each set line max ~80 characters: distance, stroke, @interval, [zone] — goal only if essential, written after ' | Cíl:' on the same line. No separate 'Cíl:' lines.
 9. No blank lines anywhere in the output. No decorative characters (#, *, ---, ✅, ⚠️) anywhere except the ones already in the template (numbers, •, @, %).
 10. INTERVALS ARE RECALCULATED BY THE APP: every kraul set that has an @interval MUST carry its [NN% — zone] tag on the SAME line (e.g. "6x200m kraul @3:00 [85% — CSS]"). The app overwrites your @interval and any "Cíl: m:ss" time on that set from the swimmers' PBs, so your @ value is only a placeholder — do NOT spend effort on interval math and ignore the interval formula above. Never write target times except on the set line or the line directly under it.`;
 
@@ -2495,8 +2515,7 @@ COACH TIP: [One practical coaching cue for today's session]
                 setTimeout(() => {
                     const el = document.getElementById('trainingTextContent');
                     if (el) {
-                        const withLinks = addVideoLinksToTraining(cleanTrainingText(trainingText));
-                        el.innerHTML = withLinks.replace(/\n/g, '<br>');
+                        el.innerHTML = rbRenderTraining(cleanTrainingText(trainingText));
                     }
                 }, 100);
             } catch (error) {
@@ -6297,7 +6316,7 @@ Použij české názvy disciplín. Každá série: X× Ym styl @interval`;
                     if (el) {
                         el.innerHTML = isDryland
                             ? renderDrylandChecklist(reply)
-                            : addVideoLinksToTraining(reply).replace(/\n/g, '<br>');
+                            : rbRenderTraining(reply);
                     }
                 }
             } catch(e) {
@@ -7038,12 +7057,12 @@ Na konci jeden řádek: CELKEM: ${duration} min, a pak jedna věta COACH TIP.`;
             setTimeout(() => {
                 const output = document.getElementById('trainingOutput');
                 if (output && t.content) {
-                    output.innerHTML = `<div class="training-output"><div style="white-space:pre-line;line-height:1.7;color:var(--text2);font-size:0.88em;" id="trainingTextContent"></div></div>`;
+                    output.innerHTML = `<div class="training-output"><div style="line-height:1.5;color:var(--text2);font-size:0.88em;" id="trainingTextContent"></div></div>`;
                     const el = document.getElementById('trainingTextContent');
                     if (el) {
                         el.innerHTML = t.type === 'suchy'
                             ? renderDrylandChecklist(t.content)
-                            : addVideoLinksToTraining(t.content).replace(/\n/g, '<br>');
+                            : rbRenderTraining(t.content);
                     }
                     document.getElementById('trainingActions').style.display = 'block';
                     document.getElementById('trainingBackBtn').style.display = 'none';
@@ -7622,6 +7641,57 @@ Na konci jeden řádek: CELKEM: ${duration} min, a pak jedna věta COACH TIP.`;
                 if (race && race !== 'Běžný trénink' && race !== 'Suchá příprava') c.push(chip('🏆 ' + race, true));
             }
             return '<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:4px;">' + c.join('') + '</div>';
+        }
+
+        // ── v3.17 Přehledné zobrazení tréninku ─────────────────────────────────
+        const RB_SEC_COLORS = { '1': '#0ea5a0', '2': '#0a74b8', '3': '#e07a12', '4': '#2b6cb0', '5': '#7c5cd6', '6': '#8aa0b3' };
+        function rbEsc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+        function rbFmtSet(raw) {
+            let goal = '';
+            let main = raw;
+            const gi = raw.search(/\s*\|\s*Cíl:/i);
+            if (gi >= 0) { goal = raw.slice(gi).replace(/^\s*\|\s*Cíl:\s*/i, ''); main = raw.slice(0, gi); }
+            let h = rbEsc(main);
+            h = h.replace(/\[📹\]\((https?:[^)\s]+)\)/g, '<a href="$1" target="_blank" style="text-decoration:none;">📹</a>');
+            h = h.replace(/^(\s*\d+\s*[x×]\s*\(?\s*\d+\s*[x×]?\s*\d*\s*m?\)?|\s*\d+\s*m\b)/, '<b>$1</b>');
+            h = h.replace(/@\s?(\d{1,2}:\d{2})/g, '<span class="tr-iv">@$1</span>');
+            h = h.replace(/\[([^\]]*?%[^\]]*?)\]/g, '<span class="tr-int">$1</span>');
+            if (h.indexOf('📹') < 0) h = addVideoLinksToTraining(h);
+            return '<div class="tr-set">' + h + (goal ? '<span class="tr-goal">🎯 ' + rbEsc(goal) + '</span>' : '') + '</div>';
+        }
+        function rbRenderTraining(text) {
+            if (!text) return '';
+            const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+            const kpi = {}; let out = []; let sec = null; let inSec = false; let total = '', tip = '';
+            const closeSec = () => { if (inSec) { out.push('</div>'); inSec = false; } };
+            for (let idx = 0; idx < lines.length; idx++) {
+                const l = lines[idx];
+                let m;
+                if (/^===.*===$/.test(l)) continue;
+                if ((m = l.match(/^(HZ VODA|KM CELKEM|NOHY|TECHNIKA)\s*:\s*(.+)$/i))) { kpi[m[1].toUpperCase()] = m[2]; continue; }
+                if ((m = l.match(/^(\d)\.\s*(.+?)\s*(?:\(\s*(~?\d+)\s*m\s*\))?\s*:?\s*$/)) && +m[1] >= 1 && +m[1] <= 6) {
+                    closeSec(); sec = m[1];
+                    const c = RB_SEC_COLORS[sec] || 'var(--blue)';
+                    out.push('<div class="tr-sec" style="--c:' + c + '"><div class="tr-h"><span class="tr-n">' + sec + '</span><span>' + rbEsc(m[2].replace(/\s*[—–-]\s*$/, '')) + '</span>' + (m[3] ? '<span class="tr-m">' + m[3] + ' m</span>' : '') + '</div>');
+                    inSec = true; continue;
+                }
+                if (/^CELKEM\s*:/i.test(l)) { total = l.replace(/^CELKEM\s*:\s*/i, ''); continue; }
+                if (/^COACH TIP\s*:/i.test(l)) { tip = l.replace(/^COACH TIP\s*:\s*/i, ''); continue; }
+                if (/^(BLOK|BLOCK|SÉRIE|SERIE|SADA)\b/i.test(l)) { out.push('<div class="tr-sub">' + rbEsc(l.replace(/:\s*$/, '')) + '</div>'); continue; }
+                if (/^•/.test(l)) { out.push('<div class="tr-cue">💡 ' + rbEsc(l.replace(/^•\s*/, '')) + '</div>'); continue; }
+                if (/^Cíl\s*:/i.test(l)) { out.push('<div class="tr-goal">🎯 ' + rbEsc(l.replace(/^Cíl\s*:\s*/i, '')) + '</div>'); continue; }
+                if (/^\d+\s*(min|s)\b.*(odpoč|pauz|pause)/i.test(l) || /^(odpočinek|pauza)/i.test(l)) { out.push('<div class="tr-pause">⏸ ' + rbEsc(l) + '</div>'); continue; }
+                out.push(inSec ? rbFmtSet(l) : '<div class="tr-set">' + addVideoLinksToTraining(rbEsc(l)) + '</div>');
+            }
+            closeSec();
+            const k = [];
+            if (kpi['KM CELKEM']) k.push('<span class="tr-kpi">🏊 <b>' + rbEsc(kpi['KM CELKEM']) + '</b></span>');
+            if (kpi['HZ VODA']) k.push('<span class="tr-kpi">⏱️ <b>' + rbEsc(kpi['HZ VODA']) + '</b></span>');
+            if (kpi['NOHY']) k.push('<span class="tr-kpi">🦵 nohy <b>' + rbEsc(kpi['NOHY']) + '</b></span>');
+            if (kpi['TECHNIKA']) k.push('<span class="tr-kpi">🎓 technika <b>' + rbEsc(kpi['TECHNIKA']) + '</b></span>');
+            return '<div class="tr-wrap">' + (k.length ? '<div class="tr-kpis">' + k.join('') + '</div>' : '') + out.join('') +
+                (total ? '<div class="tr-total">Celkem ' + rbEsc(total) + '</div>' : '') +
+                (tip ? '<div class="tr-tip"><b>Tip trenéra:</b> ' + rbEsc(tip) + '</div>' : '') + '</div>';
         }
     </script>
 </body>
