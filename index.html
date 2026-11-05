@@ -845,6 +845,8 @@ window.fetch=async function(u,o){var url=typeof u==='string'?u:(u&&u.url)||'';if
         .tr-pause { display: inline-block; font-size: 0.74em; color: var(--text2); background: var(--surface3); border-radius: 6px; padding: 1px 8px; margin: 3px 0; }
         .tr-total { text-align: right; font-weight: 800; color: var(--text); margin: 2px 2px 10px; }
         .tr-tip { background: var(--accent-glow); border-left: 4px solid var(--accent); border-radius: 10px; padding: 9px 12px; font-size: 0.85em; color: var(--text); }
+        .tr-rest { display: inline-block; font-size: 0.78em; font-weight: 700; padding: 1px 7px; border-radius: 6px; background: var(--accent-glow); color: var(--accent-ink); white-space: nowrap; vertical-align: 1px; }
+        .tr-recov { display: inline-block; font-size: 0.78em; font-weight: 600; color: var(--accent-ink); background: var(--accent-glow); border-radius: 6px; padding: 2px 9px; margin: 3px 0; }
     </style>
 </head>
 <body>
@@ -855,7 +857,7 @@ window.fetch=async function(u,o){var url=typeof u==='string'?u:(u&&u.url)||'';if
             <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
                 <div>
                     <h1 style="font-size:clamp(0.95em,3vw,1.3em);font-weight:700;">🤖 Mattyho tréninkový robůtek</h1>
-                    <p style="font-size:0.75em;color:var(--text3);">šup do vody • žádné výmluvy • makáme 🏊 <span style="opacity:0.6;font-size:0.9em;color:var(--green);cursor:help;" title="v3.15 — oprava součtu metrů (podnadpisy bloků, vnořené série); v3.14 — bazénový vzhled (modrá + tyrkys, sjednocená tlačítka a karty); v3.13 — HZ VODA v minutách, jemnější „Generovat znovu“; v3.12 — vtip celý, světlý režim sjednocen (ČSPS, Sezóna…), mobil: záložky, týden, rozvrh; v3.11 — volba režimu po Trénovat (Podle účasti / Na míru), hlavička výstupu se štítky; v3.10 — režim Na míru (podle cíle, bez ohledu na účast); v3.9 — zaměření tréninku (typ + 2 styly), záložka Yarmill: rozvrh, generátor období (auto/na míru, 25/50 m), zápis plánu i skutečnosti přes záložku, plán → skutečnost">v3.17 🌊</span></p>
+                    <p style="font-size:0.75em;color:var(--text3);">šup do vody • žádné výmluvy • makáme 🏊 <span style="opacity:0.6;font-size:0.9em;color:var(--green);cursor:help;" title="v3.15 — oprava součtu metrů (podnadpisy bloků, vnořené série); v3.14 — bazénový vzhled (modrá + tyrkys, sjednocená tlačítka a karty); v3.13 — HZ VODA v minutách, jemnější „Generovat znovu“; v3.12 — vtip celý, světlý režim sjednocen (ČSPS, Sezóna…), mobil: záložky, týden, rozvrh; v3.11 — volba režimu po Trénovat (Podle účasti / Na míru), hlavička výstupu se štítky; v3.10 — režim Na míru (podle cíle, bez ohledu na účast); v3.9 — zaměření tréninku (typ + 2 styly), záložka Yarmill: rozvrh, generátor období (auto/na míru, 25/50 m), zápis plánu i skutečnosti přes záložku, plán → skutečnost">v3.18 🌊</span></p>
                 </div>
                 <div style="display:flex;align-items:center;gap:8px;">
                     <select id="clubSelector" onchange="switchClub(this.value)"
@@ -2373,7 +2375,7 @@ Time allocation:
 
 ━━━ REPETITION LIMITS (REALISTIC) ━━━
 ${pool === '50m' ? '50m: 6-9 reps max | 100m: 4-7 reps max | 200m: 3-5 reps max | 400m: 2-3 reps max' : '25m: 8-12 reps max | 50m: 6-9 reps max | 100m: 4-7 reps max | 200m: 3-5 reps max'}
-Rule: Stop before form breaks down. Rest adequately between sets (1-3 min between main sets).
+Rule: Stop before form breaks down. NO standing rest between sets (swimmers get cold): between series always write an active recovery line "100m vyplavání volně" (50–200m easy swim, counted in meters). Never write "X min odpočinek" or any standing pause longer than 30 s.
 
 ━━━ INTERVAL CALCULATION (EVIDENCE-BASED) ━━━
 Base = slowest swimmer's PB for that distance.
@@ -2449,7 +2451,7 @@ TECHNIKA: [m]m
 [Building swims, paddle floats, race pace bursts — prepare body for main set]
 
 3. HLAVNÍ ČÁST — [focus] ([m]m):
-[Main sets with @intervals and [X% — energy system label]]
+[Main sets with @interval, rest P NN s and [X% — energy system label]]
 [Add 1-3 min rest between main sets]
 
 4. NOHY ([m]m):
@@ -2472,9 +2474,10 @@ COACH TIP: [One practical coaching cue for today's session]
 5. MAX 1 coaching cue per set (one "•" line). Pick the single most important one.
 6. Per-rep breakdown (Rep 1: ..., Rep 2: ...) ONLY for progressive/descending sets. Even sets: one target line ("Cíl: 3:00–3:05 rovnoměrně").
 7. NO closing summary table, NO per-section time table at the end — VÝKAZ at top covers it. End with CELKEM: [m]m + COACH TIP (max 2 sentences).
-8. HARD LENGTH LIMIT: 22 lines total for the whole TRÉNINK section (all 6 parts combined, VÝKAZ not counted). Count lines before you finish — if over 30, cut coaching cues first, then merge sets, until you're at or under 30. Never exceed it. Max ONE • cue per section (or none). Each set line max ~80 characters: distance, stroke, @interval, [zone] — goal only if essential, written after ' | Cíl:' on the same line. No separate 'Cíl:' lines.
+8. HARD LENGTH LIMIT: 22 lines total for the whole TRÉNINK section (all 6 parts combined, VÝKAZ not counted). Count lines before you finish — if over 22, cut coaching cues first, then merge sets, until you're at or under 30. Never exceed it. Max ONE • cue per section (or none). Each set line max ~80 characters: distance, stroke, @interval, [zone] — goal only if essential, written after ' | Cíl:' on the same line. No separate 'Cíl:' lines.
 9. No blank lines anywhere in the output. No decorative characters (#, *, ---, ✅, ⚠️) anywhere except the ones already in the template (numbers, •, @, %).
-10. INTERVALS ARE RECALCULATED BY THE APP: every kraul set that has an @interval MUST carry its [NN% — zone] tag on the SAME line (e.g. "6x200m kraul @3:00 [85% — CSS]"). The app overwrites your @interval and any "Cíl: m:ss" time on that set from the swimmers' PBs, so your @ value is only a placeholder — do NOT spend effort on interval math and ignore the interval formula above. Never write target times except on the set line or the line directly under it.`;
+10. INTERVALS ARE RECALCULATED BY THE APP: every kraul set that has an @interval MUST carry its [NN% — zone] tag on the SAME line (e.g. "6x200m kraul @3:00 [85% — CSS]"). The app overwrites your @interval and any "Cíl: m:ss" time on that set from the swimmers' PBs, so your @ value is only a placeholder — do NOT spend effort on interval math and ignore the interval formula above. Never write target times except on the set line or the line directly under it.
+11. REST INTERVALS (MANDATORY): every set line (incl. warm-up, kick, drill) carries the rest between repetitions right after the @interval as "P NN s" (or "P 1:00"), e.g. "6x100m kraul @1:35 P 15 s [85% — CSS]". Guide: A1/aerobic 10–15 s, A2/CSS 15–20 s, race pace 20–30 s, VO2max 30–60 s or 1:1, sprint/USRPT 1:2–1:3, kick and drill 15–20 s. Single continuous swims (e.g. 400m volně) have no P. Max P is 30 s — longer recovery = active swim (vyplavání), never standing.`;
 
             try {
                 const trainingTextRaw = await generateWithMeterCheck(prompt, parseInt(targetMeters));
@@ -6099,10 +6102,13 @@ Použij české názvy disciplín. Každá série: X× Ym styl @interval`;
                 const old = parseInt(atM[1]) * 60 + parseInt(atM[2]);
                 lastSwim = swim;
                 let l2 = line;
+                const restS = Math.max(5, Math.round((iv - swim) / 5) * 5);
                 if (Math.abs(iv - old) >= 5) {
                     l2 = l2.replace(/@\s*\d{1,2}:\d{2}/, '@' + fmtIv(iv));
                     res.changed.push({ dist: dist, from: fmtIv(old), to: fmtIv(iv) });
                 }
+                if (/\bP\s*\d+(?::\d{2})?\s*s?\b/.test(l2)) l2 = l2.replace(/\bP\s*\d+(?::\d{2})?\s*s?\b/, 'P ' + restS + ' s');
+                else l2 = l2.replace(/(@\s*\d{1,2}:\d{2})/, '$1 P ' + restS + ' s');
                 return fixTarget(l2, swim);
             });
             res.text = out.join('\n');
@@ -6122,7 +6128,7 @@ Použij české názvy disciplín. Každá série: X× Ym styl @interval`;
             }
             const partial = shown.filter(d => table[d].n < table[d].of).map(d => d + ' K (' + table[d].n + '/' + table[d].of + ')').join(', ');
             return '<div id="intervalNote" style="margin-top:12px;padding:10px 12px;background:var(--surface3);border:1px solid var(--border2);border-radius:8px;font-size:0.78em;color:var(--text2);line-height:1.5;">' +
-                '⏱️ Odjezdy = čas při dané intenzitě + odpočinek, z PB nejpomalejšího plavce: ' + (refs || '—') +
+                '⏱️ Odjezdy (@) a pauzy (P) = čas při dané intenzitě + odpočinek, z PB nejpomalejšího plavce: ' + (refs || '—') +
                 '<div style="margin-top:4px;color:var(--text3);">Upraveno sérií: ' + fix.changed.length + (fix.unverified ? ' • bez PB na vzdálenost (ponecháno): ' + fix.unverified : '') +
                 (partial ? ' • PB nemají všichni: ' + partial : '') + '</div>' + warn + '</div>';
         }
@@ -7255,7 +7261,7 @@ Na konci jeden řádek: CELKEM: ${duration} min, a pak jedna věta COACH TIP.`;
             if (f.typ !== 'auto') {
                 L.push('Training type: ' + RB_TYP[f.typ]);
                 if (f.typ === 'vytrvalost') L.push('Main set: aerobic A1–A2 (65–80%), long reps 200–800m, short rest 10–30s, main set 45–55% of volume.');
-                if (f.typ === 'intervaly') L.push('Main set: threshold/VO2 intervals A3–A4 (85–95%) on fixed send-off, reps 100–400m, main set 35–45% of volume + aerobic filler.');
+                if (f.typ === 'intervaly') L.push('Main set: threshold/VO2 intervals A3–A4 (85–95%) on fixed send-off with explicit rest (P NN s), reps 100–400m, main set 35–45% of volume + aerobic filler.');
                 if (f.typ === 'kratke') L.push('Main set: max speed / race pace, reps 15–50m' + (pool === '50m' ? ' (25m only from start to half-pool)' : '') + ', long rest 1:1–1:3, quality 600–1000m, starts and turns. Lower total volume (~85–90% of target).');
                 if (f.typ === 'technika') L.push('Main set: technique & drills, A1 only, many drill progressions, low intensity, regeneration.');
             }
@@ -7655,6 +7661,7 @@ Na konci jeden řádek: CELKEM: ${duration} min, a pak jedna věta COACH TIP.`;
             h = h.replace(/\[📹\]\((https?:[^)\s]+)\)/g, '<a href="$1" target="_blank" style="text-decoration:none;">📹</a>');
             h = h.replace(/^(\s*\d+\s*[x×]\s*\(?\s*\d+\s*[x×]?\s*\d*\s*m?\)?|\s*\d+\s*m\b)/, '<b>$1</b>');
             h = h.replace(/@\s?(\d{1,2}:\d{2})/g, '<span class="tr-iv">@$1</span>');
+            h = h.replace(/(^|[\s,(])P\s?(\d{1,3}\s?s|\d:\d{2})(?=$|[\s,).])/g, '$1<span class="tr-rest" title="pauza mezi úseky">pauza $2</span>');
             h = h.replace(/\[([^\]]*?%[^\]]*?)\]/g, '<span class="tr-int">$1</span>');
             if (h.indexOf('📹') < 0) h = addVideoLinksToTraining(h);
             return '<div class="tr-set">' + h + (goal ? '<span class="tr-goal">🎯 ' + rbEsc(goal) + '</span>' : '') + '</div>';
@@ -7681,6 +7688,7 @@ Na konci jeden řádek: CELKEM: ${duration} min, a pak jedna věta COACH TIP.`;
                 if (/^•/.test(l)) { out.push('<div class="tr-cue">💡 ' + rbEsc(l.replace(/^•\s*/, '')) + '</div>'); continue; }
                 if (/^Cíl\s*:/i.test(l)) { out.push('<div class="tr-goal">🎯 ' + rbEsc(l.replace(/^Cíl\s*:\s*/i, '')) + '</div>'); continue; }
                 if (/^\d+\s*(min|s)\b.*(odpoč|pauz|pause)/i.test(l) || /^(odpočinek|pauza)/i.test(l)) { out.push('<div class="tr-pause">⏸ ' + rbEsc(l) + '</div>'); continue; }
+                if (inSec && /vyplav/i.test(l) && sec !== '6') { out.push('<div class="tr-recov">🌊 ' + rbEsc(l) + '</div>'); continue; }
                 out.push(inSec ? rbFmtSet(l) : '<div class="tr-set">' + addVideoLinksToTraining(rbEsc(l)) + '</div>');
             }
             closeSec();
