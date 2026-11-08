@@ -857,7 +857,7 @@ window.fetch=async function(u,o){var url=typeof u==='string'?u:(u&&u.url)||'';if
             <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
                 <div>
                     <h1 style="font-size:clamp(0.95em,3vw,1.3em);font-weight:700;">🤖 Mattyho tréninkový robůtek</h1>
-                    <p style="font-size:0.75em;color:var(--text3);">šup do vody • žádné výmluvy • makáme 🏊 <span style="opacity:0.6;font-size:0.9em;color:var(--green);cursor:help;" title="v3.15 — oprava součtu metrů (podnadpisy bloků, vnořené série); v3.14 — bazénový vzhled (modrá + tyrkys, sjednocená tlačítka a karty); v3.13 — HZ VODA v minutách, jemnější „Generovat znovu“; v3.12 — vtip celý, světlý režim sjednocen (ČSPS, Sezóna…), mobil: záložky, týden, rozvrh; v3.11 — volba režimu po Trénovat (Podle účasti / Na míru), hlavička výstupu se štítky; v3.10 — režim Na míru (podle cíle, bez ohledu na účast); v3.9 — zaměření tréninku (typ + 2 styly), záložka Yarmill: rozvrh, generátor období (auto/na míru, 25/50 m), zápis plánu i skutečnosti přes záložku, plán → skutečnost">v3.18 🌊</span></p>
+                    <p style="font-size:0.75em;color:var(--text3);">šup do vody • žádné výmluvy • makáme 🏊 <span style="opacity:0.6;font-size:0.9em;color:var(--green);cursor:help;" title="v3.15 — oprava součtu metrů (podnadpisy bloků, vnořené série); v3.14 — bazénový vzhled (modrá + tyrkys, sjednocená tlačítka a karty); v3.13 — HZ VODA v minutách, jemnější „Generovat znovu“; v3.12 — vtip celý, světlý režim sjednocen (ČSPS, Sezóna…), mobil: záložky, týden, rozvrh; v3.11 — volba režimu po Trénovat (Podle účasti / Na míru), hlavička výstupu se štítky; v3.10 — režim Na míru (podle cíle, bez ohledu na účast); v3.9 — zaměření tréninku (typ + 2 styly), záložka Yarmill: rozvrh, generátor období (auto/na míru, 25/50 m), zápis plánu i skutečnosti přes záložku, plán → skutečnost">v3.19 🌊</span></p>
                 </div>
                 <div style="display:flex;align-items:center;gap:8px;">
                     <select id="clubSelector" onchange="switchClub(this.value)"
@@ -1156,7 +1156,7 @@ window.fetch=async function(u,o){var url=typeof u==='string'?u:(u&&u.url)||'';if
                     <div style="grid-column:1/-1;" id="targetMetersWrap">
                         <label>🎯 Cílové metry <span style="color:var(--text3);font-weight:400;font-size:0.85em;">(volitelné)</span></label>
                         <input type="number" id="targetMeters" placeholder="Nech prázdné — AI zvolí automaticky" min="1000" max="10000" step="100" style="margin-top:8px;">
-                        <div style="color:var(--text3);font-size:0.75em;margin-top:5px;">60min ≈ 2500m • 90min ≈ 3800m • 120min ≈ 5000m</div>
+                        <div style="color:var(--text3);font-size:0.75em;margin-top:5px;">Auto podle věku a zaměření — např. 13–14 let: 60 min ≈ 2 300 m • 120 min ≈ 4 600 m</div>
                     </div>
                 </div>
 
@@ -2256,13 +2256,8 @@ Všichni plavci a tréninky tohoto klubu budou NENÁVRATNĚ smazány!`)) return;
             // Auto-calculate target meters if not specified
             let targetMeters = document.getElementById('targetMeters').value;
             if (!targetMeters) {
-                const baseMeters = {
-                    '60': 2750,
-                    '90': 3850,
-                    '120': 5000
-                };
-                const base = baseMeters[duration] || 3500;
-                const variation = base * (Math.random() * 0.24 - 0.12);
+                const base = rbAutoMeters(duration, selected);
+                const variation = base * (Math.random() * 0.08 - 0.04);
                 targetMeters = Math.round((base + variation) / 100) * 100;
             }
             
@@ -5367,7 +5362,7 @@ Použij české názvy disciplín. Každá série: X× Ym styl @interval`;
                 previewItems.push({ icon: '🎯', label: 'Zaměření', value: cats || '—' });
             } else {
                 previewItems.push({ icon: type === 'pool' ? '🏊' : '🌊', label: 'Typ', value: type === 'pool' ? 'Bazén ' + pool : 'Open water' });
-                previewItems.push({ icon: '📏', label: 'Metry', value: meters ? meters + 'm' : (autoMeters[duration] || '?') + ' (auto)' });
+                previewItems.push({ icon: '📏', label: 'Metry', value: meters ? meters + 'm' : '≈ ' + rbAutoMeters(duration, selected) + 'm (auto)' });
                 previewItems.push({ icon: '🛠️', label: 'Pomůcky', value: equipment.length > 0 ? equipment.join(', ') : 'Žádné' });
             }
 
@@ -7700,6 +7695,19 @@ Na konci jeden řádek: CELKEM: ${duration} min, a pak jedna věta COACH TIP.`;
             return '<div class="tr-wrap">' + (k.length ? '<div class="tr-kpis">' + k.join('') + '</div>' : '') + out.join('') +
                 (total ? '<div class="tr-total">Celkem ' + rbEsc(total) + '</div>' : '') +
                 (tip ? '<div class="tr-tip"><b>Tip trenéra:</b> ' + rbEsc(tip) + '</div>' : '') + '</div>';
+        }
+
+        // ── v3.19 Objem podle věku a zaměření ──
+        function rbGroupAge(swimmers) {
+            const ages = (swimmers || []).map(s => !s || !s.vek ? null : (s.vek > 1900 ? new Date().getFullYear() - s.vek : s.vek)).filter(a => a && a > 0).sort((a, b) => a - b);
+            return ages.length ? ages[Math.floor(ages.length / 2)] : 13;
+        }
+        function rbAutoMeters(duration, swimmers) {
+            const age = rbGroupAge(swimmers);
+            const rate = age <= 10 ? 28 : age <= 12 ? 33 : age <= 14 ? 38 : age <= 17 ? 41 : 45;
+            const f = (typeof rbGetFocus === 'function') ? rbGetFocus().typ : 'auto';
+            const k = { kratke: 0.85, technika: 0.85, intervaly: 0.95 }[f] || 1;
+            return Math.round(parseInt(duration || 90) * rate * k / 100) * 100;
         }
     </script>
 </body>
